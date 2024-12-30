@@ -1,23 +1,31 @@
 import express from "express";
 import ConnectDataBase from "./config/ConnectDataBase.js";
 import dotenv from "dotenv";
-import authRoutes from './routes/authRoutes.js'
+import authRoutes from "./routes/authRoutes.js";
 import manageError from "./middlewares/ManageError.js";
-dotenv.config();
+import cors from "cors";
+import cookieParser from "cookie-parser";
 const app = express();
+const PORT = process.env.PORT || 3000;
+dotenv.config();
 app.use(express.json());
-ConnectDataBase()
+app.use(cors({origin: process.env.CLIENT_URL,credentials: true,}));
+app.use(cookieParser());
 
-app.get('/', (req, res, next) => {
- res.send("YOO RUNNING WORLD")
+ConnectDataBase();
+
+app.get("/", (req, res, next) => {
+  res.send("YOO RUNNING WORLD");
 });
-app.use('/auth',authRoutes)
 
-app.all("*",(req,res)=>{
-  res.status(400).json({message:'cannot access the endpoint'})
-})
-app.use(manageError)
+app.use("/auth", authRoutes);
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.all("*", (req, res) => {
+  res.status(400).json({ message: "cannot access the endpoint" });
+});
+
+app.use(manageError);
+
+app.listen(PORT, () => {
+  console.log("Server is running on port " + PORT);
 });
