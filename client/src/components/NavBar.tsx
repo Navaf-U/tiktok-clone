@@ -6,9 +6,9 @@ import { BiMessageMinus } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa";
 import { FaRegUserCircle } from "react-icons/fa";
 
-function NavBar() {
+function NavBar(): JSX.Element {
   return (
-    <div className="flex items-center justify-between bg-[#121212] w-full">
+    <div className="position fixed z-20 bg-[#121212] w-full">
       <div className="flex items-center w-full justify-between my-2 my-lg-0">
             <img src={tiktokFullPng} className="ms-3 w-32 h-[35px]" alt="" />
             <Input

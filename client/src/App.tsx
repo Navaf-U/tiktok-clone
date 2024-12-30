@@ -1,13 +1,11 @@
-import './App.css'
-import NavBar from './components/NavBar'
-
+import "./App.css";
+import AppRoutes from "./AppRoutes";
 function App() {
   return (
     <>
-    <NavBar/>
-    <h1 className='text-red-500'>hi</h1>
+      <AppRoutes />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
