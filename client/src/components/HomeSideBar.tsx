@@ -21,7 +21,7 @@ const HomeSidebar = (): JSX.Element => {
   };
 
   return (
-    <SidebarProvider>
+    <SidebarProvider >
       <Sidebar
         className={`fixed top-[62px] left-0 h-full p-4 pt-8 bg-[#121212] text-white border-t-[1px] border-[#ffffff48] transition-all ${
           isSidebarCollapsed ? "w-16" : "w-60"
@@ -93,7 +93,7 @@ const HomeSidebar = (): JSX.Element => {
           <hr />
         </SidebarMenu>
         <button
-          className={`absolute top-1/2 right-[-17px] transform -translate-y-1/2 p-1 text-white  bg-[#121212]  w-[20px] pt-10 border border-[#5c5c5cb7] hover:bg-gray-700 transition-all ${
+          className={`absolute top-1/2 right-[-20px] transform -translate-y-1/2 p-1 text-white  bg-[#121212]  w-[20px] pt-10 border border-[#5c5c5cb7] hover:bg-gray-700 transition-all ${
             isSidebarCollapsed ? "rotate-180 rounded-s-xl" : "rounded-e-xl"
           }`}
           onClick={toggleSidebar}
