@@ -1,6 +1,7 @@
 import express from "express";
 import ConnectDataBase from "./config/ConnectDataBase.js";
 import dotenv from "dotenv";
+import authRoutes from './routes/authRoutes.js'
 // import manageError from './middlewares/manageError.js';
 dotenv.config();
 const app = express();
@@ -10,6 +11,8 @@ ConnectDataBase()
 app.get('/', (req, res, next) => {
  res.send("YOO RUNNING WORLD")
 });
+app.use('/auth',authRoutes)
+
 app.all("*",(req,res)=>{
   res.status(400).json({message:'cannot access the endpoint'})
 })
