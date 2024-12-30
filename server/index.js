@@ -1,9 +1,19 @@
 import express from "express";
+import ConnectDataBase from "./config/ConnectDataBase.js";
+import dotenv from "dotenv";
+// import manageError from './middlewares/manageError.js';
+dotenv.config();
 const app = express();
+app.use(express.json());
+ConnectDataBase()
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
+app.get('/', (req, res, next) => {
+ res.send("YOO RUNNING WORLD")
 });
+app.all("*",(req,res)=>{
+  res.status(400).json({message:'cannot access the endpoint'})
+})
+// app.use(manageError())
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
