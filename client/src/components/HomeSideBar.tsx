@@ -93,12 +93,12 @@ const HomeSidebar = (): JSX.Element => {
           <hr />
         </SidebarMenu>
         <button
-          className={`absolute top-1/2 right-[-20px] transform -translate-y-1/2 p-1 text-white  bg-[#121212]  w-[20px] pt-10 border border-[#5c5c5cb7] hover:bg-gray-700 transition-all ${
+          className={`absolute top-1/2 right-[-20px] transform -translate-y-1/2 p-1 text-white  w-[20px] pt-8 border border-[#5c5c5cb7]  transition-all ${
             isSidebarCollapsed ? "rotate-180 rounded-s-xl" : "rounded-e-xl"
           }`}
           onClick={toggleSidebar}
         >
-          <ChevronLeft className="mb-10" size={20}  />
+          <ChevronLeft className="mb-8 m-[-5px]" size={20}  />
         </button>
       </Sidebar>
     </SidebarProvider>
