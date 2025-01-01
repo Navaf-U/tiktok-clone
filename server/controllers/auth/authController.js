@@ -6,7 +6,7 @@ const createToken = (id, role, expiresIn) => {
   return jwt.sign({ id ,role }, process.env.JWT_TOKEN, { expiresIn });
 };
 const registerUser = async (req, res, next) => {
-  const {  username,email, password } = req.body;
+  const {  username,email, password , dob } = req.body;
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
   });
@@ -20,7 +20,7 @@ const registerUser = async (req, res, next) => {
     }
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  await User.create({ username , email, password: hashPassword });
+  await User.create({ username , email, password: hashPassword , dob });
   res.json({ message: "User Created successfully" });
 };
 

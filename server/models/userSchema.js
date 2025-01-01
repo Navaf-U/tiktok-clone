@@ -6,6 +6,7 @@ const userSchema = mongoose.Schema(
     email:{type: String,required: true,unique: true},
     password: {type: String,required: true},
     isBlocked: { type: Boolean, default: false },
+    dob : {type: Object,required: true},
     role: { type: String, default: "user" },
   },
   {
