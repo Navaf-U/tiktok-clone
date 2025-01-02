@@ -2,6 +2,7 @@ import express from "express";
 import ConnectDataBase from "./config/ConnectDataBase.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import manageError from "./middlewares/ManageError.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -19,6 +20,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 app.all("*", (req, res) => {
   res.status(400).json({ message: "cannot access the endpoint" });
