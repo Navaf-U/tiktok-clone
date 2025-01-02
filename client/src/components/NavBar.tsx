@@ -43,9 +43,9 @@ function NavBar(): JSX.Element {
   };
 
   return (
-    <div className="fixed z-20 bg-[#121212] w-full h-[62px] flex justify-center items-center border-b border-b-[#ffffff48]">
+    <div className="fixed z-20 bg-[#121212] w-full h-[62px] flex justify-center items-center top-0 border-b border-b-[#ffffff48]">
       <div className="flex items-center w-full justify-between my-2 lg:my-0 px-4">
-        <img src={tiktokFullPng} className="w-32 h-[35px]" alt="" />
+        <Link to="/" ><img src={tiktokFullPng} className="w-32 h-[35px]" alt="" /></Link>
         <div className="flex relative flex-grow max-w-lg">
           <Input
             type="text"
@@ -106,7 +106,7 @@ function NavBar(): JSX.Element {
           onMouseLeave={handleMouseLeave}
           className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[214px] h-[345px] rounded-md"
         >
-          <div className="flex flex-col items-start px-4 py-2">
+          <div className="flex flex-col items-start py-2" onClick={()=>setShowDropdown(false)}>
             {[
               {
                 Icon: BiUser,
@@ -127,7 +127,7 @@ function NavBar(): JSX.Element {
               <Link
                 to={to}
                 key={index}
-                className="flex items-center w-full h-[40px] hover:bg-[#3a3a3a] cursor-pointer"
+                className="flex items-center w-full h-[40px] ps-3 hover:bg-[#3a3a3a] cursor-pointer"
               >
                 <Icon size={20} className="text-white" />
                 <p className="text-white ml-4 font-semibold">{text}</p>

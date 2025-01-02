@@ -4,7 +4,7 @@ function HomePage(): JSX.Element {
   return (
     <div className="flex">
       <HomeSidebar />
-      <div className="flex-1 p-4">
+      <div className="mt-20">
         <h1>Home Page</h1>
       </div>
     </div>

@@ -10,7 +10,6 @@ function AppRoutes() {
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-
         <Route
           path="/profile/:username"
           element={

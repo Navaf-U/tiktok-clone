@@ -16,47 +16,45 @@ const HomeSidebar = (): JSX.Element => {
   return (
     <SidebarProvider>
       <Sidebar
-        className="fixed top-[62px] left-0 h-full p-4 pt-8 bg-[#121212] text-white border-0  transition-all w-16 lg:w-60"
+        className="fixed top-[62px] left-0 h[1px] bg-[#121212] text-white  transition-all w-16 lg:w-60"
       >
-        <SidebarMenu className="space-y-4">
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold justify-center lg:justify-start">
+        <SidebarMenu className="">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <RiHome4Line size={26} />
             <span className="hidden lg:inline">For You</span>
           </SidebarMenuItem>
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold justify-center lg:justify-start">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12  font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <MdOutlineExplore size={26} />
             <span className="hidden lg:inline">Explore</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold justify-center lg:justify-start">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6  h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <RiUserReceived2Line size={26} />
             <span className="hidden lg:inline">Following</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold justify-center lg:justify-start">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <LiaUserFriendsSolid size={26} />
             <span className="hidden lg:inline">Friends</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold text-[#ff3b5b] justify-center lg:justify-start">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 font-bold text-[#ff3b5b] justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <RiLiveFill size={26} className="text-[#ff3b5b]" />
             <span className="hidden lg:inline">LIVE</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold justify-center lg:justify-start">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <IoNavigateOutline size={26} />
             <span className="hidden lg:inline">Messages</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg font-bold justify-center lg:justify-start pb-2">
+          <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-full rounded-md">
             <FaRegUserCircle size={26} />
             <span className="hidden lg:inline">Profile</span>
           </SidebarMenuItem>
-
-          <hr />
         </SidebarMenu>
+        <hr className="opacity-30 mt-5"/>
       </Sidebar>
-      <RiHome4Line size={26} />
     </SidebarProvider>
   );
 };
