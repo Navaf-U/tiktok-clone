@@ -4,4 +4,5 @@ const Router = express.Router()
 Router
 .get('/profile/:username', getOneUser)
 
+
 export default Router
