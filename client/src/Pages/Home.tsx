@@ -1,12 +1,12 @@
 import HomeSidebar from "@/components/HomeSideBar";
-import NavBar from "@/components/NavBar";
 
 function HomePage(): JSX.Element {
   return (
-    <div>
-      <NavBar/>
-      <h1>Home Page</h1>
-      <HomeSidebar/>
+    <div className="flex">
+      <HomeSidebar />
+      <div className="flex-1 p-4">
+        <h1>Home Page</h1>
+      </div>
     </div>
   );
 }

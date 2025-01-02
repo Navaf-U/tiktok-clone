@@ -43,36 +43,35 @@ function NavBar(): JSX.Element {
   };
 
   return (
-    <div className="position fixed z-20 bg-[#121212] w-full">
-      <div className="flex items-center w-full justify-between my-2 my-lg-0">
-        <img src={tiktokFullPng} className="ms-3 w-32 h-[35px]" alt="" />
-        <div className="flex relative">
+    <div className="fixed z-20 bg-[#121212] w-full h-[62px] flex justify-center items-center border-b border-b-[#ffffff48]">
+      <div className="flex items-center w-full justify-between my-2 lg:my-0 px-4">
+        <img src={tiktokFullPng} className="w-32 h-[35px]" alt="" />
+        <div className="flex relative flex-grow max-w-lg">
           <Input
             type="text"
             placeholder="Search"
-            className="rounded-full h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] ms-2 w-[500px] border-0"
+            className="rounded-full hidden sm:inline h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-full border-0"
           />
           <CiSearch
             size={33}
-            className="text-[#757575] p-1 border-s-[1px] border-s-[#757575]  absolute top-2 right-6"
+            className="text-[#757575] hidden md:inline p-1 border-s-[1px] border-s-[#757575] absolute top-2 right-6"
           />
         </div>
         {currUser ? (
-          <div className="flex w-[25%] justify-between items-center ms-2 me-4">
-            <Button variant={"grays"}>
+          <div className="flex items-center space-x-4">
+            <Button variant={"grays"} className="hidden md:flex" >
               <FaPlus /> Upload
             </Button>
             <BiMessageMinus className="text-[#c9c9c9]" size={30} />
             <Button
               variant={"grays"}
-              className="bg-[#121212] rounded-none border border-[#ffffff81]"
+              className="bg-[#121212] hidden md:flex rounded-none border border-[#ffffff81]"
             >
-              {" "}
               <img
                 src={tiktokIcon}
-                className="w-5 outline-1 outline-white"
+                className="w-5 outline-1 hidden md:flex outline-white"
                 alt=""
-              />{" "}
+              />
               Get Coin
             </Button>
             <button>
@@ -85,9 +84,9 @@ function NavBar(): JSX.Element {
             </button>
           </div>
         ) : (
-          <div className="flex justify-center items-center">
+          <div className="flex items-center space-x-4">
             <Button
-              className="bg-[#ff2b56] hover:bg-[#eb2e54] me-5 w-[100px] font-extrabold"
+              className="bg-[#ff2b56] hover:bg-[#eb2e54] w-[100px] font-extrabold"
               onClick={() => {
                 if (setModalType) setModalType("login");
                 if (setShowModal) setShowModal(true);
@@ -95,7 +94,7 @@ function NavBar(): JSX.Element {
             >
               Login
             </Button>
-            <BsThreeDotsVertical size={20} className="text-white me-4" />
+            <BsThreeDotsVertical size={20} className="text-white" />
           </div>
         )}
       </div>
