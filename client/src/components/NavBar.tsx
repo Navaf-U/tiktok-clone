@@ -23,7 +23,7 @@ import { Link } from "react-router-dom";
 
 function NavBar(): JSX.Element {
   const userContext = useContext(UserContext);
-  const { currUser, showModal, modalType, setModalType, setShowModal } =
+  const { currUser, showModal, modalType, setModalType, setShowModal , logoutUser } =
     userContext || {};
   const [showDropdown, setShowDropdown] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -135,7 +135,7 @@ function NavBar(): JSX.Element {
             ))}
           </div>
           <hr className="opacity-30" />
-          <button className="flex items-center justify-start ms-4 gap-3 font-semibold w-[90%] h-[40px] hover:bg-[#3a3a3a] cursor-pointer text-white">
+          <button onClick={logoutUser} className="flex items-center justify-start ms-4 gap-3 font-semibold w-[90%] h-[40px] hover:bg-[#3a3a3a] cursor-pointer text-white">
             <TbLogout2 size={20} className="text-white" />
             Log out
           </button>

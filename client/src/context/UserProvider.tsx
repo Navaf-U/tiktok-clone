@@ -9,19 +9,25 @@ interface User {
   _id: string;
   email: string;
   username: string;
+  profile: string;
+  bio: string;
   role: string;
 }
+
 
 
 interface UserContextType {
   currUser: User | null;
   LoginUser: (emailOrUsername: string, password: string) => Promise<void>;
   UserRegister: (username: string, email: string, password: string , dob : object) => Promise<void>;
+  logoutUser: () => void;
   setCurrUser: React.Dispatch<React.SetStateAction<User | null>>;
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   modalType: "login" | "signup";
   setModalType: React.Dispatch<React.SetStateAction<"login" | "signup">>;
+  showUserEdit: boolean;
+  setShowUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -36,7 +42,18 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [currUser, setCurrUser] = useState<User | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
+  const [showUserEdit, setShowUserEdit] = useState(false);
   const {toast} = useToast()
+  
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("currUser");
+    if (token && user) {
+      setCurrUser(JSON.parse(user));
+    }
+  }, []);
+  
   const LoginUser: (
     emailOrUsername: string,
     password: string
@@ -65,7 +82,6 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       console.log(axiosErrorManager(err))
     }
   };
-  console.log(currUser)
 
   const UserRegister : (
     username: string,
@@ -94,14 +110,15 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       });
     }
   }
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("currUser");
-    if (token && user) {
-      setCurrUser(JSON.parse(user));
+  const logoutUser: () => void = () => {
+    const confirm = window.confirm("Are you sure you want to logout?");
+    if (confirm) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("currUser");
+      setCurrUser(null);
     }
-  }, []);
+  };
+
 
   const value: UserContextType = {
     currUser,
@@ -111,7 +128,10 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     setShowModal,
     modalType,
     setModalType,
-    UserRegister
+    UserRegister,
+    showUserEdit,
+    setShowUserEdit,
+    logoutUser
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
