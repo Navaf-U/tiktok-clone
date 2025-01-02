@@ -8,5 +8,16 @@ const getOneUser = async (req, res) => {
   res.json(user);
 };
 
+const userUpdate = async (req, res) => {
+  const { bio } = req.body;
+  const user = await User.findOne({ _id: req.user.id}, {password: 0});
+  console.log(user)
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  user.bio = bio;
+  await user.save();
+  res.json(user);
+};
 
-export {getOneUser} 
+export {getOneUser,userUpdate} 
