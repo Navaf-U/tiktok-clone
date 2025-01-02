@@ -1,19 +1,29 @@
-import tiktokFullPng from "../assets/tiktok-full-icon.png";
-import tiktokIcon from "../assets/tiktok-icon.png";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BiMessageMinus } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa";
 import { FaRegUserCircle } from "react-icons/fa";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "@/context/UserProvider";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
+import { TiHomeOutline } from "react-icons/ti";
+import { BiUser } from "react-icons/bi";
+import { IoSettingsOutline } from "react-icons/io5";
+import { FaAdn } from "react-icons/fa6";
+import tiktokFullPng from "../assets/tiktok-full-icon.png";
+import tiktokIcon from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
+
 function NavBar(): JSX.Element {
+  const [showUserDropDown, setShowUserDropDown] = useState<boolean>(false);
   const userContext = useContext(UserContext);
   const { currUser, showModal, modalType, setModalType,setShowModal } = userContext || {};
+
+  const handleUserDropDown : React.MouseEventHandler<HTMLButtonElement> = () => {
+    setShowUserDropDown(!showUserDropDown);
+  };
 
   return (
     <div className="position fixed z-20 bg-[#121212] w-full">
@@ -48,7 +58,7 @@ function NavBar(): JSX.Element {
               />{" "}
               Get Coin
             </Button>
-            <FaRegUserCircle size={30} className="text-white" />
+            <button onClick={handleUserDropDown}><FaRegUserCircle size={30} className="text-white" /></button>
           </div>
         ) : (
           <div className="flex justify-center items-center">
@@ -67,6 +77,32 @@ function NavBar(): JSX.Element {
       </div>
       {modalType === "login" && showModal && <Login />}
       {modalType === "signup" && showModal && <Signup />}
+      {showUserDropDown && (
+        <div className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[200px] h-auto rounded-md">
+          <div className="flex justify-center items-center flex-col">
+          <div className="flex items-center text-start justify-center w-full h-[50px]">
+            <BiUser size={30} className="text-white" />
+            <p className="text-white ms-2 text-start">View Profiles</p>
+          </div>
+          <div className="flex items-center text-start justify-center w-full h-[50px]">
+            <TiHomeOutline size={30} className="text-white" />
+            <p className="text-white ms-2 text-start">Creator tools </p>
+          </div>
+          <div className="flex items-center text-start justify-center h-[50px]">
+            <IoSettingsOutline size={30} className="text-white" />
+            <p className="text-white ms-2 text-start"> Settings </p>
+          </div>
+          <div className="flex items-center text-start justify-center h-[50px]">
+            <FaRegUserCircle size={30} className="text-white" />
+            <p className="text-white ms-2 text-start  "> Log Out </p>
+          </div>
+          <div className="flex items-center text-start justify-center h-[50px]">
+            <FaAdn size={30} className="text-white flex flex-row justify-center items-center" />
+            <p className="text-white ms-2 text-start  "> Log Out </p>
+          </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
