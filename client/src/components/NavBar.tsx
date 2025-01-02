@@ -11,18 +11,35 @@ import { TiHomeOutline } from "react-icons/ti";
 import { BiUser } from "react-icons/bi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaAdn } from "react-icons/fa6";
+import { FaTiktok } from "react-icons/fa";
+import { GoQuestion } from "react-icons/go";
+import { MdOutlineDarkMode } from "react-icons/md";
+import { TbLogout2 } from "react-icons/tb";
 import tiktokFullPng from "../assets/tiktok-full-icon.png";
 import tiktokIcon from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
+import { Link } from "react-router-dom";
 
 function NavBar(): JSX.Element {
-  const [showUserDropDown, setShowUserDropDown] = useState<boolean>(false);
   const userContext = useContext(UserContext);
-  const { currUser, showModal, modalType, setModalType,setShowModal } = userContext || {};
+  const { currUser, showModal, modalType, setModalType, setShowModal } =
+    userContext || {};
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
 
-  const handleUserDropDown : React.MouseEventHandler<HTMLButtonElement> = () => {
-    setShowUserDropDown(!showUserDropDown);
+  const handleMouseEnter = () => {
+    if (hideTimeout) {
+      clearTimeout(hideTimeout);
+    }
+    setShowDropdown(true);
+  };
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setShowDropdown(false);
+    }, 1000);
+    setHideTimeout(timeout);
   };
 
   return (
@@ -58,15 +75,22 @@ function NavBar(): JSX.Element {
               />{" "}
               Get Coin
             </Button>
-            <button onClick={handleUserDropDown}><FaRegUserCircle size={30} className="text-white" /></button>
+            <button>
+              <FaRegUserCircle
+                size={30}
+                className="text-white"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              />
+            </button>
           </div>
         ) : (
           <div className="flex justify-center items-center">
             <Button
               className="bg-[#ff2b56] hover:bg-[#eb2e54] me-5 w-[100px] font-extrabold"
               onClick={() => {
-                if (setModalType) setModalType("login"); // Set modal type to "signup"
-                if (setShowModal) setShowModal(true); // Show the modal
+                if (setModalType) setModalType("login");
+                if (setShowModal) setShowModal(true);
               }}
             >
               Login
@@ -77,30 +101,45 @@ function NavBar(): JSX.Element {
       </div>
       {modalType === "login" && showModal && <Login />}
       {modalType === "signup" && showModal && <Signup />}
-      {showUserDropDown && (
-        <div className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[200px] h-auto rounded-md">
-          <div className="flex justify-center items-center flex-col">
-          <div className="flex items-center text-start justify-center w-full h-[50px]">
-            <BiUser size={30} className="text-white" />
-            <p className="text-white ms-2 text-start">View Profiles</p>
+      {showDropdown && (
+        <div
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[214px] h-[345px] rounded-md"
+        >
+          <div className="flex flex-col items-start px-4 py-2">
+            {[
+              {
+                Icon: BiUser,
+                text: "View Profiles",
+                to: `/profile/${currUser?.username}`,
+              },
+              { Icon: FaTiktok, text: "Get Coins", to: "/get-coins" },
+              {
+                Icon: TiHomeOutline,
+                text: "Creator Tools",
+                to: "/creator-tools",
+              },
+              { Icon: IoSettingsOutline, text: "Settings", to: "/settings" },
+              { Icon: FaAdn, text: "Language", to: "/language" },
+              { Icon: GoQuestion, text: "Help", to: "/help" },
+              { Icon: MdOutlineDarkMode, text: "Dark Mode", to: "/dark-mode" },
+            ].map(({ Icon, text, to }, index) => (
+              <Link
+                to={to}
+                key={index}
+                className="flex items-center w-full h-[40px] hover:bg-[#3a3a3a] cursor-pointer"
+              >
+                <Icon size={20} className="text-white" />
+                <p className="text-white ml-4 font-semibold">{text}</p>
+              </Link>
+            ))}
           </div>
-          <div className="flex items-center text-start justify-center w-full h-[50px]">
-            <TiHomeOutline size={30} className="text-white" />
-            <p className="text-white ms-2 text-start">Creator tools </p>
-          </div>
-          <div className="flex items-center text-start justify-center h-[50px]">
-            <IoSettingsOutline size={30} className="text-white" />
-            <p className="text-white ms-2 text-start"> Settings </p>
-          </div>
-          <div className="flex items-center text-start justify-center h-[50px]">
-            <FaRegUserCircle size={30} className="text-white" />
-            <p className="text-white ms-2 text-start  "> Log Out </p>
-          </div>
-          <div className="flex items-center text-start justify-center h-[50px]">
-            <FaAdn size={30} className="text-white flex flex-row justify-center items-center" />
-            <p className="text-white ms-2 text-start  "> Log Out </p>
-          </div>
-          </div>
+          <hr className="opacity-30" />
+          <button className="flex items-center justify-start ms-4 gap-3 font-semibold w-[90%] h-[40px] hover:bg-[#3a3a3a] cursor-pointer text-white">
+            <TbLogout2 size={20} className="text-white" />
+            Log out
+          </button>
         </div>
       )}
     </div>
