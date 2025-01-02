@@ -42,6 +42,8 @@ const loginUser = async (req, res,next) => {
     username: user.username,
     email: user.email,
     role: user.role,
+    profile: user.profile,
+    bio: user.bio,
   };
   res.json({ message: "Login successful", token , user: currUser });
 };
