@@ -37,7 +37,7 @@ function UserProfile(): JSX.Element {
         );
         const data = res.data;
         if (data.username === username) {
-          setOtherUser(data); 
+          setOtherUser(data);
           setUserNotFound(false);
         }
       } catch (error) {
@@ -49,13 +49,25 @@ function UserProfile(): JSX.Element {
       }
     };
     FetchUser();
-  }, [username,currUser]);
-
+  }, [username, currUser]);
+  const renderProfilePic = (profileUrl: string | undefined) => {
+    if (profileUrl) {
+      return (
+        <img
+          src={profileUrl}
+          alt="User Profile"
+          className="h-[200px] w-[200px] rounded-full object-cover"
+        />
+      );
+    } else {
+      return <FaUserCircle className="h-[200px] w-[200px] text-white" />;
+    }
+  };
   return (
     <div>
       {isCurrUser && (
         <div className="flex mt-24 ms-64">
-          <FaUserCircle className="h-[200px] w-[200px] text-white" />
+          {renderProfilePic(currUser?.profile)}{" "}
           <div>
             <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
             <div className="flex">
@@ -86,7 +98,7 @@ function UserProfile(): JSX.Element {
       )}
       {otherUser && !isCurrUser && (
         <div className="flex mt-24 ms-72">
-          <FaUserCircle className="h-[200px] w-[200px] text-white" />
+          {renderProfilePic(currUser?.profile)}{" "}
           <div>
             <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
             <div className="flex">
