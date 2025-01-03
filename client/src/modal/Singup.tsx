@@ -146,7 +146,7 @@ function Signup(): JSX.Element {
         <h4 className="ms-5 text-gray-500 mb-2">
           Your birthday won't be shown publicly.
         </h4>
-        <div className="overflow-y-scroll overflow-x-hidden mb-10 flex-1">
+        <div className="overflow-y-scroll overflow-x-hidden mb-5">
           <form
             className="mt-1 flex flex-col items-center"
             onSubmit={formik.handleSubmit}
@@ -220,12 +220,11 @@ function Signup(): JSX.Element {
         </div>
 
         <div className="flex flex-col">
-          <div className="text-center  bg-[#2e2e2e] w-[458px] ms-[-30px] text-[#e8e8e8] font-thin text-[13px] py-3">
+          <div className="text-center py-1 bg-[#2e2e2e] w-[458px] ms-[-30px] text-[#e8e8e8] font-thin text-[13px] py-">
             By continuing, you agree to TikTok’s Terms of Service and confirm
             that you have read TikTok’s Privacy Policy.
           </div>
-
-          <div className="text-center border border-x-0 border-b-0  border-t-gray-300  bg-[#2e2e2e] text-[#e8e8e8] w-[458px] ms-[-30px] font-bold py-4">
+          <div className="text-center border border-x-0 border-b-0  border-t-gray-500  bg-[#2e2e2e] text-[#e8e8e8] w-[458px] ms-[-30px] font-semibold py-4">
             Already have an account?
             <button
               onClick={handleSwitchToLogin}

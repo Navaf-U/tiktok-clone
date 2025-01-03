@@ -51,7 +51,7 @@ function Login(): JSX.Element {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-[#121212] relative p-8 rounded shadow-lg h-[580px] w-[460px]">
+      <div className="bg-[#121212] cursor-pointer relative p-8 rounded shadow-lg h-[580px] w-[460px]">
         <IoIosClose
           onClick={handleClose}
           size={40}
@@ -93,7 +93,7 @@ function Login(): JSX.Element {
           </div>
           <button
             type="submit"
-            className={`p-3 rounded w-[90%] mb-4 font-extrabold ${
+            className={`p-3 rounded w-[90%] mb-4 font-semibold ${
               isButtonActive
                 ? "bg-[#ff3b5b] text-white"
                 : "bg-[#262626] text-[#7c7c7c] hover:bg-[#222121] hover:text-[#c9c9c9]"
