@@ -50,24 +50,17 @@ function UserProfile(): JSX.Element {
     };
     FetchUser();
   }, [username, currUser]);
-  const renderProfilePic = (profileUrl: string | undefined) => {
-    if (profileUrl) {
-      return (
-        <img
-          src={profileUrl}
-          alt="User Profile"
-          className="h-[200px] w-[200px] rounded-full object-cover"
-        />
-      );
-    } else {
-      return <FaUserCircle className="h-[200px] w-[200px] text-white" />;
-    }
-  };
   return (
     <div>
       {isCurrUser && (
         <div className="flex mt-24 ms-64">
-          {renderProfilePic(currUser?.profile)}{" "}
+          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden" >
+          {currUser?.profile ? (
+            <img className="object-cover w-full h-full" src={currUser?.profile} alt="" />
+          ) : (
+            <FaUserCircle className="text-white w-full h-full" size={150} />
+          )}
+          </div>
           <div>
             <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
             <div className="flex">
@@ -97,8 +90,14 @@ function UserProfile(): JSX.Element {
         </div>
       )}
       {otherUser && !isCurrUser && (
-        <div className="flex mt-24 ms-72">
-          {renderProfilePic(currUser?.profile)}{" "}
+        <div className="flex items-center mt-24 ms-72 ">
+          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden" >
+          {otherUser?.profile ? (
+            <img className="object-cover w-full h-full" src={otherUser?.profile} alt="" />
+          ) : (
+            <FaUserCircle className="text-white w-full h-full" size={150} />
+          )}
+          </div>
           <div>
             <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
             <div className="flex">
