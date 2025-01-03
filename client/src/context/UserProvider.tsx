@@ -3,6 +3,7 @@ import axiosErrorManager from "../utilities/axiosErrorManager";
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 interface User {
@@ -43,6 +44,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
   const [showUserEdit, setShowUserEdit] = useState(false);
+  const navigate = useNavigate()
   const {toast} = useToast()
   
   
@@ -67,7 +69,6 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       localStorage.setItem("currUser", JSON.stringify(res.data.user));
       setCurrUser(res.data.user);
       setShowModal(false);
-      console.log(currUser)
       toast({
         title: "Success",
         description: "You are now logged in!",
@@ -112,10 +113,13 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   }
   const logoutUser: () => void = () => {
     const confirm = window.confirm("Are you sure you want to logout?");
+
     if (confirm) {
       localStorage.removeItem("token");
       localStorage.removeItem("currUser");
       setCurrUser(null);
+      setShowModal(false);
+      navigate("/")
     }
   };
 

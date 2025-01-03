@@ -23,8 +23,17 @@ import { Link } from "react-router-dom";
 
 function NavBar(): JSX.Element {
   const userContext = useContext(UserContext);
-  const { currUser, showModal, modalType, setModalType, setShowModal , logoutUser } =
-    userContext || {};
+  if (!userContext) {
+    throw new Error("UserContext is not available");
+  }
+  const {
+    currUser,
+    showModal,
+    modalType,
+    setModalType,
+    setShowModal,
+    logoutUser,
+  } = userContext;
   const [showDropdown, setShowDropdown] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -42,10 +51,17 @@ function NavBar(): JSX.Element {
     setHideTimeout(timeout);
   };
 
+  const handleLogout: () => void = () => {
+    setShowDropdown(false);
+    logoutUser();
+  };
+
   return (
     <div className="fixed z-20 bg-[#121212] w-full h-[62px] flex justify-center items-center top-0 border-b border-b-[#ffffff48]">
       <div className="flex items-center w-full justify-between my-2 lg:my-0 px-4">
-        <Link to="/" ><img src={tiktokFullPng} className="w-32 h-[35px]" alt="" /></Link>
+        <Link to="/">
+          <img src={tiktokFullPng} className="w-32 h-[35px]" alt="" />
+        </Link>
         <div className="flex relative flex-grow max-w-lg">
           <Input
             type="text"
@@ -59,7 +75,7 @@ function NavBar(): JSX.Element {
         </div>
         {currUser ? (
           <div className="flex items-center space-x-4">
-            <Button variant={"grays"} className="hidden md:flex" >
+            <Button variant={"grays"} className="hidden md:flex">
               <FaPlus /> Upload
             </Button>
             <BiMessageMinus className="text-[#c9c9c9]" size={30} />
@@ -106,7 +122,10 @@ function NavBar(): JSX.Element {
           onMouseLeave={handleMouseLeave}
           className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[214px] h-[345px] rounded-md"
         >
-          <div className="flex flex-col items-start py-2" onClick={()=>setShowDropdown(false)}>
+          <div
+            className="flex flex-col items-start py-2"
+            onClick={() => setShowDropdown(false)}
+          >
             {[
               {
                 Icon: BiUser,
@@ -135,9 +154,12 @@ function NavBar(): JSX.Element {
             ))}
           </div>
           <hr className="opacity-30" />
-          <button onClick={logoutUser} className="flex items-center justify-start ms-4 gap-3 font-semibold w-[90%] h-[40px] hover:bg-[#3a3a3a] cursor-pointer text-white">
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full h-[40px] ps-3 hover:bg-[#3a3a3a] cursor-pointer"
+          >
             <TbLogout2 size={20} className="text-white" />
-            Log out
+            <p className="text-white ml-4 font-semibold">Log out</p>
           </button>
         </div>
       )}
