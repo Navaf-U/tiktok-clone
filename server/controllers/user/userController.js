@@ -11,21 +11,30 @@ const getOneUser = async (req, res) => {
 };
 
 const userUpdate = async (req, res, next) => {
-  const { bio } = req.body;
-  const user = await User.findOne({ _id: req.user.id }, { password: 0 });
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  if (req.file) {
-    if (user.profile) {
-      await cloudinary.uploader.destroy(user.profile);
+  try {
+    const { bio } = req.body;
+    const user = await User.findOne({ _id: req.user.id }, { password: 0 });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    user.profile = req.uploadedFile.secure_url;
+
+    if (req.file) {
+      if (user.profile) {
+        await cloudinary.uploader.destroy(user.profile).catch(console.error);
+      }
+      user.profile = req.uploadedFile.secure_url;
+    }
+
+    if (bio !== undefined) {
+      user.bio = bio;
+    }
+
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    res.status(500).json({ message: "Failed to update profile" });
   }
-  if (bio !== undefined) {
-    user.bio = bio;
-  }
-  await user.save();
-  res.json(user);
 };
 export { getOneUser, userUpdate };

@@ -4,7 +4,7 @@ import { PassThrough } from "stream";
 const uploadToCloudinary = async (req, res, next) => {
   try {
     if (!req.file) {
-      return next(new CustomError("Please upload a file", 400));
+      return next();
     }
     const buffer = req.file.buffer;
     const resourceType = req.file.mimetype.startsWith("image")
