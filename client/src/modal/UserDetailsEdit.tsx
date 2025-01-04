@@ -28,15 +28,22 @@ function UserDetailsEdit(): JSX.Element {
 
   const handleSave = async () => {
     const formData = new FormData();
-    if (bio) formData.append("bio", bio);
-    if (profilePhoto) formData.append("file", profilePhoto);
-
+    if (bio !== currUser?.bio) {
+      formData.append("bio", bio);
+    }
+    if (profilePhoto) {
+      formData.append("file", profilePhoto);
+    }
     try {
-      const { data } = await axiosInstance.patch("/user/profile/update", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const { data } = await axiosInstance.patch(
+        "/user/profile/update",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       setCurrUser(data);
       localStorage.setItem("currUser", JSON.stringify(data));
       setShowUserEdit(false);
@@ -57,7 +64,9 @@ function UserDetailsEdit(): JSX.Element {
       </div>
       <hr className="w-full opacity-45" />
       <div className="flex justify-between py-5 items-start mt-5 mb-3 mx-10">
-        <h1 className="font-medium text-[#e8e8e8] text-[20px]">Profile photo</h1>
+        <h1 className="font-medium text-[#e8e8e8] text-[20px]">
+          Profile photo
+        </h1>
         <input type="file" accept="image/*" onChange={handleFileChange} />
       </div>
       <hr className="opacity-45 ms-5 w-[95%]" />
@@ -101,7 +110,11 @@ function UserDetailsEdit(): JSX.Element {
         >
           Cancel
         </Button>
-        <Button variant={"pinks"} className="w-24 mt-8 h-9 rounded-sm" onClick={handleSave}>
+        <Button
+          variant={"pinks"}
+          className="w-24 mt-8 h-9 rounded-sm"
+          onClick={handleSave}
+        >
           Save
         </Button>
       </div>

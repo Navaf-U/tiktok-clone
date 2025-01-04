@@ -19,7 +19,7 @@ import tiktokIcon from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
 import { Link } from "react-router-dom";
-import UserProfilePicture from "./shared/userProfilePicture";
+import UserProfilePicture from "./shared/UserProfilePicture";
 
 function NavBar(): JSX.Element {
   const userContext = useContext(UserContext);
