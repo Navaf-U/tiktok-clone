@@ -10,14 +10,16 @@ import { RiUserReceived2Line } from "react-icons/ri";
 import { LiaUserFriendsSolid } from "react-icons/lia";
 import { RiLiveFill } from "react-icons/ri";
 import { IoNavigateOutline } from "react-icons/io5";
-import { FaRegUserCircle } from "react-icons/fa";
+import UserProfilePicture from "./shared/UserProfilePicture";
+import { UserContext } from "@/context/UserProvider";
+import { useContext } from "react";
 
 const HomeSidebar = (): JSX.Element => {
+  const userContext = useContext(UserContext);
+  const { currUser } = userContext || {};
   return (
     <SidebarProvider>
-      <Sidebar
-        className="fixed top-[62px] left-0 h-[0px] bg-[#121212] border-0 text-white  transition-all w-16 lg:w-60"
-      >
+      <Sidebar className="fixed top-[62px] left-0 h-[0px] bg-[#121212] border-0 text-white  transition-all w-16 lg:w-60">
         <SidebarMenu className="">
           <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
             <RiHome4Line size={26} />
@@ -47,13 +49,17 @@ const HomeSidebar = (): JSX.Element => {
             <IoNavigateOutline size={26} />
             <span className="hidden lg:inline">Messages</span>
           </SidebarMenuItem>
-
           <SidebarMenuItem className="flex gap-2 text-lg p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <FaRegUserCircle size={26} />
+            <div className="w-[40px] h-[40px] flex items-center rounded-full overflow-hidden me-1">
+              <UserProfilePicture
+                profile={currUser?.profile}
+                className="object-cover w-full h-full hidden lg:flex"
+              />
+            </div>
             <span className="hidden lg:inline">Profile</span>
           </SidebarMenuItem>
         </SidebarMenu>
-        <hr className="opacity-30 mt-5"/>
+        <hr className="opacity-30 mt-5" />
       </Sidebar>
     </SidebarProvider>
   );

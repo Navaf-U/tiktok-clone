@@ -5,7 +5,6 @@ import { createContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 interface User {
   _id: string;
   email: string;
@@ -15,12 +14,15 @@ interface User {
   role: string;
 }
 
-
-
 interface UserContextType {
   currUser: User | null;
   LoginUser: (emailOrUsername: string, password: string) => Promise<void>;
-  UserRegister: (username: string, email: string, password: string , dob : object) => Promise<void>;
+  UserRegister: (
+    username: string,
+    email: string,
+    password: string,
+    dob: object
+  ) => Promise<void>;
   logoutUser: () => void;
   setCurrUser: React.Dispatch<React.SetStateAction<User | null>>;
   showModal: boolean;
@@ -44,10 +46,9 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
   const [showUserEdit, setShowUserEdit] = useState(false);
-  const navigate = useNavigate()
-  const {toast} = useToast()
-  
-  
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("currUser");
@@ -55,7 +56,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       setCurrUser(JSON.parse(user));
     }
   }, []);
-  
+
   const LoginUser: (
     emailOrUsername: string,
     password: string
@@ -73,44 +74,42 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
         title: "Success",
         description: "You are now logged in!",
       });
-
+      navigate("/");
     } catch (err) {
-      console.log("YOO")
-       toast({
+      console.log("YOO");
+      toast({
         title: "Login Failed",
         description: axiosErrorManager(err) || "An unknown error occurred.",
       });
-      console.log(axiosErrorManager(err))
+      console.log(axiosErrorManager(err));
     }
   };
 
-  const UserRegister : (
+  const UserRegister: (
     username: string,
-    email:string,
+    email: string,
     password: string,
-    dob : object
-  ) => Promise<void> = async (username, email , password,dob) => {
-   
+    dob: object
+  ) => Promise<void> = async (username, email, password, dob) => {
     try {
       await axios.post("http://localhost:3000/auth/register", {
         username,
         email,
         password,
-        dob
+        dob,
       });
       setModalType("login");
       toast({
         title: "Success",
         description: "You are now registered!",
       });
-
     } catch (err) {
-       toast({
+      toast({
         title: "Register Failed",
         description: axiosErrorManager(err) || "An unknown error occurred.",
       });
     }
-  }
+  };
   const logoutUser: () => void = () => {
     const confirm = window.confirm("Are you sure you want to logout?");
 
@@ -119,10 +118,9 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       localStorage.removeItem("currUser");
       setCurrUser(null);
       setShowModal(false);
-      navigate("/")
+      navigate("/");
     }
   };
-
 
   const value: UserContextType = {
     currUser,
@@ -135,7 +133,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     UserRegister,
     showUserEdit,
     setShowUserEdit,
-    logoutUser
+    logoutUser,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
