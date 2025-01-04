@@ -2,13 +2,13 @@ import { UserContext } from "@/context/UserProvider";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { HiDotsHorizontal } from "react-icons/hi";
 import UserDetailsEdit from "@/modal/UserDetailsEdit";
 import HomeSidebar from "@/components/HomeSideBar";
+import UserProfilePicture from "../components/shared/UserProfilePicture";
 interface User {
   id: string;
   username: string;
@@ -54,12 +54,11 @@ function UserProfile(): JSX.Element {
     <div>
       {isCurrUser && (
         <div className="flex mt-24 ms-64">
-          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden" >
-          {currUser?.profile ? (
-            <img className="object-cover w-full h-full" src={currUser?.profile} alt="" />
-          ) : (
-            <FaUserCircle className="text-white w-full h-full" size={150} />
-          )}
+          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
+            <UserProfilePicture
+              profile={currUser?.profile}
+              className="object-cover w-full h-full"
+            />
           </div>
           <div>
             <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
@@ -91,12 +90,11 @@ function UserProfile(): JSX.Element {
       )}
       {otherUser && !isCurrUser && (
         <div className="flex items-center mt-24 ms-72 ">
-          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden" >
-          {otherUser?.profile ? (
-            <img className="object-cover w-full h-full" src={otherUser?.profile} alt="" />
-          ) : (
-            <FaUserCircle className="text-white w-full h-full" size={150} />
-          )}
+          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
+            <UserProfilePicture
+              profile={otherUser?.profile}
+              className="object-cover w-full h-full"
+            />
           </div>
           <div>
             <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>

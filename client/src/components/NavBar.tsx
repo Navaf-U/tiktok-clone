@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BiMessageMinus } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa";
-import { FaRegUserCircle } from "react-icons/fa";
 import { useContext, useState } from "react";
 import { UserContext } from "@/context/UserProvider";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -20,6 +19,7 @@ import tiktokIcon from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
 import { Link } from "react-router-dom";
+import UserProfilePicture from "./shared/userProfilePicture";
 
 function NavBar(): JSX.Element {
   const userContext = useContext(UserContext);
@@ -90,14 +90,17 @@ function NavBar(): JSX.Element {
               />
               Get Coin
             </Button>
-            <button>
-              <FaRegUserCircle
-                size={30}
-                className="text-white"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+            <div
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              className="w-[40px] h-[40px] flex items-center rounded-full overflow-hidden"
+            >
+              <UserProfilePicture
+                profile={currUser?.profile}
+                className="object-cover w-full h-full"
               />
-            </button>
+            </div>
+
           </div>
         ) : (
           <div className="flex items-center space-x-4">
