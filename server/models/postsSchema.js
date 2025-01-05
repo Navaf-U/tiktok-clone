@@ -1,6 +1,6 @@
 import mongoose from mongoose
 
-const postSchema = mongoose.Schema({
+const postsSchema = mongoose.Schema({
     username:{type: String, required: true},
     description:{type: String, required: false},
     file:{type: String, required: true},
@@ -10,5 +10,5 @@ const postSchema = mongoose.Schema({
     favorites:{type: [String],default: []},
 })
 
-const Posts = mongoose.model("Posts", postSchema)
+const Posts = mongoose.model("Posts", postsSchema)
 export default Posts
