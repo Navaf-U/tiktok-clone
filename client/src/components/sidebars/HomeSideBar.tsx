@@ -10,7 +10,7 @@ import { RiUserReceived2Line } from "react-icons/ri";
 import { LiaUserFriendsSolid } from "react-icons/lia";
 import { RiLiveFill } from "react-icons/ri";
 import { IoNavigateOutline } from "react-icons/io5";
-import UserProfilePicture from "./shared/UserProfilePicture";
+import UserProfilePicture from "../shared/UserProfilePicture";
 import { UserContext } from "@/context/UserProvider";
 import { useContext } from "react";
 

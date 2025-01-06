@@ -7,7 +7,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
 import { HiDotsHorizontal } from "react-icons/hi";
 import UserDetailsEdit from "@/modal/UserDetailsEdit";
-import HomeSidebar from "@/components/HomeSideBar";
+import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import UserProfilePicture from "../components/shared/UserProfilePicture";
 interface User {
   id: string;

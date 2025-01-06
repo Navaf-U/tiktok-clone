@@ -1,4 +1,4 @@
-import HomeSidebar from "@/components/HomeSideBar";
+import HomeSidebar from "@/components/sidebars/HomeSideBar";
 
 function HomePage(): JSX.Element {
   return (
