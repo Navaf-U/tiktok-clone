@@ -1,6 +1,7 @@
 import NavBar from "@/components/NavBar";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
 
+
 function HomePage(): JSX.Element {
   return (
     <div>
