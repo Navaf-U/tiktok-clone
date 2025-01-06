@@ -9,6 +9,7 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import UserDetailsEdit from "@/modal/UserDetailsEdit";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import UserProfilePicture from "../components/shared/UserProfilePicture";
+import NavBar from "@/components/NavBar";
 interface User {
   id: string;
   username: string;
@@ -52,6 +53,7 @@ function UserProfile(): JSX.Element {
   }, [username, currUser]);
   return (
     <div>
+      <NavBar/>
       {isCurrUser && (
         <div className="flex mt-24 ms-64">
           <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">

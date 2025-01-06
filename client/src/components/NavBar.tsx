@@ -18,10 +18,11 @@ import tiktokFullPng from "../assets/tiktok-full-icon.png";
 import tiktokIcon from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserProfilePicture from "./shared/UserProfilePicture";
 
 function NavBar(): JSX.Element {
+  const navigate = useNavigate()
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext is not available");
@@ -75,7 +76,7 @@ function NavBar(): JSX.Element {
         </div>
         {currUser ? (
           <div className="flex items-center space-x-4">
-            <Button variant={"grays"} className="hidden md:flex">
+            <Button onClick={() => navigate("/upload/video") } variant={"grays"} className="hidden md:flex">
               <FaPlus /> Upload
             </Button>
             <BiMessageMinus className="text-[#c9c9c9]" size={30} />

@@ -1,24 +1,18 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/Home";
 import UserProfile from "./Pages/UserProfile";
-import NavBar from "./components/NavBar";
 import NotFound from "./Pages/NotFound";
+import UploadPage from "./Pages/UploadPage";
 
 function AppRoutes() {
   return (
     <>
-      <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/profile/:username"
-          element={
-              <UserProfile />
-          }
-        />
+        <Route path="/profile/:username" element={<UserProfile />} />
+        <Route path="/upload/video" element={<UploadPage/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-        
     </>
   );
 }
