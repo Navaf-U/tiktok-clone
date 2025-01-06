@@ -1,9 +1,11 @@
-import { useState } from "react";
-import PostPageSidebar from "@/components/sidebars/PostPageSidebar";
+import { useEffect, useState } from "react";
+import PostPageSidebar from "@/components/sidebars/PostPageSideBar";
 import { Button } from "@/components/ui/button";
 import { BsCloudArrowUpFill } from "react-icons/bs";
 import { useDropzone } from "react-dropzone";
 import axiosInstance from "@/utilities/axiosInstance";
+import TiktokMobileImage from "../assets/tiktokMobilePost.jpg";
+import VideoPostIcons from "@/components/shared/VideoPostIcons";
 
 interface PostDetails {
   _id: string;
@@ -19,45 +21,46 @@ const UploadPage = (): JSX.Element => {
   );
 
   const onDrop = async (acceptedFiles: File[]) => {
-    console.log("Accepted Files:", acceptedFiles);
-
     const formData = new FormData();
     acceptedFiles.forEach((file) => formData.append("file", file));
 
     try {
-      const {data} = await axiosInstance.post("/user/posts/video", formData, {
+      const { data } = await axiosInstance.post("/user/posts/video", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(data)
       setPostDetails(data);
       setUploadStatus("uploaded");
       setStage("description");
     } catch (error) {
-      console.error("Error uploading video:", error);
-      setUploadStatus("Failed to upload video");
+      setUploadStatus("Failed to upload video" + error);
     }
   };
 
   const handlePost = async () => {
+    console.log("handlePost called");
     try {
       if (postDetails) {
-        console.log("Posting description for video:", postDetails._id);
-        const response = await axiosInstance.post(
+        await axiosInstance.post(
           `/user/posts/description/${postDetails._id}`,
-          {
-            description,
-          }
+          { description }
         );
-        console.log("Post success:", response.data);
-        setStage("result");
+        console.log("Post request successful");
+        setStage("result")
+      } else {
+        console.log("postDetails is null");
       }
     } catch (error) {
-      console.error("Error posting:", error);
-      setUploadStatus("Failed to post");
+      console.error("Error in handlePost:", error);
+      setUploadStatus("Failed to post: " + error);
     }
   };
+  
+
+  useEffect(() => {
+    console.log("Stage updated:", stage);
+  }, [stage]);
 
   const handleCancel = async () => {
     if (postDetails) {
@@ -68,19 +71,19 @@ const UploadPage = (): JSX.Element => {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-  console.log(postDetails?.file)
+
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="fixed top-0 left-0 h-full">
+    <div className="flex flex-col lg:flex-row md:h-screen bg-gray-100">
+      <div className="hidden lg:block fixed top-0 left-0 h-full">
         <PostPageSidebar />
       </div>
 
-      <div className="flex flex-1 justify-center items-center pl-[220px]">
+      <div className="flex flex-1 justify-center items-center lg:pl-[220px] p-4 lg:p-0">
         <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-lg">
           {stage === "upload" && (
             <div
               {...getRootProps()}
-              className={`flex flex-col items-center justify-center h-96 border-2 rounded-md ${
+              className={`flex flex-col items-center justify-center h-64 lg:h-96 border-2 rounded-md ${
                 isDragActive
                   ? "border-blue-400 bg-blue-50"
                   : "border-dashed border-gray-300 bg-gray-50"
@@ -88,10 +91,10 @@ const UploadPage = (): JSX.Element => {
             >
               <input {...getInputProps()} />
               <BsCloudArrowUpFill size={55} className="text-gray-400" />
-              <h1 className="mt-4 text-xl font-bold text-gray-800">
+              <h1 className="mt-4 text-lg lg:text-xl font-bold text-gray-800">
                 Select video to upload
               </h1>
-              <p className="text-gray-600 text-sm">
+              <p className="text-gray-600 text-sm text-center">
                 {isDragActive
                   ? "Drop the files here ..."
                   : "Or drag and drop it here"}
@@ -102,53 +105,66 @@ const UploadPage = (): JSX.Element => {
             </div>
           )}
 
-
           {stage === "description" && postDetails && (
-            <div  className="flex flex-col items-center">
-                  {postDetails.file && (
-                      <div>
-                      <video src={postDetails?.file} controls width="320" height="240" />
-                    </div>
-                  )}
-              <h2 className="text-xl font-bold text-gray-800">
-                Add Description
-              </h2>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="Write a description for your video..."
-                className="w-full mt-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff2b56]"
-                rows={4}
-              ></textarea>
-              <div className="mt-4 flex space-x-4">
-                <Button variant="pinks" onClick={handlePost}>
-                  Post
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={handleCancel}
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800"
-                >
-                  Cancel
-                </Button>
+            <div className="flex flex-col lg:flex-row w-full">
+              <div className="flex-1 lg:pr-4 mb-4 lg:mb-0">
+                <h2 className="text-lg lg:text-xl font-bold text-gray-800">
+                  Add Description
+                </h2>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Write a description for your video..."
+                  className="w-full p-2 mt-4 border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff2b56]"
+                  rows={5}
+                ></textarea>
+                <div className="mt-4 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                  <Button variant="pinks" onClick={handlePost}>
+                    Post
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={handleCancel}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+
+              <div className="relative flex-shrink-0 w-full lg:w-[260px] aspect-[9/16] mx-auto lg:mx-0">
+                <img
+                  src={TiktokMobileImage}
+                  alt="Mobile Frame"
+                  className="absolute top-0 left-0 w-full h-full object-contain"
+                />
+                <video
+                  src={postDetails.file}
+                  controls
+                  className="absolute top-[15%] left-[10%] w-[80%] h-[70%] object-cover rounded-md"
+                />
+                <div className="absolute z-10 right-8 top-32">
+                <VideoPostIcons/>
+                </div>
               </div>
             </div>
           )}
 
           {stage === "result" && postDetails && (
             <div className="flex flex-col items-center">
-              <h2 className="text-xl font-bold text-gray-800">Post Uploaded</h2>
-              <p className="text-gray-600 mt-4">
+              <h2 className="text-lg lg:text-xl font-bold text-gray-800">
+                Post Uploaded
+              </h2>
+              <p className="text-gray-600 mt-4 text-center">
                 Your video has been posted successfully!
               </p>
               <div className="mt-4">
                 <video
                   src={postDetails.file}
                   controls
-                  width="320"
-                  height="240"
+                  className="w-full lg:w-[320px] h-auto object-cover"
                 />
-                <p className="mt-4">{description}</p>
+                <p className="mt-4 text-center">{description}</p>
               </div>
               <Button variant="pinks" onClick={handleCancel} className="mt-4">
                 Cancel
