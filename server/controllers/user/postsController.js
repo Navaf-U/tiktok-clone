@@ -32,6 +32,7 @@ const userVideoDescription = async (req, res) => {
   }
   post.description = description;
   await post.save();
+  return res.status(200).json({ message: "Post updated successfully", post });
 };
 
 const userDeleteVideo = async (req, res) => {
@@ -44,5 +45,14 @@ const userDeleteVideo = async (req, res) => {
   await Posts.deleteOne({ _id: postID });
   res.json({ message: "Post deleted successfully" });
 };
+
+// const userGetPost = async (req, res) => {
+//   const postID = req.params.id;
+//   const post = await Posts.findById(postID);
+//   if (!post) {
+//     return res.status(404).json({ message: "Post not found" });
+//   }
+//   res.json(post);
+// };
 
 export {userVideoPost,userVideoDescription,userDeleteVideo};
