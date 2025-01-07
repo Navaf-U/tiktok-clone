@@ -10,6 +10,7 @@ import UserDetailsEdit from "@/modal/UserDetailsEdit";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import UserProfilePicture from "../components/shared/UserProfilePicture";
 import NavBar from "@/components/NavBar";
+import ProfileVideoShow from "@/components/ProfileVideoShow";
 interface User {
   id: string;
   username: string;
@@ -51,46 +52,52 @@ function UserProfile(): JSX.Element {
     };
     FetchUser();
   }, [username, currUser]);
-
   return (
     <div>
       <NavBar />
-      <div className="flex mt-24 lg:ml-60 ml-16 h-screen">
-        <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
-          <UserProfilePicture
-            profile={currUser?.profile}
-            className="object-cover w-full h-full"
-          />
+      {isCurrUser && (
+        <div>
+          <div className="flex mt-24 ms-64">
+          <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
+            <UserProfilePicture
+              profile={currUser?.profile}
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <div>
+            <h1 className="text-white t ext-2xl ms-5 mt-8">{username}</h1>
+            <div className="flex">
+              <Button
+                onClick={() => setShowUserEdit(true)}
+                variant={"pinks"}
+                className="ms-4 mt-3 w-[115px] h-[40px]"
+              >
+                Edit Profile
+              </Button>
+              <IoSettingsOutline className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+              <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+            </div>
+            <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
+              <p className="hover:underline cursor-pointer">0 Following</p>
+              <p className="hover:underline cursor-pointer">0 Followers</p>
+              <p className="hover:underline cursor-pointer">0 Likes</p>
+            </div>
+            <div className="mt-2 ms-5 font-normal text-[17px]">
+              {isCurrUser && currUser?.bio ? (
+                <h1>{currUser.bio}</h1>
+              ) : (
+                <p>No bio yet.</p>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="ml-5 mt-8">
-          <h1 className="text-white text-2xl">{username}</h1>
-          <div className="flex">
-            <Button
-              onClick={() => setShowUserEdit(true)}
-              variant={"pinks"}
-              className="ms-4 mt-3 w-[115px] h-[40px]"
-            >
-              Edit Profile
-            </Button>
-            <IoSettingsOutline className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
-            <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
-          </div>
-          <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
-            <p className="hover:underline cursor-pointer">0 Following</p>
-            <p className="hover:underline cursor-pointer">0 Followers</p>
-            <p className="hover:underline cursor-pointer">0 Likes</p>
-          </div>
-          <div className="mt-2 ms-5 font-normal text-[17px]">
-            {isCurrUser && currUser?.bio ? (
-              <h1>{currUser.bio}</h1>
-            ) : (
-              <p>No bio yet.</p>
-            )}
-          </div>
+            <div className="mt-10 ms-64">
+              <ProfileVideoShow />
+            </div>
         </div>
-      </div>
+      )}
       {otherUser && !isCurrUser && (
-        <div className="flex items-center mt-24 lg:ml-60 ml-16">
+        <div className="flex items-center mt-24 ms-72 ">
           <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
             <UserProfilePicture
               profile={otherUser?.profile}
@@ -118,7 +125,11 @@ function UserProfile(): JSX.Element {
               <p className="hover:underline cursor-pointer">0 Likes</p>
             </div>
             <div className="mt-2 ms-5 font-normal text-[17px]">
-              {otherUser?.bio ? <h1>{otherUser.bio}</h1> : <p>No bio yet.</p>}
+              {otherUser && otherUser?.bio ? (
+                <h1>{otherUser.bio}</h1>
+              ) : (
+                <p>No bio yet.</p>
+              )}
             </div>
           </div>
         </div>
@@ -138,4 +149,3 @@ function UserProfile(): JSX.Element {
 }
 
 export default UserProfile;
-

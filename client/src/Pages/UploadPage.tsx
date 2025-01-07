@@ -34,7 +34,7 @@ const UploadPage = (): JSX.Element => {
     onDrop: async (acceptedFiles) => {
       const formData = new FormData();
       acceptedFiles.forEach((file) => formData.append("file", file));
-      setFilename(acceptedFiles[0].name)
+      setFilename(acceptedFiles[0].name);
       setProgress(0);
       setShowUploadedMessage(false);
       try {
@@ -116,7 +116,9 @@ const UploadPage = (): JSX.Element => {
         <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-lg">
           {stage === "description" && (
             <div>
-                <h1 className="text-[23px] font-semibold text-black">{filename}</h1>
+              <h1 className="text-[23px] font-semibold text-black">
+                {filename}
+              </h1>
               <div className="flex gap-5 text-black">
                 <h3 className="font-bold">
                   <span className="font-normal text-[14px]">Size :</span>{" "}
@@ -177,16 +179,16 @@ const UploadPage = (): JSX.Element => {
                 </h2>
 
                 <div className="relative">
-                <textarea
-                  value={description}
-                  onChange={handleChange}
-                  placeholder="Share more about your video here..."
-                  className="w-full p-2 mt-4 border text-black border-none rounded-md outline-none h-[110px] bg-[#f2f2f2]"
-                  rows={5}
-                ></textarea>
-                <div className="text-sm absolute text-gray-400 right-2 top-24 ">
-                  {description.length}/{maxLength}
-                </div>
+                  <textarea
+                    value={description}
+                    onChange={handleChange}
+                    placeholder="Share more about your video here..."
+                    className="w-full p-2 mt-4 border text-black border-none rounded-md outline-none h-[110px] bg-[#f2f2f2]"
+                    rows={5}
+                  ></textarea>
+                  <div className="text-sm absolute text-gray-400 right-2 top-24 ">
+                    {description.length}/{maxLength}
+                  </div>
                 </div>
                 <div className="mt-4 flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
                   <Button
@@ -206,19 +208,19 @@ const UploadPage = (): JSX.Element => {
                 </div>
               </div>
 
-              <div className="relative flex-shrink-0 w-full lg:w-[260px] aspect-[9/16] mx-auto lg:mx-0">
+              <div className="relative flex-shrink-0 w-full lg:w-[260px] aspect-[9/16] mx-auto lg:mx-0 rounded-md overflow-hidden border-2 border-yellow-100">
                 <img
                   src={TiktokMobileImage}
                   alt="Mobile Frame"
-                  className="absolute top-0 left-0 w-full h-full object-contain"
+                  className="absolute top-0 left-0 w-full h-full object-contain "
                 />
                 <video
                   src={postDetails.file}
                   controls
                   className="absolute top-[15%] left-[10%] w-[80%] h-[70%] object-cover"
                 />
-                <div className="absolute z-10 right-8 top-32">
-                  <VideoPostIcons />
+                <div className="absolute z-10 right-8 top-44">
+                  <VideoPostIcons small />
                 </div>
               </div>
             </div>
@@ -240,9 +242,14 @@ const UploadPage = (): JSX.Element => {
                 />
                 <p className="mt-4 text-center">{description}</p>
               </div>
+              <div className="flex gap-2">
               <Button variant="pinks" onClick={handleCancel} className="mt-4">
                 Cancel
               </Button>
+              <Button onClick={()=>setStage("upload")} className="mt-4 bg-green-300 hover:bg-green-400 text-gray-800 w-[73px]">
+                Done
+              </Button>
+              </div>
             </div>
           )}
 
