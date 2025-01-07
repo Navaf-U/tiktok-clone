@@ -6,7 +6,7 @@ function HomePage(): JSX.Element {
   return (
     <div>
       <NavBar/>
-    <div className="flex">
+    <div className="w-40 flex">
       <HomeSidebar />
       <div className="mt-20">
         <h1>Home Page</h1>
