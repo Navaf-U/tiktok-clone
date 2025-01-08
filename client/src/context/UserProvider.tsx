@@ -14,6 +14,23 @@ interface User {
   role: string;
 }
 
+interface Comment {
+  user: string;
+  text: string;
+  _id: string;
+  createdAt: string;
+}
+interface Post {
+  _id: string;
+  username: string;
+  file: string;
+  likes: string[];
+  comments: Comment[];
+  favorites: string[];
+  date: number;
+  description: string;
+}
+
 interface UserContextType {
   currUser: User | null;
   LoginUser: (emailOrUsername: string, password: string) => Promise<void>;
@@ -31,6 +48,8 @@ interface UserContextType {
   setModalType: React.Dispatch<React.SetStateAction<"login" | "signup">>;
   showUserEdit: boolean;
   setShowUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  posts: Post[],
+  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -46,6 +65,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
   const [showUserEdit, setShowUserEdit] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -122,6 +142,21 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     }
   };
 
+useEffect(()=>{
+  const getAllPosts = async () =>{
+    try {
+      const {data} = await axios.get("http://localhost:3000/user/posts")
+    setPosts(data)
+    } catch (error) {
+      toast({
+        title: "Register Failed",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+      });
+    }
+  }
+  getAllPosts()
+},[currUser])
+
   const value: UserContextType = {
     currUser,
     setCurrUser,
@@ -134,6 +169,8 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     showUserEdit,
     setShowUserEdit,
     logoutUser,
+    posts,
+    setPosts
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
