@@ -56,7 +56,7 @@ function SingleVideoPage(): JSX.Element {
 
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
-  
+
   useEffect(() => {
     const getUserSinglePost = async () => {
       try {
@@ -71,7 +71,7 @@ function SingleVideoPage(): JSX.Element {
     };
     getUserSinglePost();
   }, [id]);
-  
+
   useEffect(() => {
     const getUser = async () => {
       if (singlePost?.username) {
@@ -104,8 +104,8 @@ function SingleVideoPage(): JSX.Element {
       }
     };
     getCommentsOfPost();
-  }, [id]); 
-  
+  }, [id]);
+
   const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -115,7 +115,7 @@ function SingleVideoPage(): JSX.Element {
       });
       console.log(data);
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
-      setComment(""); 
+      setComment("");
     } catch (error) {
       toast({
         title: "Comment Error",
@@ -123,10 +123,10 @@ function SingleVideoPage(): JSX.Element {
       });
     }
   };
-     
-    const formattedDate = singlePost?.date
-      ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
-      : "";
+
+  const formattedDate = singlePost?.date
+    ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
+    : "";
   return (
     <div className="flex h-screen">
       <div>
@@ -158,8 +158,8 @@ function SingleVideoPage(): JSX.Element {
             </div>
             <p className="mt-2 text-[15px]">{singlePost?.description}</p>
             <div className="flex gap-1 items-center">
-              <IoIosMusicalNotes size={12} />
-              <p className="text-xs mt-2">original Sound - {user?.username}</p>
+              <IoIosMusicalNotes size={12} className="mt-1" />
+              <p className="text-xs mt-1">original Sound - {user?.username}</p>
             </div>
           </div>
         </div>
@@ -232,9 +232,9 @@ function SingleVideoPage(): JSX.Element {
           </div>
           <hr className="w-full opacity-50 bg-purple-800" />
         </div>
-        <div className="flex-1 overflow-y-scroll">
+        <div className="flex-1 overflow-y-scroll" id="commentsContainer">
           {stage === "comments" &&
-            singlePost?.comments.map((comment, index) => (
+            singlePost?.comments.slice().reverse().map((comment, index) => (
               <div key={index} className="p-2">
                 <div className="flex gap-2">
                   <UserProfilePicture
@@ -251,29 +251,25 @@ function SingleVideoPage(): JSX.Element {
               </div>
             ))}
         </div>
-        <hr className="w-full  opacity-50 bg-purple-800 absolute bottom-20" />
-
-        <div>
-          <form
-            className="absolute bottom-0 w-full bg-[#121212] p-3 flex gap-2 items-center"
-            action=""
-            onSubmit={postComment}
+        <form
+          className="sticky bottom-0 w-full bg-[#121212] p-3 flex gap-2 items-center"
+          action=""
+          onSubmit={postComment}
+        >
+          <input
+            type="text"
+            placeholder="Add a comment"
+            className="w-full bg-[#1c1c1c] p-2 rounded-md text-sm"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="bg-[#ff2b56] text-white px-4 py-1 rounded-md text-sm"
           >
-            <input
-              type="text"
-              placeholder="Add a comment"
-              className="w-full bg-[#1c1c1c] p-2 rounded-md text-sm"
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="bg-[#ff2b56] text-white px-4 py-1 rounded-md text-sm"
-            >
-              Post
-            </button>
-          </form>
-        </div>
+            Post
+          </button>
+        </form>
       </div>
     </div>
   );
