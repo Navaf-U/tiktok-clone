@@ -5,7 +5,10 @@ const userVideoPost = async (req, res) => {
   const uploadedFile = req.uploadedFile;
   const userID = req.user.id;
   if (uploadedFile) {
-    if (uploadedFile.format !== "mp4" || uploadedFile.resource_type !== "video") {
+    if (
+      uploadedFile.format !== "mp4" ||
+      uploadedFile.resource_type !== "video"
+    ) {
       return res.status(400).json({ message: "Invalid file type" });
     }
   }
@@ -20,7 +23,13 @@ const userVideoPost = async (req, res) => {
     username: user.username,
     file,
   });
-  res.json({_id : post._id,file,fileSize,fileDuration,message:"video uploaded successfully"});
+  res.json({
+    _id: post._id,
+    file,
+    fileSize,
+    fileDuration,
+    message: "video uploaded successfully",
+  });
 };
 
 const userVideoDescription = async (req, res) => {
@@ -56,6 +65,52 @@ const getAllPostsOfUser = async (req, res) => {
   res.json(posts);
 };
 
+const getSinglePostOfUser = async (req, res) => {
+  const postID = req.params.id;
+  const post = await Posts.findById(postID);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  res.json(post);
+};
+
+const postComment = async (req, res) => {
+  const postID = req.params.id;
+  const post = await Posts.findById(postID);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  const { text, user } = req.body;
+  if (!text || text.trim() === "") {
+    return res.status(400).json({ message: "Comment text cannot be empty" });
+  }
+  if (!user) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
+  const newComment = {
+    user,
+    text,
+  };
+  post.comments.push(newComment);
+  await post.save();
+
+  const updatedPost = await Posts.findById(postID).populate(
+    "comments.user",
+    "username profile"
+  );
+
+  res.json(updatedPost.comments);
+};
+
+const getCommentOfPost = async (req, res) => {
+  const postID = req.params.id;
+  const post = await Posts.findById(postID).populate('comments.user', 'username profile');
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  res.json(post.comments);
+};
+
 // const userGetPost = async (req, res) => {
 //   const postID = req.params.id;
 //   const post = await Posts.findById(postID);
@@ -65,4 +120,12 @@ const getAllPostsOfUser = async (req, res) => {
 //   res.json(post);
 // };
 
-export {userVideoPost,userVideoDescription,userDeleteVideo,getAllPostsOfUser};
+export {
+  userVideoPost,
+  userVideoDescription,
+  userDeleteVideo,
+  getAllPostsOfUser,
+  getSinglePostOfUser,
+  postComment,
+  getCommentOfPost
+};
