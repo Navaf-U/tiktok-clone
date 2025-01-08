@@ -1,11 +1,13 @@
 import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import axiosInstance from "@/utilities/axiosInstance";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HiOutlineAdjustmentsVertical } from "react-icons/hi2";
 import { MdBookmarkRemove } from "react-icons/md";
 import { TbHeartMinus } from "react-icons/tb";
 import VideoCard from "./shared/VideoCard";
+import { Link } from "react-router-dom";
+
 function ProfileVideoShow({ username }: { username: string }): JSX.Element {
   interface Post {
     _id: string;
@@ -23,15 +25,20 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
     "videos"
   );
 
+  const videoButtonRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
+    if (videoButtonRef.current) {
+      videoButtonRef.current.focus();
+    }
+
     const getUserPost = async () => {
       try {
         const { data } = await axiosInstance.get(`/user/posts/${username}`);
-        console.log(data);
         setPosts(data);
       } catch (error) {
         toast({
-          title: "Login Failed",
+          title: "Error",
           description: axiosErrorManager(error) || "An unknown error occurred.",
         });
       }
@@ -43,11 +50,16 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
     <div>
       <div className="flex font-semibold text-[18px] gap-5">
         <button
+          ref={videoButtonRef}
           onClick={() => setStage("videos")}
-          className="w-24 border-b-2 border-b-transparent hover:border-b-2 hover:border-white"
+          className={`w-24 border-b-2 ${
+            stage === "videos" ? "border-white" : "border-b-transparent"
+          } hover:border-b-2 hover:border-white`}
         >
           <div
-            className="flex gap-1 justify-center items-center focus:text-white text-[#8a8a8a]"
+            className={`flex gap-1 justify-center items-center ${
+              stage === "videos" ? "text-white" : "text-[#8a8a8a]"
+            }`}
             tabIndex={0}
           >
             <HiOutlineAdjustmentsVertical /> Videos
@@ -55,10 +67,14 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
         </button>
         <button
           onClick={() => setStage("favorites")}
-          className="w-24 border-b-2 border-b-transparent hover:border-b-2 hover:border-white"
+          className={`w-24 border-b-2 ${
+            stage === "favorites" ? "border-white" : "border-b-transparent"
+          } hover:border-b-2 hover:border-white`}
         >
           <div
-            className="flex gap-1 justify-center items-center focus:text-white text-[#8a8a8a]"
+            className={`flex gap-1 justify-center items-center ${
+              stage === "favorites" ? "text-white" : "text-[#8a8a8a]"
+            }`}
             tabIndex={0}
           >
             <MdBookmarkRemove /> Favorites
@@ -66,10 +82,14 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
         </button>
         <button
           onClick={() => setStage("liked")}
-          className="w-24 border-b-2 border-b-transparent hover:border-b-2 hover:border-white"
+          className={`w-24 border-b-2 ${
+            stage === "liked" ? "border-white" : "border-b-transparent"
+          } hover:border-b-2 hover:border-white`}
         >
           <div
-            className="flex gap-1 justify-center items-center focus:text-white text-[#8a8a8a]"
+            className={`flex gap-1 justify-center items-center ${
+              stage === "liked" ? "text-white" : "text-[#8a8a8a]"
+            }`}
             tabIndex={0}
           >
             <TbHeartMinus /> Liked
@@ -78,15 +98,17 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
       </div>
       <hr className="opacity-10 text-gray-500" />
       {stage === "videos" && (
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 pt-4">
-         {posts.length > 0 ? (
-           posts.map((post) => (
-             <VideoCard key={post._id} file={post.file} />
-           ))
-         ) : (
-           <p className="text-center text-gray-500">No videos found.</p>
-         )}
-       </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 pt-4">
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <Link to={`/${username}/video/${post._id}`} key={post._id}>
+                <VideoCard file={post.file}  />
+              </Link>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">No videos found.</p>
+          )}
+        </div>
       )}
       {stage === "favorites" && (
         <div>

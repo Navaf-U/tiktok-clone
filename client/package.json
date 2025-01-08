@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "client": "file:",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
