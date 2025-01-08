@@ -101,7 +101,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 pt-4">
           {posts.length > 0 ? (
             posts.map((post) => (
-              <Link to={`/${username}/video/${post._id}`} key={post._id}>
+              <Link to={`/user/video/${post._id}`} key={post._id}>
                 <VideoCard file={post.file}  />
               </Link>
             ))

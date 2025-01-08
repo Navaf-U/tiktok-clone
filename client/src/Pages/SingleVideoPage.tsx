@@ -113,7 +113,6 @@ function SingleVideoPage(): JSX.Element {
         text: comment,
         user: currUser?.id,
       });
-      console.log(data);
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       setComment("");
     } catch (error) {
@@ -127,6 +126,7 @@ function SingleVideoPage(): JSX.Element {
   const formattedDate = singlePost?.date
     ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
     : "";
+
   return (
     <div className="flex h-screen">
       <div>
@@ -234,22 +234,30 @@ function SingleVideoPage(): JSX.Element {
         </div>
         <div className="flex-1 overflow-y-scroll" id="commentsContainer">
           {stage === "comments" &&
-            singlePost?.comments.slice().reverse().map((comment, index) => (
-              <div key={index} className="p-2">
-                <div className="flex gap-2">
-                  <UserProfilePicture
-                    profile={comment.user.profile}
-                    className="rounded-full w-9 h-9"
-                  />
-                  <div className="flex flex-col">
-                    <h4 className="text-[13px] ">{comment.user.username}</h4>
-                    <p className="text-md mt-[-4px] font-semibold">
-                      {comment.text}
-                    </p>
+            singlePost?.comments
+              .slice()
+              .reverse()
+              .map((comment, index) => (
+                <div key={index} className="p-2">
+                  <div className="flex gap-2">
+                    <UserProfilePicture
+                      profile={comment.user.profile}
+                      className="rounded-full w-9 h-9"
+                    />
+                    <div className="flex flex-col">
+                      <h4 className="text-[13px] ">{comment.user.username}</h4>
+                      <p className="text-md mt-[-4px] font-semibold">
+                        {comment.text}
+                      </p>
+                      <p className="text-[10px] text-[gray] ">
+                        {formatDistanceToNow(new Date(comment.createdAt), {
+                          addSuffix: true,
+                        })}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
         </div>
         <form
           className="sticky bottom-0 w-full bg-[#121212] p-3 flex gap-2 items-center"
