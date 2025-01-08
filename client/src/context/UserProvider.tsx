@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface User {
-  _id: string;
+  id: string;
   email: string;
   username: string;
   profile: string;

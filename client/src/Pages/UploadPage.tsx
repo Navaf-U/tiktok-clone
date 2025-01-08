@@ -243,12 +243,15 @@ const UploadPage = (): JSX.Element => {
                 <p className="mt-4 text-center">{description}</p>
               </div>
               <div className="flex gap-2">
-              <Button variant="pinks" onClick={handleCancel} className="mt-4">
-                Cancel
-              </Button>
-              <Button onClick={()=>setStage("upload")} className="mt-4 bg-green-300 hover:bg-green-400 text-gray-800 w-[73px]">
-                Done
-              </Button>
+                <Button variant="pinks" onClick={handleCancel} className="mt-4">
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => setStage("upload")}
+                  className="mt-4 bg-green-300 hover:bg-green-400 text-gray-800 w-[73px]"
+                >
+                  Done
+                </Button>
               </div>
             </div>
           )}
