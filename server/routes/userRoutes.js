@@ -4,7 +4,7 @@ import { getOneUser, userUpdate } from "../controllers/user/userController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
-import { getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, postComment, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
+import { getAllPosts, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, postComment, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
 const Router = express.Router();
 Router
 .get("/profile/:username", tryCatch(getOneUser))
@@ -16,6 +16,7 @@ Router
 .delete("/posts/delete/:id",verifyToken,tryCatch(userDeleteVideo))
 
 //user post get
+.get("/posts",tryCatch(getAllPosts))
 .get("/posts/:username",verifyToken,tryCatch(getAllPostsOfUser))
 .get("/posts/video/:id",verifyToken,tryCatch(getSinglePostOfUser))
 

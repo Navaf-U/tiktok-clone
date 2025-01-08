@@ -55,6 +55,12 @@ const userDeleteVideo = async (req, res) => {
   res.json({ message: "Post deleted successfully" });
 };
 
+const getAllPosts = async (req, res) => {
+  const posts = await Posts.find();
+  if (!posts) return res.status(400).json({ message: "No Posts" });
+  res.json(posts);
+};
+
 const getAllPostsOfUser = async (req, res) => {
   const username = req.params.username;
   const user = await User.findOne({ username });
@@ -104,28 +110,23 @@ const postComment = async (req, res) => {
 
 const getCommentOfPost = async (req, res) => {
   const postID = req.params.id;
-  const post = await Posts.findById(postID).populate('comments.user', 'username profile');
+  const post = await Posts.findById(postID).populate(
+    "comments.user",
+    "username profile"
+  );
   if (!post) {
     return res.status(404).json({ message: "Post not found" });
   }
   res.json(post.comments);
 };
 
-// const userGetPost = async (req, res) => {
-//   const postID = req.params.id;
-//   const post = await Posts.findById(postID);
-//   if (!post) {
-//     return res.status(404).json({ message: "Post not found" });
-//   }
-//   res.json(post);
-// };
-
 export {
   userVideoPost,
   userVideoDescription,
   userDeleteVideo,
+  getAllPosts,
   getAllPostsOfUser,
   getSinglePostOfUser,
   postComment,
-  getCommentOfPost
+  getCommentOfPost,
 };
