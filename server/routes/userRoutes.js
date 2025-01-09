@@ -17,11 +17,11 @@ Router
 
 //user post get
 .get("/posts",tryCatch(getAllPosts))
-.get("/posts/:username",verifyToken,tryCatch(getAllPostsOfUser))
-.get("/posts/video/:id",verifyToken,tryCatch(getSinglePostOfUser))
+.get("/posts/:username",tryCatch(getAllPostsOfUser))
+.get("/posts/video/:id",tryCatch(getSinglePostOfUser))
 
 //user comment post
-.get("/posts/comments/:id",verifyToken,tryCatch(getCommentOfPost))
+.get("/posts/comments/:id",tryCatch(getCommentOfPost))
 .post("/posts/comments/:id",verifyToken,tryCatch(postComment))
 
 export default Router;
