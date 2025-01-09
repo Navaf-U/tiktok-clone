@@ -11,8 +11,11 @@ import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import UserProfilePicture from "../components/shared/UserProfilePicture";
 import NavBar from "@/components/NavBar";
 import ProfileVideoShow from "@/components/ProfileVideoShow";
+import axiosErrorManager from "@/utilities/axiosErrorManager";
+import { toast } from "@/hooks/use-toast";
+import axiosInstance from "@/utilities/axiosInstance";
 interface User {
-  id: string;
+  _id: string;
   username: string;
   email: string;
   profile: string;
@@ -29,6 +32,10 @@ function UserProfile(): JSX.Element {
   const { username } = useParams();
   const [otherUser, setOtherUser] = useState<User | null>(null);
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [followingCount, setFollowingCount] = useState<number>(0);
+  const [followersCount, setFollowersCount] = useState<number>(0);
+
   const isCurrUser = currUser?.username === username;
 
   useEffect(() => {
@@ -52,6 +59,71 @@ function UserProfile(): JSX.Element {
     };
     FetchUser();
   }, [username, currUser]);
+
+  useEffect(() => {
+    const getFollowes = async (): Promise<void> => {
+      try {
+        const userId = isCurrUser ? currUser?._id : otherUser?._id;
+        if (!userId) {
+          console.error("User ID is undefined");
+          return;
+        }
+        const { data } = await axios.get(
+          `http://localhost:3000/user/follows/${userId}`
+        );
+        console.log(data);
+        setFollowingCount(data.following.count);
+        setFollowersCount(data.followers.count);
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: axiosErrorManager(error) || "An unknown error occurred.",
+        });
+      }
+    };
+    if (currUser && otherUser) {
+      getFollowes();
+    }
+  }, [currUser, otherUser, isCurrUser , isFollowing]);
+
+  const followUser = async (): Promise<void> => {
+    try {
+      const userId = otherUser?._id;
+      if (!userId) {
+        console.error("User ID is undefined");
+        return;
+      }
+      await axiosInstance.post(`/user/follow/`, {
+        userIdToFollow: userId,
+      });
+      setIsFollowing(true);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+      });
+    }
+  };
+
+  const unfollowUser = async (): Promise<void> => {
+    try {
+      const userId = otherUser?._id;
+      if (!userId) {
+        console.error("User ID is undefined");
+        return;
+      }
+      await axiosInstance.post(`/user/unfollow/`, {
+        userIdToUnfollow: userId,
+      });
+      setIsFollowing(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+      });
+    }
+  };
+
   return (
     <div>
       <NavBar />
@@ -78,8 +150,12 @@ function UserProfile(): JSX.Element {
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
               <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
-                <p className="hover:underline cursor-pointer">0 Following</p>
-                <p className="hover:underline cursor-pointer">0 Followers</p>
+                <p className="hover:underline cursor-pointer">
+                  {followingCount} Following
+                </p>
+                <p className="hover:underline cursor-pointer">
+                  {followersCount} Followers
+                </p>
                 <p className="hover:underline cursor-pointer">0 Likes</p>
               </div>
               <div className="mt-2 ms-5 font-normal text-[17px]">
@@ -110,9 +186,10 @@ function UserProfile(): JSX.Element {
               <div className="flex">
                 <Button
                   variant={"pinks"}
+                  onClick={isFollowing ? unfollowUser : followUser}
                   className="ms-4 mt-3 w-[115px] h-[40px]"
                 >
-                  Follow
+                  {isFollowing ? "Unfollow" : "Follow"}
                 </Button>
                 <button className="ms-4 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer">
                   Message
@@ -121,8 +198,12 @@ function UserProfile(): JSX.Element {
                 <HiDotsHorizontal className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
               <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
-                <p className="hover:underline cursor-pointer">0 Following</p>
-                <p className="hover:underline cursor-pointer">0 Followers</p>
+                <p className="hover:underline cursor-pointer">
+                  {followingCount} Following
+                </p>
+                <p className="hover:underline cursor-pointer">
+                  {followersCount} Followers
+                </p>
                 <p className="hover:underline cursor-pointer">0 Likes</p>
               </div>
               <div className="mt-2 ms-5 font-normal text-[17px]">
