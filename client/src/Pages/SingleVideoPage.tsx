@@ -56,8 +56,10 @@ function SingleVideoPage(): JSX.Element {
 
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
+  const setPosts = userContext?.setPosts;
 
   useEffect(() => {
+    if (!id) return;
     const getUserSinglePost = async () => {
       try {
         const { data } = await axiosInstance(`/user/posts/video/${id}`);
@@ -74,6 +76,7 @@ function SingleVideoPage(): JSX.Element {
 
   useEffect(() => {
     const getUser = async () => {
+      if (!singlePost?.username) return;
       if (singlePost?.username) {
         try {
           const { data } = await axios.get(
@@ -89,12 +92,50 @@ function SingleVideoPage(): JSX.Element {
       }
     };
     getUser();
-  }, [singlePost]);
+  }, [singlePost?.username]);
+
+  const toggleLike = async () => {
+    if (!singlePost || !currUser?._id) {
+      console.warn("Missing singlePost ID or current user ID.", {
+        singlePost,
+        currUser,
+      });
+      return;
+    }
+
+    try {
+      const isLiked = singlePost.likes.includes(currUser._id);
+
+      const { data } = isLiked
+        ? await axiosInstance.patch(`/user/posts/like/${singlePost._id}`)
+        : await axiosInstance.post(`/user/posts/like/${singlePost._id}`);
+
+      setSinglePost((prev) => (prev ? { ...prev, likes: data.likes } : null));
+
+      if (setPosts) {
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post._id === singlePost._id) {
+              return { ...post, likes: data.likes };
+            }
+            return post;
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+      toast({
+        title: "Error",
+        description:
+          axiosErrorManager(error) || "Failed to toggle like status.",
+      });
+    }
+  };
 
   useEffect(() => {
     const getCommentsOfPost = async () => {
       try {
-        const { data } = await axiosInstance(`/user/posts/comments/${id}`);
+        const { data } = await axiosInstance.get(`/user/posts/comments/${id}`);
         setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       } catch (error) {
         toast({
@@ -111,7 +152,7 @@ function SingleVideoPage(): JSX.Element {
     try {
       const { data } = await axiosInstance.post(`/user/posts/comments/${id}`, {
         text: comment,
-        user: currUser?.id,
+        user: currUser?._id,
       });
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       setComment("");
@@ -127,15 +168,25 @@ function SingleVideoPage(): JSX.Element {
     ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
     : "";
 
+  if (!singlePost) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex gap-10 h-screen">
       <div className="w-[50%]">
         <div className="absolute left-3 top-5 bg-[#383837] rounded-full p-1">
-          <Link className="absolute cursor-pointer z-10" to="/"><IoClose size={35} /></Link>
+          <Link className="absolute cursor-pointer z-10" to="/">
+            <IoClose size={35} />
+          </Link>
         </div>
         <div className="">
           <video
-            src={singlePost?.file}
+            src={singlePost?.file || ""}
             controls
             autoPlay
             loop
@@ -168,25 +219,32 @@ function SingleVideoPage(): JSX.Element {
           <div className="flex justify-between">
             <div className="flex gap-5 mt-2">
               <div className="flex items-center gap-1 cursor-pointer">
-                <IoHeart
-                  size={32}
-                  className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
-                />
-                <p className="text-xs">{singlePost?.likes.length}</p>
+                {singlePost && currUser && (
+                  <IoHeart
+                    onClick={toggleLike}
+                    size={32}
+                    className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
+                      currUser._id && singlePost.likes.includes(currUser._id)
+                        ? "text-red-500"
+                        : ""
+                    }`}
+                  />
+                )}
+                <p className="text-xs">{singlePost?.likes?.length}</p>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <FaCommentDots
                   size={32}
                   className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
                 />
-                <p className="text-xs">{singlePost?.comments.length}</p>
+                <p className="text-xs">{singlePost?.comments?.length}</p>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <IoMdBookmark
                   size={32}
                   className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
                 />
-                <p className="text-xs">{singlePost?.favorites.length}</p>
+                <p className="text-xs">{singlePost?.favorites?.length}</p>
               </div>
             </div>
             <div className="flex gap-2">
