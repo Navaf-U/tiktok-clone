@@ -72,13 +72,11 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("currUser");
+
     if (token && user) {
-      const parsedUser = JSON.parse(user);
-      console.log(parsedUser);
-      setCurrUser(parsedUser);
+      setCurrUser(JSON.parse(user));
     }
   }, []);
-
   const LoginUser: (
     emailOrUsername: string,
     password: string

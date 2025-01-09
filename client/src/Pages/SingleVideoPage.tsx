@@ -174,8 +174,8 @@ function SingleVideoPage(): JSX.Element {
   return (
     <div className="flex gap-10 h-screen flex-col md:flex-row">
       <div className="w-full md:w-[50%]">
-        <div className="absolute left-3 top-5 bg-[#383837] rounded-full p-1">
-          <Link className="absolute cursor-pointer z-10" to="/">
+        <div className="">
+          <Link className="absolute left-3 top-5 bg-[#383837] rounded-full cursor-pointer z-10" to="/">
             <IoClose size={35} />
           </Link>
         </div>
