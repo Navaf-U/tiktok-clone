@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import cloudinary from "../../config/CloudinaryConfig.js";
 import Posts from "../../models/postsSchema.js";
 import User from "../../models/userSchema.js";
@@ -120,6 +121,42 @@ const getCommentOfPost = async (req, res) => {
   res.json(post.comments);
 };
 
+const postLike = async (req, res) => {
+  const postID = req.params.id;
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid post ID" });
+  }
+  const post = await Posts.findById(postID);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  if (post.likes.includes(req.user.id)) {
+    return res
+      .status(400)
+      .json({ message: "You have already liked this post" });
+  }
+  post.likes.push(req.user.id);
+  await post.save();
+  res.json(post);
+};
+
+const removeLike = async (req, res) => {
+  const postID = req.params.id;
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid post ID" });
+  }
+  const post = await Posts.findById(postID);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  if (!post.likes.includes(req.user.id)) {
+    return res.status(400).json({ message: "You have not liked this post" });
+  }
+  post.likes = post.likes.filter((id) => id !== req.user.id);
+  await post.save();
+  res.json(post);
+};
+
 export {
   userVideoPost,
   userVideoDescription,
@@ -129,4 +166,6 @@ export {
   getSinglePostOfUser,
   postComment,
   getCommentOfPost,
+  postLike,
+  removeLike
 };

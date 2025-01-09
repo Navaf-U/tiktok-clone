@@ -38,7 +38,7 @@ const loginUser = async (req, res,next) => {
   }
   const token = createToken(user._id, user.role, "1h");
   const currUser = {
-    id: user._id,
+    _id: user._id,
     username: user.username,
     email: user.email,
     role: user.role,
