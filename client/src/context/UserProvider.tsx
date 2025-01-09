@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface User {
-  id: string;
+  _id: string;
   email: string;
   username: string;
   profile: string;
@@ -73,7 +73,9 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("currUser");
     if (token && user) {
-      setCurrUser(JSON.parse(user));
+      const parsedUser = JSON.parse(user);
+      console.log(parsedUser);
+      setCurrUser(parsedUser);
     }
   }, []);
 
@@ -156,6 +158,7 @@ useEffect(()=>{
   }
   getAllPosts()
 },[currUser])
+
 
   const value: UserContextType = {
     currUser,

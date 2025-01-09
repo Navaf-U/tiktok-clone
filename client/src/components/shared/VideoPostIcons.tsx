@@ -10,13 +10,13 @@ interface VideoPostIconsProps {
   comment: number;
   favorites: number;
   _id : string;
+  isLiked?: boolean;
+  toggleLike?: () => void;
 }
-
-function VideoPostIcons({small = false,like,comment,favorites,_id} : VideoPostIconsProps): JSX.Element {
-  console.log(_id);
-    return (
+function VideoPostIcons({small = false,like,comment,favorites,_id,isLiked,toggleLike} : VideoPostIconsProps): JSX.Element {
+  return (
       <div className="text-center flex flex-col gap-1 justify-center items-center"> 
-        <IoHeart size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
+        <IoHeart onClick={toggleLike} size={40} className={`bg-[#2e2e2e] p-2 rounded-full cursor-pointer ${isLiked ? 'text-red-600' : ''}`} />
         <p className={`${small ? "text-[10px]" : "text-sm" }`}>{like}</p>
         <Link to={`/user/video/${_id}`}>
         <FaRegCommentDots size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
