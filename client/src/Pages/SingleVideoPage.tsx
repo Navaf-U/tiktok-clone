@@ -6,12 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { IoIosMusicalNotes, IoMdBookmark } from "react-icons/io";
 import { IoClose, IoHeart } from "react-icons/io5";
-import {
-  FaCommentDots,
-  FaFacebookF,
-  FaTwitter,
-  FaWhatsapp,
-} from "react-icons/fa";
+import { FaCommentDots, FaFacebookF, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { ImEmbed2 } from "react-icons/im";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
@@ -177,8 +172,8 @@ function SingleVideoPage(): JSX.Element {
   }
 
   return (
-    <div className="flex gap-10 h-screen">
-      <div className="w-[50%]">
+    <div className="flex gap-10 h-screen flex-col md:flex-row">
+      <div className="w-full md:w-[50%]">
         <div className="absolute left-3 top-5 bg-[#383837] rounded-full p-1">
           <Link className="absolute cursor-pointer z-10" to="/">
             <IoClose size={35} />
@@ -190,11 +185,11 @@ function SingleVideoPage(): JSX.Element {
             controls
             autoPlay
             loop
-            className="w-[100%] h-screen "
+            className="w-[100%] ms-2.5  h-[auto] md:h-screen "
           ></video>
         </div>
       </div>
-      <div className="bg-[#121212] w-[57%] m-5 flex flex-col  relative">
+      <div className="bg-[#121212] w-full md:w-[57%] m-5 flex flex-col relative">
         <div className="bg-[#1c1c1c] h-[120px] rounded-md">
           <div className="p-3">
             <div className="flex">
@@ -215,8 +210,8 @@ function SingleVideoPage(): JSX.Element {
           </div>
         </div>
 
-        <div className="p-2 w-[50%] ">
-          <div className="flex justify-between">
+        <div className="p-2">
+          <div className="flex justify-between w-auto">
             <div className="flex gap-5 mt-2">
               <div className="flex items-center gap-1 cursor-pointer">
                 {singlePost && currUser && (
@@ -247,7 +242,7 @@ function SingleVideoPage(): JSX.Element {
                 <p className="text-xs">{singlePost?.favorites?.length}</p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <ImEmbed2 size={22} className="bg-[#2e2e2e] rounded-full p-1" />
               <PiPaperPlaneTiltFill
                 size={22}
@@ -325,15 +320,19 @@ function SingleVideoPage(): JSX.Element {
           <input
             type="text"
             placeholder="Add a comment"
-            className="w-full bg-[#1c1c1c] p-2 rounded-md text-sm"
-            value={comment}
+            className="w-full text-white bg-[#2e2e2e] p-2 rounded-md"
             onChange={(e) => setComment(e.target.value)}
+            value={comment}
           />
-          <button
-            type="submit"
-            className="bg-[#ff2b56] text-white px-4 py-1 rounded-md text-sm"
-          >
-            Post
+          <button type="submit" disabled={comment.length < 1}>
+            <IoIosMusicalNotes
+              size={28}
+              className={`${
+                comment.length > 0
+                  ? "bg-[#FF007C] text-white rounded-full p-2"
+                  : "text-gray-400"
+              }`}
+            />
           </button>
         </form>
       </div>

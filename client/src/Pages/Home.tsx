@@ -81,7 +81,7 @@ function Home(): JSX.Element {
             {posts.map((post, index) => (
               <div
                 key={post._id}
-                className={`w-auto h-[500px] max-w-[800px] mt-8 absolute flex justify-center items-center transition-opacity duration-300 lg:ms-[-290px] ${
+                className={`w-auto  md:h-[500px] h-auto max-w-[800px] mt-8 absolute flex justify-center items-center transition-opacity duration-300 lg:ms-[-290px] ${
                   index === activeIndex ? "opacity-100 z-10" : "opacity-0"
                 }`}
               >
@@ -96,7 +96,7 @@ function Home(): JSX.Element {
                     />
                   </div>
                 )}
-                <div className="absolute bottom-4 right-[-50px]">
+                <div className="absolute md:bottom-4 md:right-[-50px] z-20 right-2">
                   <VideoPostIcons
                     _id={post._id}
                     small={false}
@@ -112,14 +112,29 @@ function Home(): JSX.Element {
           </div>
         </div>
       </div>
+       <div className=" right-4 flex flex-col items-center space-y-2 md:hidden">
+        <button
+          className="absolute  top-16 z-10 bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
+          onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length)}
+        >
+          <MdOutlineKeyboardArrowUp className="text-white" size={40} />
+        </button>
+        <button
+          className="absolute bottom-5 z-10 bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
+          onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length)}
+        >
+          <MdOutlineKeyboardArrowDown className="text-white" size={40} />
+        </button>
+      </div>
+
       <button
-        className="fixed bottom-72 right-4 bg-[#303030] hover:bg-[#383838] rounded-full p-1 active:bg-red-600"
+        className="fixed bottom-72 right-4 bg-[#303030] hover:bg-[#383838] rounded-full p-1 active:bg-red-600 hidden md:block"
         onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length)}
       >
         <MdOutlineKeyboardArrowUp className="text-white" size={40} />
       </button>
       <button
-        className="fixed bottom-56 right-4 bg-[#303030] hover:bg-[#383838] rounded-full p-1 active:bg-red-600"
+        className="fixed bottom-56 right-4 bg-[#303030] hover:bg-[#383838] rounded-full p-1 active:bg-red-600 hidden md:block"
         onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length)}
       >
         <MdOutlineKeyboardArrowDown className="text-white" size={40} />
