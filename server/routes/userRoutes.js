@@ -5,6 +5,7 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
 import { getAllPosts, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, postComment, postLike, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
+import { getFollowersAndFollowing, userFollow, userUnfollow } from "../controllers/user/followController.js";
 const Router = express.Router();
 Router
 .get("/profile/:username", tryCatch(getOneUser))
@@ -27,5 +28,12 @@ Router
 //user
 .post("/posts/like/:id",verifyToken,tryCatch(postLike))
 .patch("/posts/like/:id",verifyToken,tryCatch(removeLike))
+
+
+
+//follows
+.get("/follows/:userID",tryCatch(getFollowersAndFollowing))
+.post("/follow",verifyToken,tryCatch(userFollow))
+.post("/unfollow",verifyToken,tryCatch(userUnfollow))
 
 export default Router;
