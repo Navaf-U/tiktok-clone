@@ -81,9 +81,7 @@ function UserProfile(): JSX.Element {
         });
       }
     };
-    if (currUser && otherUser) {
       getFollowes();
-    }
   }, [currUser, otherUser, isCurrUser , isFollowing]);
 
   const followUser = async (): Promise<void> => {
