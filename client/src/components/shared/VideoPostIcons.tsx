@@ -2,17 +2,29 @@ import { IoHeart } from "react-icons/io5";
 import { FaRegCommentDots } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
 import { PiShareFatFill } from "react-icons/pi";
-function VideoPostIcons({small = false}): JSX.Element {
+import { Link } from "react-router-dom";
+
+interface VideoPostIconsProps {
+  small?: boolean;
+  like: number;
+  comment: number;
+  favorites: number;
+  _id : string;
+}
+
+function VideoPostIcons({small = false,like,comment,favorites,_id} : VideoPostIconsProps): JSX.Element {
+  console.log(_id);
     return (
       <div className="text-center flex flex-col gap-1 justify-center items-center"> 
-        <IoHeart/>
-        <p className={`${small ? "text-[10px]" : "text-sm" }`}>1000</p>
-        <FaRegCommentDots/>
-        <p className={`${small ? "text-[10px]" : "text-sm" }`}>1000</p>
-        <FaBookmark/>
-        <p className={`${small ? "text-[10px]" : "text-sm" }`}>1000</p>
-        <PiShareFatFill/>
-        <p className={`${small ? "text-[10px]" : "text-sm" }`}>1000</p>
+        <IoHeart size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
+        <p className={`${small ? "text-[10px]" : "text-sm" }`}>{like}</p>
+        <Link to={`/user/video/${_id}`}>
+        <FaRegCommentDots size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
+        <p className={`${small ? "text-[10px]" : "text-sm" }`}>{comment}</p>
+        </Link>
+        <FaBookmark size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
+        <p className={`${small ? "text-[10px]" : "text-sm" }`}>{favorites}</p>
+        <PiShareFatFill size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
       </div>
     )
   }

@@ -77,8 +77,7 @@ const UploadPage = (): JSX.Element => {
           description,
         });
         setStage("result");
-      } else {
-        console.log("postDetails is null");
+        setDescription("");
       }
     } catch (error) {
       setUploadStatus("Failed to post: " + axiosErrorManager(error));
@@ -99,6 +98,7 @@ const UploadPage = (): JSX.Element => {
     }
     setUploadStatus(null);
     setStage("upload");
+    setDescription("");
   };
 
   const progressAnimation = useSpring({
@@ -220,7 +220,7 @@ const UploadPage = (): JSX.Element => {
                   className="absolute top-[15%] left-[10%] w-[80%] h-[70%] object-cover"
                 />
                 <div className="absolute z-10 right-8 top-44">
-                  <VideoPostIcons small />
+                  <VideoPostIcons small like={1000} comment={1000} favorites={1000} _id={postDetails._id} />
                 </div>
               </div>
             </div>
@@ -240,15 +240,12 @@ const UploadPage = (): JSX.Element => {
                   controls
                   className="w-full lg:w-[320px] h-auto object-cover"
                 />
-                <p className="mt-4 text-center">{description}</p>
+                <p className="mt-4 text-center text-black">{description}</p>
               </div>
               <div className="flex gap-2">
-                <Button variant="pinks" onClick={handleCancel} className="mt-4">
-                  Cancel
-                </Button>
                 <Button
                   onClick={() => setStage("upload")}
-                  className="mt-4 bg-green-300 hover:bg-green-400 text-gray-800 w-[73px]"
+                  className="mt-4 bg-green-300 hover:bg-green-400 text-gray-800 w-[200px]"
                 >
                   Done
                 </Button>

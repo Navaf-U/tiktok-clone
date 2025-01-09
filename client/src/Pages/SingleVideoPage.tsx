@@ -2,7 +2,7 @@ import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import axiosInstance from "@/utilities/axiosInstance";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { IoIosMusicalNotes, IoMdBookmark } from "react-icons/io";
 import { IoClose, IoHeart } from "react-icons/io5";
@@ -128,18 +128,18 @@ function SingleVideoPage(): JSX.Element {
     : "";
 
   return (
-    <div className="flex h-screen">
-      <div>
+    <div className="flex gap-10 h-screen">
+      <div className="w-[50%]">
         <div className="absolute left-3 top-5 bg-[#383837] rounded-full p-1">
-          <IoClose size={25} />
+          <Link className="absolute cursor-pointer z-10" to="/"><IoClose size={35} /></Link>
         </div>
-        <div className="mt-16">
+        <div className="">
           <video
             src={singlePost?.file}
             controls
             autoPlay
             loop
-            className="w-[100%]"
+            className="w-[100%] h-screen "
           ></video>
         </div>
       </div>
@@ -164,7 +164,7 @@ function SingleVideoPage(): JSX.Element {
           </div>
         </div>
 
-        <div className="p-2 ">
+        <div className="p-2 w-[50%] ">
           <div className="flex justify-between">
             <div className="flex gap-5 mt-2">
               <div className="flex items-center gap-1 cursor-pointer">
@@ -172,21 +172,21 @@ function SingleVideoPage(): JSX.Element {
                   size={32}
                   className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
                 />
-                <p className="text-xs">0</p>
+                <p className="text-xs">{singlePost?.likes.length}</p>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <FaCommentDots
                   size={32}
                   className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
                 />
-                <p className="text-xs">0</p>
+                <p className="text-xs">{singlePost?.comments.length}</p>
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <IoMdBookmark
                   size={32}
                   className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
                 />
-                <p className="text-xs">0</p>
+                <p className="text-xs">{singlePost?.favorites.length}</p>
               </div>
             </div>
             <div className="flex gap-2">
