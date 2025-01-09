@@ -18,7 +18,7 @@ function VideoCard({ file }: { file: string }): JSX.Element {
 
   return (
     <div
-      className="w-full sm:w-[280px] h-[390px] bg-black rounded-lg overflow-hidden shadow-lg"
+      className="w-[300px]  sm:w-[280px] h-[390px] bg-black rounded-lg overflow-hidden shadow-lg"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

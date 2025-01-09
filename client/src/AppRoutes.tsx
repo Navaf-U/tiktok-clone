@@ -4,15 +4,17 @@ import UserProfile from "./Pages/UserProfile";
 import NotFound from "./Pages/NotFound";
 import UploadPage from "./Pages/UploadPage";
 import SingleVideoPage from "./Pages/SingleVideoPage";
+import ExplorePage from "./Pages/ExplorePage";
 
 function AppRoutes() {
   return (
     <>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/explore" element={<ExplorePage />} />
         <Route path="/profile/:username" element={<UserProfile />} />
         <Route path="/upload/video" element={<UploadPage/>} />
-        <Route path="/:username/video/:id" element={<SingleVideoPage/>} />
+        <Route path="/user/video/:id" element={<SingleVideoPage/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
