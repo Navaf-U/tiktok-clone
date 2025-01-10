@@ -48,8 +48,10 @@ interface UserContextType {
   setModalType: React.Dispatch<React.SetStateAction<"login" | "signup">>;
   showUserEdit: boolean;
   setShowUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
-  posts: Post[],
-  setPosts: React.Dispatch<React.SetStateAction<Post[]>>
+  posts: Post[];
+  setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
+  isLoading : boolean;
+  setIsLoading : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -62,6 +64,7 @@ interface UserProviderProps {
 
 function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [currUser, setCurrUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
   const [showUserEdit, setShowUserEdit] = useState(false);
@@ -171,7 +174,9 @@ useEffect(()=>{
     setShowUserEdit,
     logoutUser,
     posts,
-    setPosts
+    setPosts,
+    isLoading,
+    setIsLoading
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

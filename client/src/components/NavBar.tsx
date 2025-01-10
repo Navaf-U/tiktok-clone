@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BiMessageMinus } from "react-icons/bi";
 import { FaPlus } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/UserProvider";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
@@ -20,8 +20,21 @@ import Login from "../modal/Login";
 import Signup from "../modal/Singup";
 import { Link, useNavigate } from "react-router-dom";
 import UserProfilePicture from "./shared/UserProfilePicture";
+import axios from "axios";
+import { toast } from "@/hooks/use-toast";
+import axiosErrorManager from "@/utilities/axiosErrorManager";
+
+interface User {
+  _id: string;
+  username: string;
+  profile: string;
+  bio: string;
+}
+
 
 function NavBar(): JSX.Element {
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<User[]>([]);
   const navigate = useNavigate()
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -34,9 +47,15 @@ function NavBar(): JSX.Element {
     setModalType,
     setShowModal,
     logoutUser,
+    isLoading,
+    setIsLoading
   } = userContext;
   const [showDropdown, setShowDropdown] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
+
+
+  
+
 
   const handleMouseEnter = () => {
     if (hideTimeout) {
@@ -57,6 +76,41 @@ function NavBar(): JSX.Element {
     logoutUser();
   };
 
+  useEffect(()=>{
+    const delayDebounce = setTimeout(()=>{
+      if(searchQuery){
+        searchUsers(searchQuery)
+      }else{
+        setSearchResults([])
+      }
+    },500)
+    return () => clearTimeout(delayDebounce) 
+  },[searchQuery])
+
+  const searchUsers = async (query:string) : Promise<void> =>{
+    setIsLoading(true)
+    try {
+      const {data} = await axios.get(`http://localhost:3000/user/search`, {
+        params: { query },
+      });
+      setSearchResults(data) 
+    } catch (error) {
+      console.log(axiosErrorManager(error))
+    }finally {
+      setIsLoading(false);
+    }
+  }
+
+
+   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+  const handleUserClick = (username: string) => {
+    navigate(`/profile/${username}`);
+    setSearchResults([]);
+  };
+
+
   return (
     <div className="fixed z-20 bg-[#121212] w-full h-[62px] flex justify-center items-center top-0 border-b border-b-[#ffffff48]">
       <div className="flex items-center w-full justify-between my-2 lg:my-0 px-4">
@@ -67,6 +121,7 @@ function NavBar(): JSX.Element {
           <Input
             type="text"
             placeholder="Search"
+            onChange={handleSearchChange}
             className="rounded-full hidden sm:inline h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-full border-0"
           />
           <CiSearch
@@ -101,7 +156,7 @@ function NavBar(): JSX.Element {
                 className="object-cover w-full h-full"
               />
             </div>
-
+            
           </div>
         ) : (
           <div className="flex items-center space-x-4">
@@ -118,6 +173,21 @@ function NavBar(): JSX.Element {
           </div>
         )}
       </div>
+
+      {searchResults.length > 0 && (
+        <div className="absolute top-[60px] left-[24%] right-[45%]  w-[37%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+          {searchResults.map((user) => (
+            <div key={user._id} className="p-3 hover:bg-[#3a3a3a] cursor-pointer" onClick={() => handleUserClick(user.username)}>
+              <div className="flex items-center">
+                <UserProfilePicture profile={user.profile} className="w-10 h-10 rounded-full" />
+                <p className="ml-3 text-white">{user.username}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      
       {modalType === "login" && showModal && <Login />}
       {modalType === "signup" && showModal && <Signup />}
       {showDropdown && (
