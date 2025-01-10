@@ -109,6 +109,29 @@ const postComment = async (req, res) => {
   res.json(updatedPost.comments);
 };
 
+const removeComment = async (req, res) => {
+  const postID = req.params.id;
+  const commentID = req.params.commentID;
+  const userID = req.user.id;
+  const post = await Posts.findById(postID);
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  const commentIndex = post.comments.findIndex(
+    (comment) => comment._id.toString() === commentID
+  );
+  if (commentIndex === -1) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
+  const comment = post.comments[commentIndex];
+  if (comment.user.toString() !== userID && post.uploader.toString() !== userID) {
+    return res.status(403).json({ message: "You are not authorized to delete this comment" });
+  }
+  post.comments.splice(commentIndex, 1);
+  await post.save();
+  res.json(post.comments);
+};
+
 const getCommentOfPost = async (req, res) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID).populate(
@@ -165,6 +188,7 @@ export {
   getAllPostsOfUser,
   getSinglePostOfUser,
   postComment,
+  removeComment,
   getCommentOfPost,
   postLike,
   removeLike
