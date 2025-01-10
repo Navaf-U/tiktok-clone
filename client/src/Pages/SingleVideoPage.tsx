@@ -19,7 +19,7 @@ import { toast } from "@/hooks/use-toast";
 import { UserContext } from "@/context/UserProvider";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";
-
+import { IoPaperPlaneOutline } from "react-icons/io5";
 function SingleVideoPage(): JSX.Element {
   interface Post {
     _id: string;
@@ -399,11 +399,11 @@ function SingleVideoPage(): JSX.Element {
             value={comment}
           />
           <button type="submit" disabled={comment.length < 1}>
-            <IoIosMusicalNotes
+            <IoPaperPlaneOutline
               size={28}
               className={`${
                 comment.length > 0
-                  ? "bg-[#FF007C] text-white rounded-full p-2"
+                  ? "bg-[#FF007C] text-white rounded-full p-1 flex justify-center items-center"
                   : "text-gray-400"
               }`}
             />

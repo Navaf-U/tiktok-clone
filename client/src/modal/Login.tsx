@@ -44,7 +44,6 @@ function Login(): JSX.Element {
     }
   };
 
-  // Check if both inputs contain at least one letter
   const hasLetters = (text: string) => /[a-zA-Z]/.test(text);
   const isButtonActive =
     hasLetters(formState.emailOrUsername) && hasLetters(formState.password);

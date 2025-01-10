@@ -3,12 +3,16 @@ import NavBar from "@/components/NavBar";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import { UserContext } from "@/context/UserProvider";
 import { useContext } from "react";
-import { MdOutlineKeyboardArrowUp, MdOutlineKeyboardArrowDown } from "react-icons/md";
+import {
+  MdOutlineKeyboardArrowUp,
+  MdOutlineKeyboardArrowDown,
+} from "react-icons/md";
 import VideoPostIcons from "@/components/shared/VideoPostIcons";
 import axiosInstance from "@/utilities/axiosInstance";
 import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
-
+import { IoVolumeHigh } from "react-icons/io5";
+import { HiSpeakerXMark } from "react-icons/hi2";
 interface Post {
   _id: string;
   file: string;
@@ -23,8 +27,11 @@ function Home(): JSX.Element {
   const posts: Post[] = userContext?.posts || [];
   const currUser = userContext?.currUser;
   const setPosts = userContext?.setPosts;
-  const [activeIndex, setActiveIndex] = useState(0); 
-  const videoRefs = useRef(posts?.map(() => React.createRef<HTMLVideoElement>()));
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const videoRefs = useRef(
+    posts?.map(() => React.createRef<HTMLVideoElement>())
+  );
 
   useEffect(() => {
     const handleArrowKeys = (e: KeyboardEvent) => {
@@ -64,9 +71,14 @@ function Home(): JSX.Element {
       console.error("Error toggling like:", error);
       toast({
         title: "Error",
-        description: axiosErrorManager(error) || "Failed to toggle like status.",
+        description:
+          axiosErrorManager(error) || "Failed to toggle like status.",
       });
     }
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
   };
 
   return (
@@ -91,9 +103,20 @@ function Home(): JSX.Element {
                       ref={videoRefs.current[index]}
                       className="w-full h-full object-cover rounded-md"
                       src={post?.file}
+                      muted={isMuted}
                       loop
                       autoPlay
                     />
+                    <button
+                      onClick={toggleMute}
+                      className="absolute top-1 left-2 p-2 bg-black bg-opacity-20 rounded-full text-white"
+                    >
+                      {isMuted ? (
+                        <HiSpeakerXMark size={24} />
+                      ) : (
+                        <IoVolumeHigh size={24} /> 
+                      )}
+                    </button>
                   </div>
                 )}
                 <div className="absolute md:bottom-4 md:right-[-50px] z-20 right-2">
@@ -112,16 +135,22 @@ function Home(): JSX.Element {
           </div>
         </div>
       </div>
-       <div className=" right-4 flex flex-col items-center space-y-2 md:hidden">
+      <div className=" right-4 flex flex-col items-center space-y-2 md:hidden">
         <button
           className="absolute  top-16 z-10 bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
-          onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length)}
+          onClick={() =>
+            setActiveIndex(
+              (prevIndex) => (prevIndex - 1 + posts.length) % posts.length
+            )
+          }
         >
           <MdOutlineKeyboardArrowUp className="text-white" size={40} />
         </button>
         <button
           className="absolute bottom-5 z-10 bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
-          onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length)}
+          onClick={() =>
+            setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length)
+          }
         >
           <MdOutlineKeyboardArrowDown className="text-white" size={40} />
         </button>
@@ -129,13 +158,19 @@ function Home(): JSX.Element {
 
       <button
         className="fixed bottom-72 right-4 bg-[#303030] hover:bg-[#383838] rounded-full p-1 active:bg-red-600 hidden md:block"
-        onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length)}
+        onClick={() =>
+          setActiveIndex(
+            (prevIndex) => (prevIndex - 1 + posts.length) % posts.length
+          )
+        }
       >
         <MdOutlineKeyboardArrowUp className="text-white" size={40} />
       </button>
       <button
         className="fixed bottom-56 right-4 bg-[#303030] hover:bg-[#383838] rounded-full p-1 active:bg-red-600 hidden md:block"
-        onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length)}
+        onClick={() =>
+          setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length)
+        }
       >
         <MdOutlineKeyboardArrowDown className="text-white" size={40} />
       </button>
