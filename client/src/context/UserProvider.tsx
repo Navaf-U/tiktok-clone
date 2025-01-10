@@ -52,6 +52,8 @@ interface UserContextType {
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
   isLoading : boolean;
   setIsLoading : React.Dispatch<React.SetStateAction<boolean>>;
+  followsShow: boolean;
+  setFollowsShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -65,9 +67,10 @@ interface UserProviderProps {
 function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [currUser, setCurrUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
-  const [showUserEdit, setShowUserEdit] = useState(false);
+  const [showUserEdit, setShowUserEdit] = useState<boolean>(false);
+  const [followsShow, setFollowsShow] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -176,7 +179,9 @@ useEffect(()=>{
     posts,
     setPosts,
     isLoading,
-    setIsLoading
+    setIsLoading,
+    followsShow,
+    setFollowsShow
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
