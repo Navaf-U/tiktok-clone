@@ -14,6 +14,7 @@ import ProfileVideoShow from "@/components/ProfileVideoShow";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/utilities/axiosInstance";
+import FollowersShow from "@/modal/FollowersShow";
 interface User {
   _id: string;
   username: string;
@@ -23,18 +24,64 @@ interface User {
   role: string;
 }
 
+interface Follower {
+  _id: string;
+  follower: {
+    _id: string;
+    username: string;
+    profile: string;
+  };
+  following: string;
+}
+interface Following {
+  _id: string;
+  following: {
+    _id: string;
+    username: string;
+    profile: string;
+  };
+  follower: string;
+}
+
 function UserProfile(): JSX.Element {
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext is not available");
   }
-  const { currUser, showUserEdit, setShowUserEdit } = userContext;
+  const {
+    currUser,
+    showUserEdit,
+    setShowUserEdit,
+    followsShow,
+    setFollowsShow,
+  } = userContext;
   const { username } = useParams();
   const [otherUser, setOtherUser] = useState<User | null>(null);
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [following, setFollowing] = useState<Following[]>([]);
+  const [followers, setFollowers] = useState<Follower[]>([]);
   const [followingCount, setFollowingCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
+  const [stage, setStage] = useState<"following" | "followers" | "suggested">(
+    "following"
+  );
+
+
+  const editPorfile = () => {
+    setShowUserEdit(true);
+  };
+
+  const followerHandler = () => {
+    setStage("followers");
+    setFollowsShow(true);
+  } 
+
+  const followingHandler = () => {
+    setStage("following");
+    setFollowsShow(true);
+  }
+
 
   const isCurrUser = currUser?.username === username;
 
@@ -48,6 +95,7 @@ function UserProfile(): JSX.Element {
         if (data.username === username) {
           setOtherUser(data);
           setUserNotFound(false);
+          checkIfFollowing(data._id);
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -57,6 +105,21 @@ function UserProfile(): JSX.Element {
         }
       }
     };
+
+    const checkIfFollowing = async (otherUserID: string) => {
+      try {
+        const userID = currUser?._id;
+        if (!userID) return;
+
+        const res = await axios.get(
+          `http://localhost:3000/user/followers/${otherUserID}/${userID}`
+        );
+        setIsFollowing(res.data.isFollowing);
+      } catch (error) {
+        console.error("Error checking follow status:", error);
+      }
+    };
+
     FetchUser();
   }, [username, currUser]);
 
@@ -72,6 +135,8 @@ function UserProfile(): JSX.Element {
           `http://localhost:3000/user/follows/${userId}`
         );
         console.log(data);
+        setFollowing(data.following.data);
+        setFollowers(data.followers.data);
         setFollowingCount(data.following.count);
         setFollowersCount(data.followers.count);
       } catch (error) {
@@ -81,8 +146,8 @@ function UserProfile(): JSX.Element {
         });
       }
     };
-      getFollowes();
-  }, [currUser, otherUser, isCurrUser , isFollowing]);
+    getFollowes();
+  }, [currUser, otherUser, isCurrUser, isFollowing]);
 
   const followUser = async (): Promise<void> => {
     try {
@@ -138,7 +203,7 @@ function UserProfile(): JSX.Element {
               <h1 className="text-white t ext-2xl ms-5 mt-8">{username}</h1>
               <div className="flex">
                 <Button
-                  onClick={() => setShowUserEdit(true)}
+                  onClick={editPorfile}
                   variant={"pinks"}
                   className="ms-4 mt-3 w-[115px] h-[40px]"
                 >
@@ -148,10 +213,16 @@ function UserProfile(): JSX.Element {
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
               <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
-                <p className="hover:underline cursor-pointer">
+                <p
+                  onClick={followingHandler}
+                  className="hover:underline cursor-pointer"
+                >
                   {followingCount} Following
                 </p>
-                <p className="hover:underline cursor-pointer">
+                <p
+                  onClick={followerHandler}
+                  className="hover:underline cursor-pointer"
+                >
                   {followersCount} Followers
                 </p>
                 <p className="hover:underline cursor-pointer">0 Likes</p>
@@ -196,10 +267,16 @@ function UserProfile(): JSX.Element {
                 <HiDotsHorizontal className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
               <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
-                <p className="hover:underline cursor-pointer">
+                <p
+                  onClick={followingHandler}
+                  className="hover:underline cursor-pointer"
+                >
                   {followingCount} Following
                 </p>
-                <p className="hover:underline cursor-pointer">
+                <p
+                  onClick={followerHandler}
+                  className="hover:underline cursor-pointer"
+                >
                   {followersCount} Followers
                 </p>
                 <p className="hover:underline cursor-pointer">0 Likes</p>
@@ -226,8 +303,22 @@ function UserProfile(): JSX.Element {
           </p>
         </div>
       )}
-      <HomeSidebar />
+      <div className="hidden lg:flex">
+        <HomeSidebar />
+      </div>
       {showUserEdit && <UserDetailsEdit />}
+      {followsShow && (
+        <FollowersShow
+          followingCount={followingCount}
+          followersCount={followersCount}
+          following={following}
+          followers={followers}
+          setFollowing={setFollowing}
+          setFollowingCount={setFollowingCount}
+          stage={stage}
+          setStage={setStage}
+        />
+      )}
     </div>
   );
 }
