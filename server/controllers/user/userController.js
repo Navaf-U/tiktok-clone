@@ -37,4 +37,15 @@ const userUpdate = async (req, res, next) => {
     res.status(500).json({ message: "Failed to update profile" });
   }
 };
-export { getOneUser, userUpdate };
+
+
+const searchUser = async (req,res) =>{
+  const { query } = req.query;
+  if (!query) {
+    return res.status(400).json({ message: "Query parameter is required" });
+  }
+  const users = await User.find({username:{$regex:query,$options:'i'}}).limit(10)
+  return res.json(users);
+}
+
+export { getOneUser, userUpdate , searchUser };
