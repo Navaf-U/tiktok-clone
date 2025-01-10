@@ -38,6 +38,25 @@ const userUnfollow = async (req, res) => {
 };
 
 
+const isFollowing = async (req, res) => {
+  const { userID, otherUserID } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(otherUserID)) {
+    return res.status(400).json({ message: "Invalid user ID(s) provided." });
+  }
+
+  const follow = await Follows.findOne({
+    follower: userID,
+    following: otherUserID,
+  });
+
+  if (follow) {
+    return res.status(200).json({ isFollowing: true });
+  } else {
+    return res.status(200).json({ isFollowing: false });
+  }
+};
+
 const getFollowersAndFollowing = async (req,res)=>{
     const { userID } = req.params;
     if (!mongoose.Types.ObjectId.isValid(userID)) {
@@ -59,4 +78,4 @@ const getFollowersAndFollowing = async (req,res)=>{
       });
 }
 
-export {userFollow,userUnfollow,getFollowersAndFollowing}
+export {userFollow,userUnfollow,getFollowersAndFollowing,isFollowing}

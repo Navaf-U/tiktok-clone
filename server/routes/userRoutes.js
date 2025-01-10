@@ -5,7 +5,7 @@ import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
 import { getAllPosts, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, postComment, postLike, removeComment, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
-import { getFollowersAndFollowing, userFollow, userUnfollow } from "../controllers/user/followController.js";
+import { getFollowersAndFollowing, isFollowing, userFollow, userUnfollow } from "../controllers/user/followController.js";
 const Router = express.Router();
 Router
 
@@ -36,6 +36,7 @@ Router
 
 //follows
 .get("/follows/:userID",tryCatch(getFollowersAndFollowing))
+.get("/followers/:otherUserID/:userID",tryCatch(isFollowing))
 .post("/follow",verifyToken,tryCatch(userFollow))
 .post("/unfollow",verifyToken,tryCatch(userUnfollow))
 
