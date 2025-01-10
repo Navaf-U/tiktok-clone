@@ -6,12 +6,19 @@ import { Link, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { IoIosMusicalNotes, IoMdBookmark } from "react-icons/io";
 import { IoClose, IoHeart } from "react-icons/io5";
-import { FaCommentDots, FaFacebookF, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import {
+  FaCommentDots,
+  FaFacebookF,
+  FaTwitter,
+  FaWhatsapp,
+} from "react-icons/fa";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { ImEmbed2 } from "react-icons/im";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import { toast } from "@/hooks/use-toast";
 import { UserContext } from "@/context/UserProvider";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 function SingleVideoPage(): JSX.Element {
   interface Post {
@@ -34,6 +41,7 @@ function SingleVideoPage(): JSX.Element {
   }
 
   interface Comment {
+    _id: string;
     user: {
       _id: string;
       username: string;
@@ -48,6 +56,8 @@ function SingleVideoPage(): JSX.Element {
   const [user, setUser] = useState<User | null>(null);
   const [comment, setComment] = useState<string>("");
   const [stage, setStage] = useState<"comments" | "creatorVideos">("comments");
+  const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
@@ -159,9 +169,44 @@ function SingleVideoPage(): JSX.Element {
     }
   };
 
+  const removeComment = async (commentID: string) => {
+    try {
+      await axiosInstance.delete(`/user/posts/comments/${id}/${commentID}`);
+      setSinglePost((prev) =>
+        prev
+          ? {
+              ...prev,
+              comments: prev.comments.filter((c) => c._id !== commentID),
+            }
+          : null
+      );
+    } catch (error) {
+      toast({
+        title: "Comment Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+      });
+    }
+  };
+
   const formattedDate = singlePost?.date
     ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
     : "";
+
+  const showDropdown = (index: number) => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    setDropdownIndex(index);
+  };
+
+  const hideDropdown = (index: number) => {
+    const timeout = setTimeout(() => {
+      if (dropdownIndex === index) {
+        setDropdownIndex(null);
+      }
+    }, 500);
+    setHoverTimeout(timeout);
+  };
 
   if (!singlePost) {
     return (
@@ -175,7 +220,10 @@ function SingleVideoPage(): JSX.Element {
     <div className="flex gap-10 h-screen flex-col md:flex-row">
       <div className="w-full md:w-[50%]">
         <div className="">
-          <Link className="absolute left-3 top-5 bg-[#383837] rounded-full cursor-pointer z-10" to="/">
+          <Link
+            className="absolute left-3 top-5 bg-[#383837] rounded-full cursor-pointer z-10"
+            to="/"
+          >
             <IoClose size={35} />
           </Link>
         </div>
@@ -291,7 +339,10 @@ function SingleVideoPage(): JSX.Element {
               .slice()
               .reverse()
               .map((comment, index) => (
-                <div key={index} className="p-2">
+                <div
+                  key={index}
+                  className="p-2 flex justify-between items-center"
+                >
                   <div className="flex gap-2">
                     <UserProfilePicture
                       profile={comment.user.profile}
@@ -309,6 +360,29 @@ function SingleVideoPage(): JSX.Element {
                       </p>
                     </div>
                   </div>
+                  {(currUser?._id === comment.user._id ||
+                    currUser?._id === singlePost?.username) && (
+                    <div
+                      className="relative"
+                      onMouseEnter={() => showDropdown(index)}
+                      onMouseLeave={() => hideDropdown(index)}
+                    >
+                      <HiOutlineDotsHorizontal
+                        size={30}
+                        className="text-white rounded-full p-1 cursor-pointer"
+                      />
+                      {dropdownIndex === index && (
+                        <div className="absolute top-6 right-0 bg-[#2e2e2e] text-white rounded-md shadow-md">
+                          <button
+                            className="px-12 py-3.5 flex items-center justify-start gap-2 hover:text-[#ff3b5b] w-full text-left"
+                            onClick={() => removeComment(comment._id)}
+                          >
+                           <FaRegTrashCan className=""/> Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
         </div>

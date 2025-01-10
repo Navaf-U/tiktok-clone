@@ -21,7 +21,6 @@ import Signup from "../modal/Singup";
 import { Link, useNavigate } from "react-router-dom";
 import UserProfilePicture from "./shared/UserProfilePicture";
 import axios from "axios";
-import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 
 interface User {
@@ -47,7 +46,6 @@ function NavBar(): JSX.Element {
     setModalType,
     setShowModal,
     logoutUser,
-    isLoading,
     setIsLoading
   } = userContext;
   const [showDropdown, setShowDropdown] = useState(false);
