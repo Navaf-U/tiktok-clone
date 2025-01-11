@@ -16,6 +16,8 @@ import { HiSpeakerXMark } from "react-icons/hi2";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
 interface Post {
   _id: string;
   username: string;
@@ -36,6 +38,7 @@ function Home(): JSX.Element {
   const setPosts = userContext?.setPosts;
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [profilePictures, setProfilePictures] = useState<Record<string, string>>({});
   const videoRefs = useRef(
     posts?.map(() => React.createRef<HTMLVideoElement>())
   );
@@ -43,8 +46,9 @@ function Home(): JSX.Element {
   useEffect(() => {
     const handleArrowKeys = (e: KeyboardEvent) => {
       if (e.key === "ArrowDown") {
-        const randomIndex = Math.floor(Math.random() * posts.length);
-        setActiveIndex(randomIndex);
+        setActiveIndex((prevIndex) => (prevIndex + 1) % posts.length);
+      } else if (e.key === "ArrowUp") {
+        setActiveIndex((prevIndex) => (prevIndex - 1 + posts.length) % posts.length);
       }
     };
 
@@ -53,6 +57,12 @@ function Home(): JSX.Element {
       window.removeEventListener("keydown", handleArrowKeys);
     };
   }, [posts.length]);
+
+  useEffect(() => {
+    posts.forEach((post) => {
+      fetchProfilePicture(post.username);
+    });
+  }, [posts]);
 
   const toggleLike = async (postId: string) => {
     if (!currUser?._id) {
@@ -86,8 +96,20 @@ function Home(): JSX.Element {
         title: "Error",
         description:
           axiosErrorManager(error) || "Failed to toggle like status.",
-          className: "bg-red-500 font-semibold text-white",
+        className: "bg-red-500 font-semibold text-white",
       });
+    }
+  };
+
+  const fetchProfilePicture = async (username: string) => {
+    if (profilePictures[username]) return;
+
+    try {
+      const { data } = await axios.get(`http://localhost:3000/user/profile/${username}`);
+      console.log(data);
+      setProfilePictures((prev) => ({ ...prev, [username]: data.profile }));
+    } catch (error) {
+      console.error(`Failed to fetch profile for ${username}:`, error);
     }
   };
 
@@ -107,7 +129,7 @@ function Home(): JSX.Element {
             {posts.map((post, index) => (
               <div
                 key={post._id}
-                className={`w-auto  md:h-[500px] h-auto max-w-[800px] mt-8 absolute flex justify-center items-center transition-opacity duration-300 lg:ms-[-290px] ${
+                className={`w-auto md:h-[500px] h-auto max-w-[800px] mt-8 absolute flex justify-center items-center transition-opacity duration-300 lg:ms-[-290px] ${
                   index === activeIndex ? "opacity-100 z-10" : "opacity-0"
                 }`}
               >
@@ -131,7 +153,6 @@ function Home(): JSX.Element {
                         </Link>
                         <b className="mb-2">.</b>
                         <p className="ms-1">
-                          {" "}
                           {post?.date
                             ? formatDistanceToNow(new Date(post.date), {
                                 addSuffix: true,
@@ -156,6 +177,13 @@ function Home(): JSX.Element {
                     </button>
                   </div>
                 )}
+                <div className="absolute top-[190px] right-[-51px]">
+                  <img
+                    src={profilePictures[post.username] || "/default-profile.png"}
+                    alt={post.username}
+                    className="w-10 h-10 object-cover rounded-full"
+                  />
+                </div>
                 <div className="absolute md:bottom-4 md:right-[-50px] z-20 right-2">
                   <VideoPostIcons
                     _id={post._id}
@@ -172,9 +200,9 @@ function Home(): JSX.Element {
           </div>
         </div>
       </div>
-      <div className=" right-4 flex flex-col items-center space-y-2 md:hidden">
+      <div className="right-4 flex flex-col items-center space-y-2 md:hidden">
         <button
-          className="absolute  top-16 z-10 bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
+          className="absolute top-16 z-10 bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
           onClick={() =>
             setActiveIndex(
               (prevIndex) => (prevIndex - 1 + posts.length) % posts.length
