@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { UserContext } from "@/context/UserProvider";
 import { useContext, useState } from "react";
 import { IoIosClose } from "react-icons/io";
+import { FaRegTrashCan } from "react-icons/fa6";
 import axiosInstance from "../utilities/axiosInstance";
 
 function UserDetailsEdit(): JSX.Element {
@@ -51,6 +52,20 @@ function UserDetailsEdit(): JSX.Element {
     }
   };
 
+  const deletProfile = async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete your profile?"
+    );
+    if (!confirm) return;
+    try {
+      const { data } = await axiosInstance.delete("/user/profile/delete");
+      setCurrUser(data);
+      localStorage.setItem("currUser", JSON.stringify(data));
+    } catch (error) {
+      console.error("Error deleting user profile:", error);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-[#191919] rounded-md flex flex-col left-[25%] right-[25%] w-[50%] z-50">
       <div className="flex justify-between items-center mt-5 mb-3 mx-9">
@@ -66,7 +81,25 @@ function UserDetailsEdit(): JSX.Element {
         <h1 className="font-medium text-[#e8e8e8] text-[20px]">
           Profile photo
         </h1>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <div className=" flex justify-between group">
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+          <div className="relative">
+            {currUser?.profile && (
+              <div>
+                <img
+                  src={currUser?.profile}
+                  alt="Profile"
+                  className="w-20 h-20 rounded-full"
+                />
+                <FaRegTrashCan
+                  className="absolute top-4 left-4  text-white bg-black bg-opacity-30 text-opacity-50 rounded-md  p-1 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  size={50}
+                  onClick={deletProfile}
+                />
+              </div>
+            )}
+          </div>
+        </div>
       </div>
       <hr className="opacity-45 ms-5 w-[95%]" />
       <div className="flex justify-between gap-4 py-3 items-start mt-5 mb-3 mx-10">

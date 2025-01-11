@@ -103,7 +103,7 @@ const UploadPage = (): JSX.Element => {
 
   const progressAnimation = useSpring({
     width: `${progress}%`,
-    config: { duration: 10000 },
+    config: { duration: 7000 },
   });
 
   return (
@@ -220,7 +220,13 @@ const UploadPage = (): JSX.Element => {
                   className="absolute top-[15%] left-[10%] w-[80%] h-[70%] object-cover"
                 />
                 <div className="absolute z-10 right-8 top-44">
-                  <VideoPostIcons small like={1000} comment={1000} favorites={1000} _id={postDetails._id} />
+                  <VideoPostIcons
+                    small
+                    like={1000}
+                    comment={1000}
+                    favorites={1000}
+                    _id={postDetails._id}
+                  />
                 </div>
               </div>
             </div>

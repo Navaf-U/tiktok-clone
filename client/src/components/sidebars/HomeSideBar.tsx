@@ -24,7 +24,7 @@ const HomeSidebar = (): JSX.Element => {
     <SidebarProvider>
       <Sidebar className="fixed top-[62px] left-0 h-[0px] bg-[#121212] border-0 text-white  transition-all w-16 lg:w-60">
         <SidebarMenu className="">
-          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem onClick={()=>navigate("/")} className="flex gap-2 text-md lg:p-6 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
             <RiHome4Line size={22}  />
             <span className="hidden lg:inline">For You</span>
           </SidebarMenuItem>
