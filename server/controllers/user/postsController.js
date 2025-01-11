@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import cloudinary from "../../config/CloudinaryConfig.js";
 import Posts from "../../models/postsSchema.js";
 import User from "../../models/userSchema.js";
+import CustomError from "../../util/CustomError.js";
 const userVideoPost = async (req, res) => {
   const uploadedFile = req.uploadedFile;
   const userID = req.user.id;
@@ -10,12 +11,12 @@ const userVideoPost = async (req, res) => {
       uploadedFile.format !== "mp4" ||
       uploadedFile.resource_type !== "video"
     ) {
-      return res.status(400).json({ message: "Invalid file type" });
+      return next(new CustomError("Invalid file type", 400));
     }
   }
   const user = await User.findById(userID);
   if (!user || !user.username) {
-    return res.status(400).json({ message: "User information is missing" });
+    return next(new CustomError("User information is missing", 400));
   }
   const file = req.uploadedFile?.secure_url;
   const fileSize = req.uploadedFile?.bytes / (1024 * 1024);
@@ -38,7 +39,7 @@ const userVideoDescription = async (req, res) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   post.description = description;
   await post.save();
@@ -49,7 +50,7 @@ const userDeleteVideo = async (req, res) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   await cloudinary.uploader.destroy(post.file);
   await Posts.deleteOne({ _id: postID });
@@ -58,7 +59,7 @@ const userDeleteVideo = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   const posts = await Posts.find();
-  if (!posts) return res.status(400).json({ message: "No Posts" });
+  if (!posts) return next(new CustomError("Post not found", 404));
   res.json(posts);
 };
 
@@ -66,7 +67,7 @@ const getAllPostsOfUser = async (req, res) => {
   const username = req.params.username;
   const user = await User.findOne({ username });
   if (!user) {
-    return res.status(404).json({ message: "User not found" });
+    return next(new CustomError("User not found", 404));
   }
   const posts = await Posts.find({ username });
   res.json(posts);
@@ -76,7 +77,7 @@ const getSinglePostOfUser = async (req, res) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   res.json(post);
 };
@@ -85,14 +86,14 @@ const postComment = async (req, res) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   const { text, user } = req.body;
   if (!text || text.trim() === "") {
     return res.status(400).json({ message: "Comment text cannot be empty" });
   }
   if (!user) {
-    return res.status(400).json({ message: "User ID is required" });
+    return next(new CustomError("User not found", 404));
   }
   const newComment = {
     user,
@@ -115,7 +116,7 @@ const removeComment = async (req, res) => {
   const userID = req.user.id;
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   const commentIndex = post.comments.findIndex(
     (comment) => comment._id.toString() === commentID
@@ -124,8 +125,12 @@ const removeComment = async (req, res) => {
     return res.status(404).json({ message: "Comment not found" });
   }
   const comment = post.comments[commentIndex];
-  if (comment.user.toString() !== userID && post.uploader.toString() !== userID) {
-    return res.status(403).json({ message: "You are not authorized to delete this comment" });
+  if (
+    comment.user.toString() !== userID &&
+    post.uploader.toString() !== userID
+  ) {
+   return next(new CustomError("You are not authorized", 404));
+
   }
   post.comments.splice(commentIndex, 1);
   await post.save();
@@ -139,7 +144,7 @@ const getCommentOfPost = async (req, res) => {
     "username profile"
   );
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   res.json(post.comments);
 };
@@ -151,7 +156,7 @@ const postLike = async (req, res) => {
   }
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   if (post.likes.includes(req.user.id)) {
     return res
@@ -191,5 +196,5 @@ export {
   removeComment,
   getCommentOfPost,
   postLike,
-  removeLike
+  removeLike,
 };
