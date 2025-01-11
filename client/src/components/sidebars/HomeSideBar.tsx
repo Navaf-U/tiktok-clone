@@ -4,56 +4,57 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
+import { RiLiveLine } from "react-icons/ri";
 import { RiHome4Line } from "react-icons/ri";
 import { MdOutlineExplore } from "react-icons/md";
 import { RiUserReceived2Line } from "react-icons/ri";
 import { LiaUserFriendsSolid } from "react-icons/lia";
-import { RiLiveFill } from "react-icons/ri";
-import { IoNavigateOutline } from "react-icons/io5";
+import { PiPaperPlaneTiltBold } from "react-icons/pi";
 import UserProfilePicture from "../shared/UserProfilePicture";
 import { UserContext } from "@/context/UserProvider";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 const HomeSidebar = (): JSX.Element => {
-  const navigate = useNavigate()
   const userContext = useContext(UserContext);
   const { currUser } = userContext || {};
+  const navigate = useNavigate();
 
   return (
     <SidebarProvider>
       <Sidebar className="fixed top-[62px] left-0 h-[0px] bg-[#121212] border-0 text-white  transition-all w-16 lg:w-60">
         <SidebarMenu className="">
-          <SidebarMenuItem className="flex gap-2 text-lg lg:p-6 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <RiHome4Line size={26}  />
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <RiHome4Line size={22}  />
             <span className="hidden lg:inline">For You</span>
           </SidebarMenuItem>
-          <SidebarMenuItem onClick={()=>navigate("/explore")}  className="flex gap-2 text-lg lg:p-6 h-12  font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <MdOutlineExplore size={26} />
+          <SidebarMenuItem onClick={()=>navigate("/explore")}  className="flex gap-2 text-md lg:p-6 h-12  font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <MdOutlineExplore size={22} />
             <span className="hidden lg:inline">Explore</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <RiUserReceived2Line size={26} />
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <RiUserReceived2Line size={22} />
             <span className="hidden lg:inline">Following</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <LiaUserFriendsSolid size={26} />
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <LiaUserFriendsSolid size={22} />
             <span className="hidden lg:inline">Friends</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg lg:p-6 h-12 font-bold text-[#ff3b5b] justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <RiLiveFill size={26} className="text-[#ff3b5b]" />
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold  justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <RiLiveLine size={22} className="" />
             <span className="hidden lg:inline">LIVE</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-lg lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <IoNavigateOutline size={26} />
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <PiPaperPlaneTiltBold size={22} />
             <span className="hidden lg:inline">Messages</span>
           </SidebarMenuItem>
-          <SidebarMenuItem className="flex gap-2 text-lg lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
-            <div className="w-[40px] h-[40px] flex items-center rounded-full overflow-hidden me-1">
+          {currUser && (
+            <SidebarMenuItem onClick={()=>navigate(`/profile/${currUser.username}`)} className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <div className="w-[30px] h-[30px] flex items-center rounded-full overflow-hidden me-1">
               <UserProfilePicture
                 profile={currUser?.profile}
                 className="object-cover w-full h-full hidden lg:flex"
@@ -61,6 +62,7 @@ const HomeSidebar = (): JSX.Element => {
             </div>
             <span className="hidden lg:inline">Profile</span>
           </SidebarMenuItem>
+          )}
         </SidebarMenu>
         <hr className="opacity-30 mt-5 w-[70%] ms-2" />
       </Sidebar>

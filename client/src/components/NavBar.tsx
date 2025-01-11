@@ -15,7 +15,6 @@ import { GoQuestion } from "react-icons/go";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import tiktokFullPng from "../assets/tiktok-full-icon.png";
-import tiktokIcon from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
 import { Link, useNavigate } from "react-router-dom";
@@ -30,11 +29,10 @@ interface User {
   bio: string;
 }
 
-
 function NavBar(): JSX.Element {
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext is not available");
@@ -46,14 +44,10 @@ function NavBar(): JSX.Element {
     setModalType,
     setShowModal,
     logoutUser,
-    setIsLoading
+    setIsLoading,
   } = userContext;
   const [showDropdown, setShowDropdown] = useState(false);
   const [hideTimeout, setHideTimeout] = useState<NodeJS.Timeout | null>(null);
-
-
-  
-
 
   const handleMouseEnter = () => {
     if (hideTimeout) {
@@ -74,33 +68,32 @@ function NavBar(): JSX.Element {
     logoutUser();
   };
 
-  useEffect(()=>{
-    const delayDebounce = setTimeout(()=>{
-      if(searchQuery){
-        searchUsers(searchQuery)
-      }else{
-        setSearchResults([])
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (searchQuery) {
+        searchUsers(searchQuery);
+      } else {
+        setSearchResults([]);
       }
-    },500)
-    return () => clearTimeout(delayDebounce) 
-  },[searchQuery])
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
 
-  const searchUsers = async (query:string) : Promise<void> =>{
-    setIsLoading(true)
+  const searchUsers = async (query: string): Promise<void> => {
+    setIsLoading(true);
     try {
-      const {data} = await axios.get(`http://localhost:3000/user/search`, {
+      const { data } = await axios.get(`http://localhost:3000/user/search`, {
         params: { query },
       });
-      setSearchResults(data) 
+      setSearchResults(data);
     } catch (error) {
-      console.log(axiosErrorManager(error))
-    }finally {
+      console.log(axiosErrorManager(error));
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
 
-
-   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
   const handleUserClick = (username: string) => {
@@ -108,32 +101,38 @@ function NavBar(): JSX.Element {
     setSearchResults([]);
   };
 
-
   return (
-    <div className="fixed z-20 bg-[#121212] w-full h-[62px] flex justify-center items-center top-0 border-b border-b-[#ffffff48]">
-      <div className="flex items-center w-full justify-between my-2 lg:my-0 px-4">
+    <div className="fixed z-20 bg-[#121212] w-full h-[58px] flex justify-center items-center top-0 border-b border-b-[#ffffff18]">
+      <div className="flex items-center w-full justify-between my-2  lg:my-0 px-4">
         <Link to="/">
-          <img src={tiktokFullPng} className="w-32 h-[35px]" alt="" />
+          <img src={tiktokFullPng} className="w-28 h-[32px]" alt="" />
         </Link>
-        <div className="flex relative flex-grow max-w-lg">
+        <div className="flex relative flex-grow left-[10%] max-w-lg">
           <Input
             type="text"
             placeholder="Search"
             onChange={handleSearchChange}
-            className="rounded-full hidden sm:inline h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-full border-0"
+            className="rounded-full h-[35px] sm:inline sm:h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-[80%] lg:w-[90%]  border-0"
           />
           <CiSearch
-            size={33}
-            className="text-[#757575] hidden md:inline p-1 border-s-[1px] border-s-[#757575] absolute top-2 right-6"
+            size={30}
+            className="text-[#757575] hidden md:inline p-1   absolute top-2 right-16"
           />
         </div>
         {currUser ? (
           <div className="flex items-center space-x-4">
-            <Button onClick={() => navigate("/upload/video") } variant={"grays"} className="hidden md:flex">
+            <Button
+              onClick={() => navigate("/upload/video")}
+              variant={"grays"}
+              className="hidden md:flex"
+            >
               <FaPlus /> Upload
             </Button>
-            <BiMessageMinus className="text-[#c9c9c9]" size={30} />
-            <Button
+            <div className="cursor-pointer">
+              <div className="bg-red-600  absolute top-2 right-16 rounded-md md:w-[1.5%] w-[3%] h-[15px] flex justify-center items-center text-[11px]">0</div>
+            <BiMessageMinus className="text-[#c9c9c9]" size={25} />
+            </div>
+            {/* <Button
               variant={"grays"}
               className="bg-[#121212] hidden md:flex rounded-none border border-[#ffffff81]"
             >
@@ -143,7 +142,7 @@ function NavBar(): JSX.Element {
                 alt=""
               />
               Get Coin
-            </Button>
+            </Button> */}
             <div
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
@@ -154,7 +153,6 @@ function NavBar(): JSX.Element {
                 className="object-cover w-full h-full"
               />
             </div>
-            
           </div>
         ) : (
           <div className="flex items-center space-x-4">
@@ -173,11 +171,18 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className="absolute top-[60px] left-[24%] right-[45%]  w-[37%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+        <div className="absolute top-[60px] left-[38%] right-[45%]  w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
           {searchResults.map((user) => (
-            <div key={user._id} className="p-3 hover:bg-[#3a3a3a] cursor-pointer" onClick={() => handleUserClick(user.username)}>
+            <div
+              key={user._id}
+              className="p-3 hover:bg-[#3a3a3a] cursor-pointer"
+              onClick={() => handleUserClick(user.username)}
+            >
               <div className="flex items-center">
-                <UserProfilePicture profile={user.profile} className="w-10 h-10 rounded-full" />
+                <UserProfilePicture
+                  profile={user.profile}
+                  className="w-10 h-10 rounded-full"
+                />
                 <p className="ml-3 text-white">{user.username}</p>
               </div>
             </div>
@@ -185,7 +190,6 @@ function NavBar(): JSX.Element {
         </div>
       )}
 
-      
       {modalType === "login" && showModal && <Login />}
       {modalType === "signup" && showModal && <Signup />}
       {showDropdown && (

@@ -58,7 +58,6 @@ function SingleVideoPage(): JSX.Element {
   const [stage, setStage] = useState<"comments" | "creatorVideos">("comments");
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
-
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
   const setPosts = userContext?.setPosts;
@@ -102,7 +101,7 @@ function SingleVideoPage(): JSX.Element {
   const toggleLike = async () => {
     if (!singlePost || !currUser?._id) {
       toast({
-        title: "Error",
+        title: "Like Error",
         description: "You must be logged in to like posts.",
       });
       return;
