@@ -101,9 +101,9 @@ function SingleVideoPage(): JSX.Element {
 
   const toggleLike = async () => {
     if (!singlePost || !currUser?._id) {
-      console.warn("Missing singlePost ID or current user ID.", {
-        singlePost,
-        currUser,
+      toast({
+        title: "Error",
+        description: "You must be logged in to like posts.",
       });
       return;
     }
@@ -262,12 +262,12 @@ function SingleVideoPage(): JSX.Element {
           <div className="flex justify-between w-auto">
             <div className="flex gap-5 mt-2">
               <div className="flex items-center gap-1 cursor-pointer">
-                {singlePost && currUser && (
+                {singlePost &&  (
                   <IoHeart
                     onClick={toggleLike}
                     size={32}
                     className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
-                      currUser._id && singlePost.likes.includes(currUser._id)
+                      currUser?._id && singlePost.likes?.includes(currUser?._id)
                         ? "text-red-500"
                         : ""
                     }`}

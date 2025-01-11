@@ -26,6 +26,7 @@ function Home(): JSX.Element {
 
   const posts: Post[] = userContext?.posts || [];
   const currUser = userContext?.currUser;
+  const {setModalType, setShowModal} = userContext || {};
   const setPosts = userContext?.setPosts;
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -49,7 +50,12 @@ function Home(): JSX.Element {
 
   const toggleLike = async (postId: string) => {
     if (!currUser?._id) {
-      console.warn("Missing current user ID.", { currUser });
+      toast({
+        title: "Error",
+        description: "You must be logged in to like posts.",
+      })
+      setModalType?.("login");
+      setShowModal?.(true);
       return;
     }
 
