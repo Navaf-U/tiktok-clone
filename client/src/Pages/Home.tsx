@@ -13,12 +13,18 @@ import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import { IoVolumeHigh } from "react-icons/io5";
 import { HiSpeakerXMark } from "react-icons/hi2";
+import { BsMusicNoteBeamed } from "react-icons/bs";
+import { formatDistanceToNow } from "date-fns";
+import { Link } from "react-router-dom";
 interface Post {
   _id: string;
+  username: string;
   file: string;
   likes: string[];
   comments: object[];
   favorites: string[];
+  date: number;
+  description: string;
 }
 
 function Home(): JSX.Element {
@@ -26,7 +32,7 @@ function Home(): JSX.Element {
 
   const posts: Post[] = userContext?.posts || [];
   const currUser = userContext?.currUser;
-  const {setModalType, setShowModal} = userContext || {};
+  const { setModalType, setShowModal } = userContext || {};
   const setPosts = userContext?.setPosts;
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -53,7 +59,7 @@ function Home(): JSX.Element {
       toast({
         title: "Error",
         description: "You must be logged in to like posts.",
-      })
+      });
       setModalType?.("login");
       setShowModal?.(true);
       return;
@@ -113,6 +119,29 @@ function Home(): JSX.Element {
                       loop
                       autoPlay
                     />
+                    <div className="absolute bottom-2 left-2">
+                      <div className="flex pb-1 items-center text-sm">
+                        <Link
+                          className="me-1"
+                          to={`/profile/${post?.username}`}
+                        >
+                          {post?.username}
+                        </Link>
+                        <b className="mb-2">.</b>
+                        <p className="ms-1">
+                          {" "}
+                          {post?.date
+                            ? formatDistanceToNow(new Date(post.date), {
+                                addSuffix: true,
+                              })
+                            : ""}
+                        </p>
+                      </div>
+                      <p className="pb-2">{post?.description}</p>
+                      <p className="flex justify-center items-center gap-2 me-5">
+                        <BsMusicNoteBeamed size={15} /> original sound{" "}
+                      </p>
+                    </div>
                     <button
                       onClick={toggleMute}
                       className="absolute top-1 left-2 p-2 bg-black bg-opacity-20 rounded-full text-white"
@@ -120,7 +149,7 @@ function Home(): JSX.Element {
                       {isMuted ? (
                         <HiSpeakerXMark size={24} />
                       ) : (
-                        <IoVolumeHigh size={24} /> 
+                        <IoVolumeHigh size={24} />
                       )}
                     </button>
                   </div>
