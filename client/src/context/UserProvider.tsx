@@ -99,6 +99,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       toast({
         title: "Success",
         description: "You are now logged in!",
+        className: "bg-[#ff2b56] font-semibold text-white",
       });
       navigate("/");
     } catch (err) {
@@ -128,11 +129,13 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       toast({
         title: "Success",
         description: "You are now registered!",
+        className: "bg-[#ff2b56] font-semibold text-white",
       });
     } catch (err) {
       toast({
         title: "Register Failed",
         description: axiosErrorManager(err) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
       });
     }
   };
@@ -146,6 +149,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       setShowModal(false);
       navigate("/");
     }
+
   };
 
 useEffect(()=>{
@@ -157,6 +161,7 @@ useEffect(()=>{
       toast({
         title: "Register Failed",
         description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
       });
     }
   }

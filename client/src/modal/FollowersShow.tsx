@@ -1,5 +1,5 @@
 import { UserContext } from "@/context/UserProvider";
-import { useContext} from "react";
+import { useContext } from "react";
 import { IoClose } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -11,7 +11,9 @@ interface FollowersShowProps {
   setFollowing: React.Dispatch<React.SetStateAction<Following[]>>;
   setFollowingCount: React.Dispatch<React.SetStateAction<number>>;
   stage: "following" | "followers" | "suggested";
-  setStage: React.Dispatch<React.SetStateAction<"following" | "followers" | "suggested">>;
+  setStage: React.Dispatch<
+    React.SetStateAction<"following" | "followers" | "suggested">
+  >;
 }
 
 interface User {
@@ -71,11 +73,11 @@ function FollowersShow({
       <div>
         {data.map((item: Followers | Following) => {
           const user =
-          stage === "following"
-          ? (item as Following).following
-          : stage === "followers"
-          ? (item as Followers).follower
-          : null;
+            stage === "following"
+              ? (item as Following).following
+              : stage === "followers"
+              ? (item as Followers).follower
+              : null;
           return (
             user && (
               <div
@@ -92,7 +94,10 @@ function FollowersShow({
                 </div>
                 <div>
                   {
-                    <button onClick={handleNavigate(user.username)} className="px-6 py-1 bg-[#ff3b5b] text-white rounded-md">
+                    <button
+                      onClick={handleNavigate(user.username)}
+                      className="px-6 py-1 bg-[#ff3b5b] text-white rounded-md"
+                    >
                       View
                     </button>
                   }
@@ -108,7 +113,9 @@ function FollowersShow({
   return (
     <div className="fixed inset-0 left-[32%] bg-[#121212] opacity-95 w-[500px] h-screen z-50">
       <div className="flex justify-between items-center p-2">
-        <h1 className="w-full text-center text-2xl font-semibold">{profileUsername}</h1>
+        <h1 className="w-full text-center text-2xl font-semibold">
+          {profileUsername}
+        </h1>
         <p className="cursor-pointer" onClick={handleClose}>
           <IoClose size={35} />
         </p>

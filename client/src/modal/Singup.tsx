@@ -191,7 +191,7 @@ function Signup(): JSX.Element {
               onBlur={formik.handleBlur}
             />
             {formik.touched.password && formik.errors.password && (
-              <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
+              <div className="text-red-500 text-sm p-0 text-start w-full mt-[-6px] ms-10">
                 {formik.errors.password}
               </div>
             )}

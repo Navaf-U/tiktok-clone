@@ -59,6 +59,7 @@ function Home(): JSX.Element {
       toast({
         title: "Error",
         description: "You must be logged in to like posts.",
+        className: "bg-red-500 font-semibold text-white",
       });
       setModalType?.("login");
       setShowModal?.(true);
@@ -85,6 +86,7 @@ function Home(): JSX.Element {
         title: "Error",
         description:
           axiosErrorManager(error) || "Failed to toggle like status.",
+          className: "bg-red-500 font-semibold text-white",
       });
     }
   };

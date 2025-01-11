@@ -67,7 +67,6 @@ function UserProfile(): JSX.Element {
     "following"
   );
 
-
   const editPorfile = () => {
     setShowUserEdit(true);
   };
@@ -75,13 +74,12 @@ function UserProfile(): JSX.Element {
   const followerHandler = () => {
     setStage("followers");
     setFollowsShow(true);
-  } 
+  };
 
   const followingHandler = () => {
     setStage("following");
     setFollowsShow(true);
-  }
-
+  };
 
   const isCurrUser = currUser?.username === username;
 
@@ -116,7 +114,11 @@ function UserProfile(): JSX.Element {
         );
         setIsFollowing(res.data.isFollowing);
       } catch (error) {
-        console.error("Error checking follow status:", error);
+        toast({
+          title: "Error",
+          description: axiosErrorManager(error) || "An unknown error occurred.",
+          className: "bg-red-500 font-semibold text-white",
+        })
       }
     };
 
@@ -143,6 +145,7 @@ function UserProfile(): JSX.Element {
         toast({
           title: "Error",
           description: axiosErrorManager(error) || "An unknown error occurred.",
+          className: "bg-red-500 font-semibold text-white",
         });
       }
     };
@@ -164,6 +167,7 @@ function UserProfile(): JSX.Element {
       toast({
         title: "Error",
         description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
       });
     }
   };

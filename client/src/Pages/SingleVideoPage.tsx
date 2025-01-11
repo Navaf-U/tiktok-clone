@@ -72,6 +72,7 @@ function SingleVideoPage(): JSX.Element {
         toast({
           title: "Error",
           description: axiosErrorManager(error) || "Failed to fetch post.",
+          className: "bg-red-500 font-semibold text-white",
         });
       }
     };
@@ -91,6 +92,7 @@ function SingleVideoPage(): JSX.Element {
           toast({
             title: "Error",
             description: axiosErrorManager(error) || "Failed to fetch user.",
+            className: "bg-red-500 font-semibold text-white",
           });
         }
       }
@@ -103,6 +105,7 @@ function SingleVideoPage(): JSX.Element {
       toast({
         title: "Like Error",
         description: "You must be logged in to like posts.",
+        className: "bg-red-500 font-semibold text-white",
       });
       return;
     }
@@ -132,6 +135,7 @@ function SingleVideoPage(): JSX.Element {
         title: "Error",
         description:
           axiosErrorManager(error) || "Failed to toggle like status.",
+        className: "bg-red-500 font-semibold text-white",
       });
     }
   };
@@ -145,6 +149,7 @@ function SingleVideoPage(): JSX.Element {
         toast({
           title: "Comment Error",
           description: axiosErrorManager(error) || "Failed to fetch comments.",
+          className: "bg-red-500 font-semibold text-white",
         });
       }
     };
@@ -164,6 +169,7 @@ function SingleVideoPage(): JSX.Element {
       toast({
         title: "Comment Error",
         description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
       });
     }
   };
@@ -183,6 +189,7 @@ function SingleVideoPage(): JSX.Element {
       toast({
         title: "Comment Error",
         description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
       });
     }
   };
@@ -236,7 +243,7 @@ function SingleVideoPage(): JSX.Element {
           ></video>
         </div>
       </div>
-      <div className="bg-[#121212] w-full md:w-[57%] m-5 flex flex-col relative">
+      <div className="bg-[#121212] w-[94%] md:w-[57%] m-5 flex flex-col relative">
         <div className="bg-[#1c1c1c] h-[120px] rounded-md">
           <div className="p-3">
             <div className="flex">
@@ -261,7 +268,7 @@ function SingleVideoPage(): JSX.Element {
           <div className="flex justify-between w-auto">
             <div className="flex gap-5 mt-2">
               <div className="flex items-center gap-1 cursor-pointer">
-                {singlePost &&  (
+                {singlePost && (
                   <IoHeart
                     onClick={toggleLike}
                     size={32}
@@ -376,7 +383,7 @@ function SingleVideoPage(): JSX.Element {
                             className="px-12 py-3.5 flex items-center justify-start gap-2 hover:text-[#ff3b5b] w-full text-left"
                             onClick={() => removeComment(comment._id)}
                           >
-                           <FaRegTrashCan className=""/> Delete
+                            <FaRegTrashCan className="" /> Delete
                           </button>
                         </div>
                       )}
@@ -386,26 +393,35 @@ function SingleVideoPage(): JSX.Element {
               ))}
         </div>
         <form
-          className="sticky bottom-0 w-full bg-[#121212] p-3 flex gap-2 items-center"
+          className="sticky bottom-0 w-full bg-[#121212]  md:p-3 flex gap-2 items-center"
           action=""
           onSubmit={postComment}
         >
           <input
             type="text"
             placeholder="Add a comment"
-            className="w-full text-white bg-[#2e2e2e] p-2 rounded-md"
+            className="w-full text-white bg-[#2e2e2e] p-2 rounded-md outline-none"
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
           <button type="submit" disabled={comment.length < 1}>
             <IoPaperPlaneOutline
               size={28}
-              className={`${
+              className={`md:hidden ${
                 comment.length > 0
                   ? "bg-[#FF007C] text-white rounded-full p-1 flex justify-center items-center"
                   : "text-gray-400"
               }`}
             />
+            <p
+              className={`hidden md:flex ${
+                comment.length > 0
+                  ? "bg-[#FF007C] text-white rounded-md p-1.5 w-[80px] flex justify-center items-center"
+                  : "text-gray-400 bg-[#2e2e2e] rounded-md p-1.5 w-[80px] flex justify-center items-center"
+              }`}
+            >
+              Post
+            </p>
           </button>
         </form>
       </div>
