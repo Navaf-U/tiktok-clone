@@ -1,6 +1,6 @@
 import express from "express";
 import tryCatch from "../util/tryCatch.js";
-import { getOneUser, searchUser, userUpdate } from "../controllers/user/userController.js";
+import { getOneUser, searchUser, userProfileDelete, userUpdate } from "../controllers/user/userController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
@@ -12,6 +12,7 @@ Router
 //user profile get and update and user search
 .get("/profile/:username", tryCatch(getOneUser))
 .patch("/profile/update",upload.single("file"),verifyToken,uploadToCloudinary,tryCatch(userUpdate))
+.delete("/profile/delete",verifyToken,tryCatch(userProfileDelete))
 .get("/search",searchUser)
 //user posting
 .post("/posts/video",upload.single("file"),verifyToken,uploadToCloudinary,tryCatch(userVideoPost))

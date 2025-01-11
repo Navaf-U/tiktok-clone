@@ -34,6 +34,18 @@ const userUpdate = async (req, res, next) => {
     res.json(user);
 };
 
+const userProfileDelete = async (req, res, next) => {
+  const user = await User.findOne({ _id: req.user.id }, { password: 0 });
+  if (!user) {
+    return next(new CustomError("User not found", 404));
+  }
+  if (user.profile) {
+    await cloudinary.uploader.destroy(user.profile).catch(console.error);
+  }
+  user.profile = undefined;
+  await user.save();
+  res.json(user);
+};
 
 const searchUser = async (req,res) =>{
   const { query } = req.query;
@@ -44,4 +56,4 @@ const searchUser = async (req,res) =>{
   return res.json(users);
 }
 
-export { getOneUser, userUpdate , searchUser };
+export { getOneUser, userUpdate , searchUser , userProfileDelete };
