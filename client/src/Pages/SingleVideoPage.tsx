@@ -2,10 +2,10 @@ import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import axiosInstance from "@/utilities/axiosInstance";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { IoIosMusicalNotes, IoMdBookmark } from "react-icons/io";
-import { IoClose, IoHeart } from "react-icons/io5";
+import { IoClose, IoHeart,IoPaperPlaneOutline } from "react-icons/io5";
 import {
   FaCommentDots,
   FaFacebookF,
@@ -19,7 +19,7 @@ import { toast } from "@/hooks/use-toast";
 import { UserContext } from "@/context/UserProvider";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { IoPaperPlaneOutline } from "react-icons/io5";
+import { BsThreeDots } from "react-icons/bs";
 function SingleVideoPage(): JSX.Element {
   interface Post {
     _id: string;
@@ -57,10 +57,12 @@ function SingleVideoPage(): JSX.Element {
   const [comment, setComment] = useState<string>("");
   const [stage, setStage] = useState<"comments" | "creatorVideos">("comments");
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
+  const [postDltDropDown, setPostDltDropDown] = useState<boolean>(false);
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null);
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
   const setPosts = userContext?.setPosts;
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!id) return;
@@ -78,6 +80,25 @@ function SingleVideoPage(): JSX.Element {
     };
     getUserSinglePost();
   }, [id]);
+
+  const removePost = async(id:string) =>{
+    try {
+      const confirm = window.confirm("Are you sure you want to delete this post?");
+      if(!confirm) return
+
+      await axiosInstance.delete(`/user/posts/delete/${id}`);
+      navigate(`/profile/${currUser?.username}`);
+      if (setPosts) {
+        setPosts((prev) => prev?.filter((post) => post._id !== id));
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "Failed to delete post.",
+        className: "bg-red-500 font-semibold text-white",
+      });
+  }
+}
 
   useEffect(() => {
     const getUser = async () => {
@@ -176,6 +197,8 @@ function SingleVideoPage(): JSX.Element {
 
   const removeComment = async (commentID: string) => {
     try {
+      const confirm = window.confirm("Are you sure you want to delete this comment?");
+      if (!confirm) return;
       await axiosInstance.delete(`/user/posts/comments/${id}/${commentID}`);
       setSinglePost((prev) =>
         prev
@@ -198,6 +221,21 @@ function SingleVideoPage(): JSX.Element {
     ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
     : "";
 
+    const handleMouseEnterDelete = () => {
+      if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+      }
+      setPostDltDropDown(true);
+    };
+  
+    const handleMouseLeaveDelete = () => {
+      const timeout = setTimeout(() => {
+        setPostDltDropDown(false);
+      }, 1000);
+      setHoverTimeout(timeout);
+    };
+
+
   const showDropdown = (index: number) => {
     if (hoverTimeout) {
       clearTimeout(hoverTimeout);
@@ -205,10 +243,12 @@ function SingleVideoPage(): JSX.Element {
     setDropdownIndex(index);
   };
 
+
   const hideDropdown = (index: number) => {
     const timeout = setTimeout(() => {
       if (dropdownIndex === index) {
         setDropdownIndex(null);
+        setPostDltDropDown(false);
       }
     }, 500);
     setHoverTimeout(timeout);
@@ -223,8 +263,8 @@ function SingleVideoPage(): JSX.Element {
   }
 
   return (
-    <div className="flex gap-10 h-screen flex-col md:flex-row">
-      <div className="w-full md:w-[50%]">
+    <div className="flex gap-10 md:justify-between h-screen flex-col md:flex-row">
+      <div className="w-full md:w-[63%]">
         <div className="">
           <Link
             className="absolute left-3 top-5 bg-[#383837] rounded-full cursor-pointer z-10"
@@ -243,9 +283,10 @@ function SingleVideoPage(): JSX.Element {
           ></video>
         </div>
       </div>
-      <div className="bg-[#121212] w-[94%] md:w-[57%] m-5 flex flex-col relative">
+      <div className="bg-[#121212] w-[94%] md:w-[37%] m-5 flex flex-col relative">
         <div className="bg-[#1c1c1c] h-[120px] rounded-md">
-          <div className="p-3">
+          <div className="p-3 flex justify-between">
+            <div>
             <div className="flex">
               <UserProfilePicture
                 profile={user?.profile}
@@ -261,6 +302,15 @@ function SingleVideoPage(): JSX.Element {
               <IoIosMusicalNotes size={12} className="mt-1" />
               <p className="text-xs mt-1">original Sound - {user?.username}</p>
             </div>
+            </div>
+            <div className="mt-2 cursor-pointer" onMouseEnter={handleMouseEnterDelete} onMouseLeave={handleMouseLeaveDelete}>
+              <BsThreeDots size={20} />
+            </div>
+            {postDltDropDown === true && (
+              <div onClick={() => removePost(singlePost._id)} className="bg-[#121212] hover:text-[#ff2b56] flex items-center ps-3 absolute top-8 right-6 h-10 w-[150px] cursor-pointer">
+                <button>Delete</button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -367,7 +417,7 @@ function SingleVideoPage(): JSX.Element {
                     </div>
                   </div>
                   {(currUser?._id === comment.user._id ||
-                    currUser?._id === singlePost?.username) && (
+                    currUser?.username === singlePost?.username) && (
                     <div
                       className="relative"
                       onMouseEnter={() => showDropdown(index)}
@@ -424,6 +474,7 @@ function SingleVideoPage(): JSX.Element {
             </p>
           </button>
         </form>
+
       </div>
     </div>
   );

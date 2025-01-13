@@ -12,11 +12,15 @@ import { IoNavigateOutline } from "react-icons/io5";
 import { Button } from "../ui/button";
 import logo from "../../assets/TiktokPostPageLogo.png";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "@/context/UserProvider";
 const PostPageSidebar = (): JSX.Element => {
+  const userContext = useContext(UserContext)
+  const currUser = userContext?.currUser;
   return (
     <SidebarProvider className="bg-white">
       <div className="fixed top-0 w-full border-b h-14 z-50 flex items-center border-b-gray-300 bg-white">
-        <Link to='/'><img src={logo} alt="" className="w-48 h-11 ms-3" /></Link>
+        <Link to={`/profile/${currUser?.username}`}><img src={logo} alt="" className="w-48 h-11 ms-3" /></Link>
       </div>
       <Sidebar className="fixed top-[62px] text-black left-0 h-[0px]  transition-all w-16 lg:w-56">
       <Button variant={'pinks'} className="h-auto rounded-none p-3 mx-[12px] w-48 mt-2  focus:bg-[#ebebeb] focus:text-[gray] ">

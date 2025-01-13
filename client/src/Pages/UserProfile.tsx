@@ -1,7 +1,7 @@
 import { UserContext } from "@/context/UserProvider";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiShareForwardLine } from "react-icons/ri";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import axiosErrorManager from "@/utilities/axiosErrorManager";
 import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/utilities/axiosInstance";
 import FollowersShow from "@/modal/FollowersShow";
+import { FaPlus } from "react-icons/fa6";
 interface User {
   _id: string;
   username: string;
@@ -63,9 +64,8 @@ function UserProfile(): JSX.Element {
   const [followers, setFollowers] = useState<Follower[]>([]);
   const [followingCount, setFollowingCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
-  const [stage, setStage] = useState<"following" | "followers" | "suggested">(
-    "following"
-  );
+  const [stage, setStage] = useState<"following" | "followers" | "suggested">("following" );
+  const navigate = useNavigate()
 
   const editPorfile = () => {
     setShowUserEdit(true);
@@ -136,7 +136,6 @@ function UserProfile(): JSX.Element {
         const { data } = await axios.get(
           `http://localhost:3000/user/follows/${userId}`
         );
-        console.log(data);
         setFollowing(data.following.data);
         setFollowers(data.followers.data);
         setFollowingCount(data.following.count);
@@ -215,6 +214,7 @@ function UserProfile(): JSX.Element {
                 </Button>
                 <IoSettingsOutline className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+                <FaPlus onClick={()=>navigate("/upload/video")} className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
               <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
                 <p
