@@ -47,7 +47,7 @@ const userProfileDelete = async (req, res, next) => {
   res.json(user);
 };
 
-const searchUser = async (req,res) =>{
+const searchUser = async (req,res,next) =>{
   const { query } = req.query;
   if (!query) {
     return next(new CustomError("Query parameter is required", 404));

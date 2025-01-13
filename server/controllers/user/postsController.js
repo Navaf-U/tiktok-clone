@@ -3,7 +3,7 @@ import cloudinary from "../../config/CloudinaryConfig.js";
 import Posts from "../../models/postsSchema.js";
 import User from "../../models/userSchema.js";
 import CustomError from "../../util/CustomError.js";
-const userVideoPost = async (req, res) => {
+const userVideoPost = async (req, res,next) => {
   const uploadedFile = req.uploadedFile;
   const userID = req.user.id;
   if (uploadedFile) {
@@ -34,7 +34,7 @@ const userVideoPost = async (req, res) => {
   });
 };
 
-const userVideoDescription = async (req, res) => {
+const userVideoDescription = async (req, res,next) => {
   const { description } = req.body;
   const postID = req.params.id;
   const post = await Posts.findById(postID);
@@ -46,7 +46,7 @@ const userVideoDescription = async (req, res) => {
   return res.status(200).json({ message: "Post updated successfully", post });
 };
 
-const userDeleteVideo = async (req, res) => {
+const userDeleteVideo = async (req, res,next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
@@ -57,13 +57,13 @@ const userDeleteVideo = async (req, res) => {
   res.json({ message: "Post deleted successfully" });
 };
 
-const getAllPosts = async (req, res) => {
+const getAllPosts = async (req, res,next) => {
   const posts = await Posts.find();
   if (!posts) return next(new CustomError("Post not found", 404));
   res.json(posts);
 };
 
-const getAllPostsOfUser = async (req, res) => {
+const getAllPostsOfUser = async (req, res,next) => {
   const username = req.params.username;
   const user = await User.findOne({ username });
   if (!user) {
@@ -73,7 +73,7 @@ const getAllPostsOfUser = async (req, res) => {
   res.json(posts);
 };
 
-const getSinglePostOfUser = async (req, res) => {
+const getSinglePostOfUser = async (req, res, next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
@@ -82,7 +82,7 @@ const getSinglePostOfUser = async (req, res) => {
   res.json(post);
 };
 
-const postComment = async (req, res) => {
+const postComment = async (req, res,next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
@@ -110,7 +110,7 @@ const postComment = async (req, res) => {
   res.json(updatedPost.comments);
 };
 
-const removeComment = async (req, res) => {
+const removeComment = async (req, res,next) => {
   const postID = req.params.id;
   const commentID = req.params.commentID;
   const userID = req.user.id;
@@ -137,7 +137,7 @@ const removeComment = async (req, res) => {
   res.json(post.comments);
 };
 
-const getCommentOfPost = async (req, res) => {
+const getCommentOfPost = async (req, res,next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID).populate(
     "comments.user",
@@ -149,7 +149,7 @@ const getCommentOfPost = async (req, res) => {
   res.json(post.comments);
 };
 
-const postLike = async (req, res) => {
+const postLike = async (req, res,next) => {
   const postID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid post ID" });
@@ -168,7 +168,7 @@ const postLike = async (req, res) => {
   res.json(post);
 };
 
-const removeLike = async (req, res) => {
+const removeLike = async (req, res,next) => {
   const postID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid post ID" });

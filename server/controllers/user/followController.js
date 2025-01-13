@@ -1,7 +1,7 @@
 import User from "../../models/userSchema.js";
 import Follows from "../../models/followsSchema.js";
 import mongoose from "mongoose";
-const userFollow = async (req, res) => {
+const userFollow = async (req, res,next) => {
   const { userIdToFollow } = req.body;
   const { id: userID } = req.user;
   if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(userIdToFollow)) {
@@ -20,7 +20,7 @@ const userFollow = async (req, res) => {
   res.status(200).json({ message: "Followed successfully!" });
 };
 
-const userUnfollow = async (req, res) => {
+const userUnfollow = async (req, res,next) => {
   const { userIdToUnfollow } = req.body;
   const { id: userID } = req.user;
   if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(userIdToUnfollow)) {
@@ -38,7 +38,7 @@ const userUnfollow = async (req, res) => {
 };
 
 
-const isFollowing = async (req, res) => {
+const isFollowing = async (req, res,next) => {
   const { userID, otherUserID } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(userID) || !mongoose.Types.ObjectId.isValid(otherUserID)) {
@@ -57,7 +57,7 @@ const isFollowing = async (req, res) => {
   }
 };
 
-const getFollowersAndFollowing = async (req,res)=>{
+const getFollowersAndFollowing = async (req,res,next)=>{
     const { userID } = req.params;
     if (!mongoose.Types.ObjectId.isValid(userID)) {
         return res.status(400).json({ message: "Invalid user ID provided." });
