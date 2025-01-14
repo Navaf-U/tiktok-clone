@@ -89,7 +89,7 @@ function UserDetailsEdit(): JSX.Element {
                 <img
                   src={currUser?.profile}
                   alt="Profile"
-                  className="w-20 h-20 rounded-full"
+                  className="w-20 h-20 rounded-full object-cover"
                 />
                 <FaRegTrashCan
                   className="absolute top-4 left-4  text-white bg-black bg-opacity-30 text-opacity-50 rounded-md  p-1 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
