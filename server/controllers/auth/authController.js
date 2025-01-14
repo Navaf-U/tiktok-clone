@@ -47,16 +47,19 @@ const loginUser = async (req, res, next) => {
     profile: user.profile,
     bio: user.bio,
   };
+  res.cookie("refreshToken", refreshToken , {
+    httpOnly: true,
+    secure: true, 
+    sameSite: "None",
+  })
   res.json({ message: "Login successful", token, user: currUser });
 };
 
 const refreshingToken = async (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
-
   if (!refreshToken) {
     return next(new CustomError("No refresh token provided", 401));
   }
-
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const accessToken = createToken(decoded.id, decoded.role, "1h");
@@ -69,4 +72,4 @@ const refreshingToken = async (req, res, next) => {
   }
 };
 
-export { registerUser, loginUser };
+export { registerUser, loginUser,refreshingToken };
