@@ -37,8 +37,13 @@ const loginUser = async (req, res, next) => {
   if (!isPasswordCorrect) {
     return next(new CustomError("Invalid credentials", 400));
   }
-  const token = createToken(user._id, user.role, "1h");
-  const refreshToken = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
+  const token = createToken(user._id, user.role, "10s");
+  const refreshToken = jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: "7d" }
+  );
+
   const currUser = {
     _id: user._id,
     username: user.username,
@@ -47,15 +52,19 @@ const loginUser = async (req, res, next) => {
     profile: user.profile,
     bio: user.bio,
   };
-  res.cookie("refreshToken", refreshToken , {
+
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: true, 
+    secure: true,
     sameSite: "None",
   })
+
   res.json({ message: "Login successful", token, user: currUser });
 };
 
 const refreshingToken = async (req, res, next) => {
+  console.log(req.cookies?.refreshToken, "YESS");
+  console.log(req.cookie?.refreshToken, "NOO");
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
     return next(new CustomError("No refresh token provided", 401));
@@ -72,4 +81,4 @@ const refreshingToken = async (req, res, next) => {
   }
 };
 
-export { registerUser, loginUser,refreshingToken };
+export { registerUser, loginUser, refreshingToken };

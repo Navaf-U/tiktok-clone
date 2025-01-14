@@ -11,11 +11,11 @@ const PORT = process.env.PORT || 3000;
 dotenv.config();
 app.use(express.json());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-app.use(cookieParser());
+app.use(cookieParser());  
 
 ConnectDataBase();
 
-app.get("/", (req, res, next) => {
+app.get("/", (req, res) => {
   res.send("YOO RUNNING WORLD");
 });
 
