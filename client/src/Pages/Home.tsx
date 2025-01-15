@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "@/components/NavBar";
+import demoPng from "../assets/userDemoPfp.png"
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import { UserContext } from "@/context/UserProvider";
 import { useContext } from "react";
@@ -15,7 +16,7 @@ import { IoVolumeHigh } from "react-icons/io5";
 import { HiSpeakerXMark } from "react-icons/hi2";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { formatDistanceToNow } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface Post {
@@ -42,6 +43,7 @@ function Home(): JSX.Element {
   const videoRefs = useRef(
     posts?.map(() => React.createRef<HTMLVideoElement>())
   );
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleArrowKeys = (e: KeyboardEvent) => {
@@ -177,9 +179,9 @@ function Home(): JSX.Element {
                     </button>
                   </div>
                 )}
-                <div className="absolute top-[190px] right-[-51px]">
+                <div onClick={()=>navigate(`/profile/${post.username}`)} className="absolute top-[190px] cursor-pointer right-[-51px]">
                   <img
-                    src={profilePictures[post.username] || "/default-profile.png"}
+                    src={profilePictures[post?.username] || demoPng }
                     alt={post.username}
                     className="w-10 h-10 object-cover rounded-full"
                   />

@@ -216,7 +216,8 @@ const UploadPage = (): JSX.Element => {
                 />
                 <video
                   src={postDetails.file}
-                  controls
+                  autoPlay
+                  loop
                   className="absolute top-[15%] left-[10%] w-[80%] h-[70%] object-cover"
                 />
                 <div className="absolute z-10 right-8 top-44">
