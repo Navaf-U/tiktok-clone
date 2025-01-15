@@ -82,6 +82,15 @@ const getSinglePostOfUser = async (req, res, next) => {
   res.json(post);
 };
 
+const randomSinglePost = async (req, res, next) => {
+  const post = await Posts.aggregate([{ $sample: { size: 1 } }]);
+  if (!post || post.length === 0) {
+    return next(new CustomError("Post not found", 404));
+  }
+  res.json(post);
+};
+
+
 const postComment = async (req, res,next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
@@ -192,6 +201,7 @@ export {
   getAllPosts,
   getAllPostsOfUser,
   getSinglePostOfUser,
+  randomSinglePost,
   postComment,
   removeComment,
   getCommentOfPost,
