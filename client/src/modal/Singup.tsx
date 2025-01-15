@@ -47,6 +47,10 @@ function Signup(): JSX.Element {
     validationSchema: Yup.object({
       username: Yup.string()
         .min(3, "Username must be at least 3 characters")
+        .matches(
+          /^[a-z0-9]+$/,
+          "Username must be in lowercase letters and numbers"
+        )
         .required("Username is required"),
       email: Yup.string()
         .email("Invalid email address")
@@ -127,21 +131,21 @@ function Signup(): JSX.Element {
           </select>
         </div>
         <div className="flex w-[100%]">
-        {formik.touched.birthMonth && formik.errors.birthMonth && (
-          <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
-            {formik.errors.birthMonth}
-          </div>
-        )}
-        {formik.touched.birthDay && formik.errors.birthDay && (
-          <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
-            {formik.errors.birthDay}
-          </div>
-        )}
-        {formik.touched.birthYear && formik.errors.birthYear && (
-          <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
-            {formik.errors.birthYear}
-          </div>
-        )}
+          {formik.touched.birthMonth && formik.errors.birthMonth && (
+            <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
+              {formik.errors.birthMonth}
+            </div>
+          )}
+          {formik.touched.birthDay && formik.errors.birthDay && (
+            <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
+              {formik.errors.birthDay}
+            </div>
+          )}
+          {formik.touched.birthYear && formik.errors.birthYear && (
+            <div className="text-red-500 text-sm p-0 text-start w-full mt-[-10px] ms-10">
+              {formik.errors.birthYear}
+            </div>
+          )}
         </div>
         <h4 className="ms-5 text-gray-500 mb-2">
           Your birthday won't be shown publicly.

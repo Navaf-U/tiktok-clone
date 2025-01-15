@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useToast } from "../hooks/use-toast";
 import axiosErrorManager from "../utilities/axiosErrorManager";
 import axios from "axios";
@@ -50,12 +51,13 @@ interface UserContextType {
   setShowUserEdit: React.Dispatch<React.SetStateAction<boolean>>;
   posts: Post[];
   setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
-  isLoading : boolean;
-  setIsLoading : React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   followsShow: boolean;
   setFollowsShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
@@ -78,7 +80,6 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("currUser");
-
     if (token && user) {
       setCurrUser(JSON.parse(user));
     }
@@ -88,10 +89,14 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     password: string
   ) => Promise<void> = async (emailOrUsername, password) => {
     try {
-      const res = await axios.post("http://localhost:3000/auth/login", {
-        emailOrUsername,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:3000/auth/login",
+        {
+          emailOrUsername,
+          password,
+        },
+        { withCredentials: true }
+      );
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("currUser", JSON.stringify(res.data.user));
       setCurrUser(res.data.user);
@@ -140,6 +145,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       });
     }
   };
+
   const logoutUser: () => void = () => {
     const confirm = window.confirm("Are you sure you want to logout?");
 
@@ -150,26 +156,23 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       setShowModal(false);
       navigate("/");
     }
-
   };
 
-useEffect(()=>{
-  const getAllPosts = async () =>{
-    try {
-      const {data} = await axios.get("http://localhost:3000/user/posts")
-    setPosts(data)
-    } catch (error) {
-      toast({
-        title: "Register Failed",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      });
-    }
-  }
-  getAllPosts()
-},[currUser])
-
-
+  useEffect(() => {
+    const getAllPosts = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:3000/user/posts");
+        setPosts(data);
+      } catch (error) {
+        toast({
+          title: "Register Failed",
+          description: axiosErrorManager(error) || "An unknown error occurred.",
+          className: "bg-red-500 font-semibold text-white",
+        });
+      }
+    };
+    getAllPosts();
+  }, []);
   const value: UserContextType = {
     currUser,
     setCurrUser,
@@ -187,7 +190,7 @@ useEffect(()=>{
     isLoading,
     setIsLoading,
     followsShow,
-    setFollowsShow
+    setFollowsShow,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
