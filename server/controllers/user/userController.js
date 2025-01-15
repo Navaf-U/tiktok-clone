@@ -14,7 +14,6 @@ const getOneUser = async (req, res,next) => {
 const userUpdate = async (req, res, next) => {
     const { bio } = req.body;
     const user = await User.findOne({ _id: req.user.id }, { password: 0 });
-
     if (!user) {
       return next(new CustomError("User not found", 404));
     }

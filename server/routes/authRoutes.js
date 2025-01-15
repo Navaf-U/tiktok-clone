@@ -6,6 +6,6 @@ const routes = express.Router();
 routes
 .post('/register', tryCatch(registerUser))
 .post('/login', tryCatch(loginUser))
-.post("/refresh-token",tryCatch(refreshingToken))
+.post("/refreshToken",tryCatch(refreshingToken))
 
 export default routes;

@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 const createToken = (id, role, expiresIn) => {
   return jwt.sign({ id, role }, process.env.JWT_TOKEN, { expiresIn });
 };
+const createRefreshToken = (id, role, expiresIn) => {
+  return jwt.sign({ id, role }, process.env.JWT_REFRESH_TOKEN, { expiresIn });
+};
 
 const registerUser = async (req, res, next) => {
   const { username, email, password, dob } = req.body;
@@ -38,12 +41,8 @@ const loginUser = async (req, res, next) => {
     return next(new CustomError("Invalid credentials", 400));
   }
   const token = createToken(user._id, user.role, "10s");
-  const refreshToken = jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_REFRESH_SECRET,
-    { expiresIn: "7d" }
-  );
-
+  const refreshToken = createRefreshToken(user._id, user.role, "1d");
+  console.log("Setting refreshToken cookie:", refreshToken);
   const currUser = {
     _id: user._id,
     username: user.username,
@@ -54,31 +53,25 @@ const loginUser = async (req, res, next) => {
   };
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
+    httpOnly: true, 
+    secure: true, 
+    sameSite: "none"
   })
-
   res.json({ message: "Login successful", token, user: currUser });
 };
 
+
 const refreshingToken = async (req, res, next) => {
-  console.log(req.cookies?.refreshToken, "YESS");
-  console.log(req.cookie?.refreshToken, "NOO");
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
     return next(new CustomError("No refresh token provided", 401));
-  }
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+  }  
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN);
     const accessToken = createToken(decoded.id, decoded.role, "1h");
     res.status(200).json({
       message: "Token refreshed",
       token: accessToken,
     });
-  } catch (error) {
-    return next(new CustomError("Invalid or expired refresh token", 401));
-  }
 };
 
 export { registerUser, loginUser, refreshingToken };
