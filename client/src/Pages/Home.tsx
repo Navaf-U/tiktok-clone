@@ -79,7 +79,7 @@ function Home(): JSX.Element {
 
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/user/profile/${username}`
+        `${import.meta.env.VITE_API_URL}/user/profile/${username}`
       );
       setProfilePictures((prev) => ({ ...prev, [username]: data.profile }));
     } catch (error) {
@@ -90,7 +90,7 @@ function Home(): JSX.Element {
   const fetchRandomPost = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:3000/user/posts/video/random"
+        `${import.meta.env.VITE_API_URL}/user/posts/video/random`
       );
       if (data && data.length > 0) {
         const newPost = data[0];

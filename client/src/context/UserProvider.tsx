@@ -90,7 +90,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   ) => Promise<void> = async (emailOrUsername, password) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/auth/login",
+        `${import.meta.env.VITE_API_URL}/auth/login`,
         {
           emailOrUsername,
           password,
@@ -125,7 +125,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     dob: object
   ) => Promise<void> = async (username, email, password, dob) => {
     try {
-      await axios.post("http://localhost:3000/auth/register", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/register`, {
         username,
         email,
         password,
@@ -161,7 +161,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   useEffect(() => {
     const getAllPosts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:3000/user/posts");
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts`);
         setPosts(data);
       } catch (error) {
         toast({

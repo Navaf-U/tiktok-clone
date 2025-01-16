@@ -106,7 +106,7 @@ function SingleVideoPage(): JSX.Element {
       if (singlePost?.username) {
         try {
           const { data } = await axios.get(
-            `http://localhost:3000/user/profile/${singlePost.username}`
+            `${import.meta.env.VITE_API_URL}/user/profile/${singlePost.username}`
           );
           setUser(data);
         } catch (error) {

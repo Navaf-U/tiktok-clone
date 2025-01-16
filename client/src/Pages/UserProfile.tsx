@@ -87,7 +87,7 @@ function UserProfile(): JSX.Element {
     const FetchUser = async (): Promise<void> => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/user/profile/${username}`
+          `${import.meta.env.VITE_API_URL}/user/profile/${username}`
         );
         const data = res.data;
         if (data.username === username) {
@@ -110,7 +110,7 @@ function UserProfile(): JSX.Element {
         if (!userID) return;
 
         const res = await axios.get(
-          `http://localhost:3000/user/followers/${otherUserID}/${userID}`
+          `${import.meta.env.VITE_API_URL}/user/followers/${otherUserID}/${userID}`
         );
         setIsFollowing(res.data.isFollowing);
       } catch (error) {
@@ -134,7 +134,7 @@ function UserProfile(): JSX.Element {
           return;
         }
         const { data } = await axios.get(
-          `http://localhost:3000/user/follows/${userId}`
+          `${import.meta.env.VITE_API_URL}/user/follows/${userId}`
         );
         setFollowing(data.following.data);
         setFollowers(data.followers.data);

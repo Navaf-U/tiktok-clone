@@ -83,7 +83,7 @@ function NavBar(): JSX.Element {
   const searchUsers = async (query: string): Promise<void> => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get(`http://localhost:3000/user/search`, {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/search`, {
         params: { query },
       });
       setSearchResults(data);
