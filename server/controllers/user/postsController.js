@@ -207,26 +207,29 @@ const postFavorite = async(req,res,next)=>{
   if(post.favorites.includes(req.user.id)){
     return res.status(400).json({message:"You have already favorited this post"})
   }
+
   post.favorites.push(req.user.id)
   await post.save()
   res.json(post)
 }
 
-const removeFavorite = async(req,res,next)=>{
-  const postID = req.params.id 
+const removeFavorite = async (req, res, next) => {
+  const postID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid post ID" });
   }
-  const post = await Posts.findById(postID)
-  if(!post){
+  const post = await Posts.findById(postID);
+  if (!post) {
     return next(new CustomError("Post not found", 404));
   }
-  if(!post.favorites.includes(req.user.id)){
-    return res.status(400).json({message:"You have not favorited this post"})
+  if (!post.favorites.includes(req.user.id)) {
+    return res.status(400).json({ message: "You have not favorited this post" });
   }
-  post.favorites = post.favorites.filter((id) => id !== req.user.id)
-  await post.save()
-}
+  post.favorites = post.favorites.filter((id) => id !== req.user.id);
+  await post.save();
+  res.json({ message: "Favorite removed successfully", favorites: post.favorites });
+};
+
 
 const getFavorites = async(req,res,next)=>{
   const postID = req.params.id 
