@@ -146,8 +146,8 @@ function Home(): JSX.Element {
         <div className="flex-grow pt-4">
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
-              <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-8 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative ms-20  md:ms-0 left-[64px] md:left-0 w-[372px] h-[600px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
+              <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-5 absolute flex justify-center items-center transition-opacity duration-300">
+                <div className="relative ms-20  md:ms-0 left-[64px] md:left-0 w-[372px] h-[690px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"
