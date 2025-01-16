@@ -169,7 +169,7 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className="absolute top-[60px] left-[38%] right-[45%]  w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+        <div className="absolute top-[60px] md:left-[44.5%] md:right-[45%] right-[28%]  w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
           {searchResults.map((user) => (
             <div
               key={user._id}

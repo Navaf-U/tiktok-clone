@@ -34,7 +34,7 @@ function Home(): JSX.Element {
   const userContext = useContext(UserContext);
 
   const currUser = userContext?.currUser;
-  const { setModalType, setShowModal ,setPosts } = userContext || {};
+  const { setModalType, setShowModal, setPosts } = userContext || {};
   const [activePost, setActivePost] = useState<Post | null>(null);
   const [previousPosts, setPreviousPosts] = useState<Post[]>([]);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -84,15 +84,18 @@ function Home(): JSX.Element {
     } catch (error) {
       toast({
         title: "Error",
-        description: axiosErrorManager(error) || "Failed to fetch profile picture.",
+        description:
+          axiosErrorManager(error) || "Failed to fetch profile picture.",
         className: "bg-red-500 font-semibold text-white",
-      })
+      });
     }
   };
 
   const fetchRandomPost = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/video/random`);
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/user/posts/video/random`
+      );
       if (data && data.length > 0) {
         const newPost = data[0];
         if (activePost) {
@@ -106,7 +109,7 @@ function Home(): JSX.Element {
         title: "Error",
         description: axiosErrorManager(error) || "Failed to fetch random post.",
         className: "bg-red-500 font-semibold text-white",
-      })
+      });
     }
   };
 
@@ -118,7 +121,7 @@ function Home(): JSX.Element {
         className: "bg-red-500 font-semibold text-white",
       });
       setModalType?.("login");
-          setShowModal?.(true);
+      setShowModal?.(true);
       return;
     }
 
@@ -180,7 +183,8 @@ function Home(): JSX.Element {
     } catch (error) {
       toast({
         title: "Favorite Error",
-        description: axiosErrorManager(error) || "Failed to toggle favorite status.",
+        description:
+          axiosErrorManager(error) || "Failed to toggle favorite status.",
         className: "bg-red-500 font-semibold text-white",
       });
     }
@@ -201,7 +205,7 @@ function Home(): JSX.Element {
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
               <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-5 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative ms-20  md:ms-0 left-[64px] md:left-0 w-[372px] h-[690px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
+                <div className="relative ms-20  md:ms-0 left-[66px] md:left-0 w-[385px] h-[620px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"
@@ -253,7 +257,7 @@ function Home(): JSX.Element {
                   <img
                     src={profilePictures[activePost?.username] || demoPng}
                     alt={activePost.username}
-                    className="mt-8 md:mt-0 w-10 h-10 object-cover rounded-full"
+                    className="md:mt-0 w-10 h-10 object-cover rounded-full"
                   />
                 </div>
                 <div className="absolute mt-28 md:bottom-4 right-[-50px] z-10 ">
@@ -266,7 +270,9 @@ function Home(): JSX.Element {
                     toggleLike={() => toggleLike()}
                     toggleFavorites={() => toggleFavorites()}
                     isLiked={activePost.likes.includes(currUser?._id ?? "")}
-                    isFavorite={activePost.favorites.includes(currUser?._id ?? "")}
+                    isFavorite={activePost.favorites.includes(
+                      currUser?._id ?? ""
+                    )}
                   />
                 </div>
               </div>
@@ -275,25 +281,30 @@ function Home(): JSX.Element {
         </div>
       </div>
 
-      <div className="fixed md:right-4 md:top-60 top-1 z-10 ms-40 md:ms-0 mt-6 flex flex-col md:gap-y-5 gap-y-[534px] items-center space-y-2"
-      >
-        <button
-          className="md:bg-[#30303087] md:hover:bg-[#383838] w-24 h-24 flex justify-center items-center md:w-auto md:h-auto  md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+      <button
+          className="absolute left-36 top-8 md:top-16 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 flex justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
           onClick={() => {
-            if (previousPosts.length > 0) {
-              setActivePost(previousPosts[previousPosts.length - 1]);
-              setPreviousPosts((prev) => prev.slice(0, -1));
-            }
-          }}
-        >
-          <MdOutlineKeyboardArrowUp className="text-white active:text-[red] md:active:text-white" size={50} />
-        </button>
+          if (previousPosts.length > 0) {
+            setActivePost(previousPosts[previousPosts.length - 1]);
+            setPreviousPosts((prev) => prev.slice(0, -1));
+          }
+        }}
+      >
+        <MdOutlineKeyboardArrowUp
+          className="text-white active:text-[red] md:active:text-white"
+          size={50}
+        />
+      </button>
+      <div className="w-full">
         <button
           onClick={fetchRandomPost}
-          className="md:bg-[#30303087] md:hover:bg-[#383838] w-24 h-24 flex justify-center items-center md:w-auto md:h-auto  md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute left-36 bottom-0 md:bottom-2 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 flex justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
         >
-          <MdOutlineKeyboardArrowDown className="text-white active:text-[green] md:active:text-white" size={50} />
-        </button>
+          <MdOutlineKeyboardArrowDown
+            className="text-white active:text-[green] md:active:text-white"
+            size={50}
+          />
+        </button>{" "}
       </div>
     </div>
   );
