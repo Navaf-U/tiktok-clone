@@ -15,6 +15,7 @@ import { GoQuestion } from "react-icons/go";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import tiktokFullPng from "../assets/tiktok-full-icon.png";
+import tiktokIconPng from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
 import Signup from "../modal/Singup";
 import { Link, useNavigate } from "react-router-dom";
@@ -105,14 +106,17 @@ function NavBar(): JSX.Element {
     <div className="fixed z-20 bg-[#121212] w-full h-[58px] flex justify-center items-center top-0 border-b border-b-[#ffffff18]">
       <div className="flex items-center w-full justify-between my-2  lg:my-0 px-4">
         <Link to="/">
-          <img src={tiktokFullPng} className="w-28 h-[32px]" alt="" />
+          <img src={tiktokFullPng} className="w-28 hidden md:flex h-[32px]" alt="" />
+        </Link>
+        <Link to="/">
+          <img src={tiktokIconPng} className="w-12 md:hidden h-[30px]" alt="" />
         </Link>
         <div className="flex relative flex-grow left-[10%] max-w-lg">
           <Input
             type="text"
             placeholder="Search"
             onChange={handleSearchChange}
-            className="rounded-full h-[35px] sm:inline sm:h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-[80%] lg:w-[90%]  border-0"
+            className="rounded-full h-[35px] me-10 md:me:0 sm:inline sm:h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-[80%] lg:w-[90%]  border-0"
           />
           <CiSearch
             size={30}
@@ -132,17 +136,6 @@ function NavBar(): JSX.Element {
               <div className="bg-red-600  absolute top-2 right-16 rounded-md md:w-[1.5%] w-[3%] h-[15px] flex justify-center items-center text-[11px]">0</div>
             <BiMessageMinus className="text-[#c9c9c9]" size={25} />
             </div>
-            {/* <Button
-              variant={"grays"}
-              className="bg-[#121212] hidden md:flex rounded-none border border-[#ffffff81]"
-            >
-              <img
-                src={tiktokIcon}
-                className="w-5 outline-1 hidden md:flex outline-white"
-                alt=""
-              />
-              Get Coin
-            </Button> */}
             <div
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
