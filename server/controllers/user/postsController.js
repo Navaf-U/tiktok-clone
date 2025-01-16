@@ -184,7 +184,7 @@ const removeLike = async (req, res,next) => {
   }
   const post = await Posts.findById(postID);
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return next(new CustomError("Post not found", 404));
   }
   if (!post.likes.includes(req.user.id)) {
     return res.status(400).json({ message: "You have not liked this post" });
@@ -193,6 +193,66 @@ const removeLike = async (req, res,next) => {
   await post.save();
   res.json(post);
 };
+
+
+const postFavorite = async(req,res,next)=>{
+  const postID = req.params.id 
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid post ID" });
+  }
+  const post = await Posts.findById(postID)
+  if(!post){
+    return next(new CustomError("Post not found", 404));
+  }
+  if(post.favorites.includes(req.user.id)){
+    return res.status(400).json({message:"You have already favorited this post"})
+  }
+  post.favorites.push(req.user.id)
+  await post.save()
+  res.json(post)
+}
+
+const removeFavorite = async(req,res,next)=>{
+  const postID = req.params.id 
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid post ID" });
+  }
+  const post = await Posts.findById(postID)
+  if(!post){
+    return next(new CustomError("Post not found", 404));
+  }
+  post.favorites = post.favorites.filter((id) => id !== req.user.id)
+  await post.save()
+  if(!post.favorites.includes(req.user.id)){
+    return res.status(400).json({message:"You have not favorited this post"})
+  }
+}
+
+const getFavorites = async(req,res,next)=>{
+  const postID = req.params.id 
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid post ID" });
+  }
+  const post = await Posts.findById(postID)
+  if(!post){
+    return next(new CustomError("Post not found", 404));
+  }
+  res.json(post.favorites)
+}
+
+const getUserFavorites = async(req,res,next)=>{
+  const userID = req.params.id 
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
+  const user = await User.findById(userID)
+  if(!user){
+    return next(new CustomError("User not found", 404));
+  }
+  const posts = await Posts.find({favorites:userID})
+  res.json(posts)
+}
+
 
 export {
   userVideoPost,
@@ -207,4 +267,7 @@ export {
   getCommentOfPost,
   postLike,
   removeLike,
+  postFavorite,
+  getFavorites,
+  getUserFavorites
 };

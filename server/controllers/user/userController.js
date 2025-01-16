@@ -17,7 +17,7 @@ const userUpdate = async (req, res, next) => {
     if (!user) {
       return next(new CustomError("User not found", 404));
     }
-
+    
     if (req.file) {
       if (user.profile) {
         await cloudinary.uploader.destroy(user.profile).catch(console.error);
