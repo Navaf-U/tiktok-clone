@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { IoIosMusicalNotes, IoMdBookmark } from "react-icons/io";
-import { IoClose, IoHeart,IoPaperPlaneOutline } from "react-icons/io5";
+import { IoClose, IoHeart, IoPaperPlaneOutline } from "react-icons/io5";
 import {
   FaCommentDots,
   FaFacebookF,
@@ -62,7 +62,7 @@ function SingleVideoPage(): JSX.Element {
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
   const setPosts = userContext?.setPosts;
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) return;
@@ -81,10 +81,12 @@ function SingleVideoPage(): JSX.Element {
     getUserSinglePost();
   }, [id]);
 
-  const removePost = async(id:string) =>{
+  const removePost = async (id: string) => {
     try {
-      const confirm = window.confirm("Are you sure you want to delete this post?");
-      if(!confirm) return
+      const confirm = window.confirm(
+        "Are you sure you want to delete this post?"
+      );
+      if (!confirm) return;
 
       await axiosInstance.delete(`/user/posts/delete/${id}`);
       navigate(`/profile/${currUser?.username}`);
@@ -97,8 +99,8 @@ function SingleVideoPage(): JSX.Element {
         description: axiosErrorManager(error) || "Failed to delete post.",
         className: "bg-red-500 font-semibold text-white",
       });
-  }
-}
+    }
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -161,42 +163,46 @@ function SingleVideoPage(): JSX.Element {
     }
   };
 
-  
   const toggleFavorites = async () => {
     try {
       if (!singlePost || !currUser?._id) {
         toast({
-          title: "Like Error",
-          description: "You must be logged in to like posts.",
+          title: "Favorite Error",
+          description: "You must be logged in to favorite posts.",
           className: "bg-red-500 font-semibold text-white",
         });
         return;
       }
-      const isFavorite = singlePost.favorites.includes(currUser._id);
+  
+      const isFavorite = singlePost?.favorites?.includes(currUser._id);
+  
       const { data } = isFavorite
         ? await axiosInstance.delete(`/user/favorites/${singlePost._id}`)
         : await axiosInstance.post(`/user/favorites/${singlePost._id}`);
+  
       setSinglePost((prev) =>
         prev ? { ...prev, favorites: data.favorites } : null
       );
+  
       if (setPosts) {
         setPosts((prev) =>
-          prev.map((post) => {
-            if (post._id === singlePost._id) {
-              return { ...post, favorites: data.favorites };
-            }
-            return post;
-          })
+          prev?.map((post) =>
+            post._id === singlePost._id
+              ? { ...post, favorites: data.favorites }
+              : post
+          )
         );
       }
     } catch (error) {
       toast({
-        title: "Comment Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
+        title: "Error",
+        description: axiosErrorManager(error) || "Failed to toggle favorite status.",
         className: "bg-red-500 font-semibold text-white",
       });
     }
   };
+  
+  
 
   useEffect(() => {
     const getCommentsOfPost = async () => {
@@ -234,7 +240,9 @@ function SingleVideoPage(): JSX.Element {
 
   const removeComment = async (commentID: string) => {
     try {
-      const confirm = window.confirm("Are you sure you want to delete this comment?");
+      const confirm = window.confirm(
+        "Are you sure you want to delete this comment?"
+      );
       if (!confirm) return;
       await axiosInstance.delete(`/user/posts/comments/${id}/${commentID}`);
       setSinglePost((prev) =>
@@ -258,20 +266,19 @@ function SingleVideoPage(): JSX.Element {
     ? formatDistanceToNow(new Date(singlePost.date), { addSuffix: true })
     : "";
 
-    const handleMouseEnterDelete = () => {
-      if (hoverTimeout) {
-        clearTimeout(hoverTimeout);
-      }
-      setPostDltDropDown(true);
-    };
-  
-    const handleMouseLeaveDelete = () => {
-      const timeout = setTimeout(() => {
-        setPostDltDropDown(false);
-      }, 1000);
-      setHoverTimeout(timeout);
-    };
+  const handleMouseEnterDelete = () => {
+    if (hoverTimeout) {
+      clearTimeout(hoverTimeout);
+    }
+    setPostDltDropDown(true);
+  };
 
+  const handleMouseLeaveDelete = () => {
+    const timeout = setTimeout(() => {
+      setPostDltDropDown(false);
+    }, 1000);
+    setHoverTimeout(timeout);
+  };
 
   const showDropdown = (index: number) => {
     if (hoverTimeout) {
@@ -279,7 +286,6 @@ function SingleVideoPage(): JSX.Element {
     }
     setDropdownIndex(index);
   };
-
 
   const hideDropdown = (index: number) => {
     const timeout = setTimeout(() => {
@@ -324,27 +330,38 @@ function SingleVideoPage(): JSX.Element {
         <div className="bg-[#1c1c1c] h-[120px] rounded-md">
           <div className="p-3 flex justify-between">
             <div>
-            <div className="flex">
-              <UserProfilePicture
-                profile={user?.profile}
-                className="rounded-full w-10"
-              />
-              <div className="flex flex-col ms-2">
-                <h4 className="text-lg font-semibold ms-2">{user?.username}</h4>
-                <p className="text-xs">{formattedDate}</p>
+              <div className="flex">
+                <UserProfilePicture
+                  profile={user?.profile}
+                  className="rounded-full w-10"
+                />
+                <div className="flex flex-col ms-2">
+                  <h4 className="text-lg font-semibold ms-2">
+                    {user?.username}
+                  </h4>
+                  <p className="text-xs">{formattedDate}</p>
+                </div>
+              </div>
+              <p className="mt-2 text-[15px]">{singlePost?.description}</p>
+              <div className="flex gap-1 items-center">
+                <IoIosMusicalNotes size={12} className="mt-1" />
+                <p className="text-xs mt-1">
+                  original Sound - {user?.username}
+                </p>
               </div>
             </div>
-            <p className="mt-2 text-[15px]">{singlePost?.description}</p>
-            <div className="flex gap-1 items-center">
-              <IoIosMusicalNotes size={12} className="mt-1" />
-              <p className="text-xs mt-1">original Sound - {user?.username}</p>
-            </div>
-            </div>
-            <div className="mt-2 cursor-pointer" onMouseEnter={handleMouseEnterDelete} onMouseLeave={handleMouseLeaveDelete}>
+            <div
+              className="mt-2 cursor-pointer"
+              onMouseEnter={handleMouseEnterDelete}
+              onMouseLeave={handleMouseLeaveDelete}
+            >
               <BsThreeDots size={20} />
             </div>
             {postDltDropDown === true && (
-              <div onClick={() => removePost(singlePost._id)} className="bg-[#121212] hover:text-[#ff2b56] flex items-center ps-3 absolute top-8 right-6 h-10 w-[150px] cursor-pointer">
+              <div
+                onClick={() => removePost(singlePost._id)}
+                className="bg-[#121212] hover:text-[#ff2b56] flex items-center ps-3 absolute top-8 right-6 h-10 w-[150px] cursor-pointer"
+              >
                 <button>Delete</button>
               </div>
             )}
@@ -377,13 +394,14 @@ function SingleVideoPage(): JSX.Element {
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <IoMdBookmark
-                onClick={toggleFavorites}
+                  onClick={toggleFavorites}
                   size={32}
                   className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
                     currUser?._id && singlePost.favorites?.includes(currUser?._id)
                       ? "text-red-500"
                       : ""
-                  }`}                />
+                  }`}
+                />
                 <p className="text-xs">{singlePost?.favorites?.length}</p>
               </div>
             </div>
@@ -515,7 +533,6 @@ function SingleVideoPage(): JSX.Element {
             </p>
           </button>
         </form>
-
       </div>
     </div>
   );

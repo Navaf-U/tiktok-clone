@@ -155,7 +155,7 @@ function Home(): JSX.Element {
       }
       const isFavorite = activePost.favorites.includes(currUser._id);
       const { data } = isFavorite
-        ? await axiosInstance.delete(`/user/favorites//${activePost._id}`)
+        ? await axiosInstance.delete(`/user/favorites/${activePost._id}`)
         : await axiosInstance.post(`/user/favorites/${activePost._id}`);
       console.log(data, "FAV DATA");
       setActivePost((prev) =>
