@@ -3,7 +3,7 @@ import ConnectDataBase from "./config/ConnectDataBase.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import manageError from "./middlewares/ManageError.js";
+import manageError from "./middlewares/manageError.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 const app = express();
