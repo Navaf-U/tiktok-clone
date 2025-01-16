@@ -221,11 +221,11 @@ const removeFavorite = async(req,res,next)=>{
   if(!post){
     return next(new CustomError("Post not found", 404));
   }
-  post.favorites = post.favorites.filter((id) => id !== req.user.id)
-  await post.save()
   if(!post.favorites.includes(req.user.id)){
     return res.status(400).json({message:"You have not favorited this post"})
   }
+  post.favorites = post.favorites.filter((id) => id !== req.user.id)
+  await post.save()
 }
 
 const getFavorites = async(req,res,next)=>{
@@ -269,5 +269,6 @@ export {
   removeLike,
   postFavorite,
   getFavorites,
-  getUserFavorites
+  getUserFavorites,
+  removeFavorite
 };

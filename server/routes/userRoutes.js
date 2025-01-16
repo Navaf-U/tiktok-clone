@@ -4,7 +4,7 @@ import { getOneUser, searchUser, userProfileDelete, userUpdate } from "../contro
 import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
-import { getAllPosts, getAllPostsOfUser, getCommentOfPost, getFavorites, getSinglePostOfUser, getUserFavorites, postComment, postFavorite, postLike, randomSinglePost, removeComment, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
+import { getAllPosts, getAllPostsOfUser, getCommentOfPost, getFavorites, getSinglePostOfUser, getUserFavorites, postComment, postFavorite, postLike, randomSinglePost, removeComment, removeFavorite, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
 import { getFollowersAndFollowing, isFollowing, userFollow, userUnfollow } from "../controllers/user/followController.js";
 const Router = express.Router();
 Router
@@ -38,7 +38,7 @@ Router
 .get("/favorites/:postID",tryCatch(getFavorites))
 .get("/favorites/user/:id",tryCatch(getUserFavorites))
 .post("/favorites/:id",verifyToken,tryCatch(postFavorite))
-.delete("/favorites/:id")
+.delete("/favorites/:id",verifyToken,tryCatch(removeFavorite))
 
 //follows
 .get("/follows/:userID",tryCatch(getFollowersAndFollowing))
