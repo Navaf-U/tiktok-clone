@@ -9,6 +9,8 @@ import TiktokMobileImage from "../assets/tiktokMobilePost.jpg";
 import VideoPostIcons from "@/components/shared/VideoPostIcons";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import { FaCheckCircle } from "react-icons/fa";
+import { IoIosClose } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 interface PostDetails {
   _id: string;
   file: string;
@@ -28,6 +30,7 @@ const UploadPage = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState<number>(0);
   const [showUploadedMessage, setShowUploadedMessage] = useState(false);
+  const navigate = useNavigate();
   const maxLength = 4000;
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -111,7 +114,13 @@ const UploadPage = (): JSX.Element => {
       <div className="hidden lg:block fixed top-0 left-0 w-[220px] bg-white">
         <PostPageSidebar />
       </div>
-
+      <div className="md:hidden">
+        <IoIosClose
+          onClick={() => navigate("/")}
+          className="cursor-pointer text-black"
+          size={50}
+        />
+      </div>
       <div className="flex flex-1 justify-center items-center mt-16 lg:pl-[220px] p-4 lg:p-0">
         <div className="w-full max-w-4xl p-6 bg-white rounded-md shadow-lg">
           {stage === "description" && (

@@ -20,6 +20,7 @@ function UserDetailsEdit(): JSX.Element {
       setBio(e.target.value);
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setProfilePhoto(e.target.files[0]);
@@ -67,88 +68,103 @@ function UserDetailsEdit(): JSX.Element {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#191919] rounded-md flex flex-col left-[25%] right-[25%] w-[50%] z-50">
-      <div className="flex justify-between items-center mt-5 mb-3 mx-9">
-        <h1 className="font-medium text-[#e8e8e8] text-[22px]">Edit profile</h1>
-        <IoIosClose
-          onClick={() => setShowUserEdit(false)}
-          className="cursor-pointer"
-          size={40}
-        />
-      </div>
-      <hr className="w-full opacity-45" />
-      <div className="flex justify-between py-5 items-start mt-5 mb-3 mx-10">
-        <h1 className="font-medium text-[#e8e8e8] text-[20px]">
-          Profile photo
-        </h1>
-        <div className=" flex justify-between group">
-          <input type="file" accept="image/*" onChange={handleFileChange} />
-          <div className="relative">
-            {currUser?.profile && (
-              <div>
-                <img
-                  src={currUser?.profile}
-                  alt="Profile"
-                  className="w-20 h-20 rounded-full object-cover"
-                />
-                <FaRegTrashCan
-                  className="absolute top-4 left-4  text-white bg-black bg-opacity-30 text-opacity-50 rounded-md  p-1 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  size={50}
-                  onClick={deletProfile}
-                />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="bg-[#191919] rounded-md w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-4 sticky top-0 bg-[#191919]">
+          <h1 className="font-medium text-[#e8e8e8] text-lg sm:text-[22px]">Edit profile</h1>
+          <IoIosClose
+            onClick={() => setShowUserEdit(false)}
+            className="cursor-pointer"
+            size={32}
+          />
+        </div>
+        <hr className="opacity-45" />
+        
+        <div className="p-4 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <h2 className="font-medium text-[#e8e8e8] text-lg whitespace-nowrap">
+              Profile photo
+            </h2>
+            <div className="flex flex-col items-center sm:items-start gap-2">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="text-sm text-gray-300"
+              />
+              {currUser?.profile && (
+                <div className="relative w-20 h-20">
+                  <img
+                    src={currUser.profile}
+                    alt="Profile"
+                    className="w-full h-full rounded-full object-cover"
+                  />
+                  <FaRegTrashCan
+                    className="absolute top-0 right-0 text-white bg-black bg-opacity-50 rounded-full p-1 cursor-pointer opacity-0 hover:opacity-100 transition-opacity duration-200"
+                    size={20}
+                    onClick={deletProfile}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <hr className="opacity-45" />
+
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+            <h2 className="font-medium text-[#e8e8e8] text-lg whitespace-nowrap">
+              Username
+            </h2>
+            <div className="flex-1">
+              <h3 className="font-medium text-[#e8e8e8] text-base">
+                {currUser?.username}
+              </h3>
+              <p className="text-xs text-[#ffffffbc] mt-1">
+                www.tiktokClone.com/@{currUser?.username}
+                <br />
+                Your username can be changed once every 30 days. You can change it again after Jan 27, 2025.
+              </p>
+            </div>
+          </div>
+
+          <hr className="opacity-45" />
+
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+            <h2 className="font-medium text-[#e8e8e8] text-lg whitespace-nowrap">
+              Bio
+            </h2>
+            <div className="flex-1">
+              <textarea
+                name="bio"
+                id="bio"
+                value={bio}
+                placeholder="bio"
+                onChange={handleChange}
+                className="bg-[#2e2e2e] w-full min-h-[100px] rounded-md p-2 text-[#e8e8e8]"
+              />
+              <div className="text-sm text-gray-400 mt-2">
+                {bio.length}/{maxLength} characters
               </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
-      <hr className="opacity-45 ms-5 w-[95%]" />
-      <div className="flex justify-between gap-4 py-3 items-start mt-5 mb-3 mx-10">
-        <h1 className="font-medium text-[#e8e8e8] text-[20px]">Username</h1>
-        <div>
-          <h1 className="text-center font-medium text-[#e8e8e8] text-[17px]">
-            {currUser?.username}
-          </h1>
-          <p className="text-center text-[10px] text-[#ffffffbc]">
-            www.tiktokClone.com/@{currUser?.username}
-            <br />
-            Your username can be changed once every 30 days. You can change it
-            again after Jan 27, 2025.
-          </p>
+
+        <div className="sticky bottom-0 bg-[#191919] p-4 flex justify-end gap-4">
+          <Button
+            variant="grays"
+            className="w-24 h-9 rounded-sm"
+            onClick={() => setShowUserEdit(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="pinks"
+            className="w-24 h-9 rounded-sm"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
         </div>
-      </div>
-      <hr className="opacity-45 ms-5 w-[95%] py-3" />
-      <div className="flex justify-between items-start mt-5 mb-3 mx-10">
-        <h1 className="font-medium text-[#e8e8e8] text-[20px]">Bio</h1>
-        <div className="flex flex-col">
-          <textarea
-            name="bio"
-            id="bio"
-            value={bio}
-            placeholder="bio"
-            onChange={handleChange}
-            className="bg-[#2e2e2e] w-[360px] h-[100px] rounded-md p-2"
-          ></textarea>
-          <div className="text-sm text-gray-400 mt-2">
-            {bio.length}/{maxLength} characters
-          </div>
-        </div>
-      </div>
-      <hr className="opacity-25 mt-2 w-[100%]" />
-      <div className="flex gap-4 justify-end me-10">
-        <Button
-          variant={"grays"}
-          className="w-24 mt-8 h-9 rounded-sm"
-          onClick={() => setShowUserEdit(false)}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant={"pinks"}
-          className="w-24 mt-8 h-9 rounded-sm"
-          onClick={handleSave}
-        >
-          Save
-        </Button>
       </div>
     </div>
   );

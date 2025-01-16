@@ -63,7 +63,7 @@ function Home(): JSX.Element {
       if (e.key === "ArrowDown") {
         fetchRandomPost();
       } else if (e.key === "ArrowUp" && previousPosts.length > 0) {
-        handlePreviousPost()
+        handlePreviousPost();
       }
     };
 
@@ -71,8 +71,8 @@ function Home(): JSX.Element {
     return () => {
       window.removeEventListener("keydown", handleArrowKeys);
     };
-  }, [previousPosts,activePost]);
-  console.log("object")
+  }, [previousPosts, activePost]);
+  console.log("object");
 
   const fetchProfilePicture = async (username: string) => {
     if (profilePictures[username]) return;
@@ -89,16 +89,18 @@ function Home(): JSX.Element {
 
   const fetchRandomPost = async () => {
     try {
-     const { data } = await axios.get("http://localhost:3000/user/posts/video/random");
-    if (data && data.length > 0) {
-      const newPost = data[0];
-      if (activePost) {
-        setPreviousPosts((prev) => [...prev, activePost]);
+      const { data } = await axios.get(
+        "http://localhost:3000/user/posts/video/random"
+      );
+      if (data && data.length > 0) {
+        const newPost = data[0];
+        if (activePost) {
+          setPreviousPosts((prev) => [...prev, activePost]);
+        }
+        setActivePost(newPost);
+        fetchProfilePicture(newPost.username);
       }
-      setActivePost(newPost);
-      fetchProfilePicture(newPost.username);
-    }
-   } catch (error) {
+    } catch (error) {
       console.error("Error fetching random post:", error);
     }
   };
@@ -132,13 +134,9 @@ function Home(): JSX.Element {
     }
   };
 
- 
-
   const toggleMute = () => {
     setIsMuted((prev) => !prev);
   };
-
-  console.log(activePost);
 
   return (
     <div className="h-screen overflow-hidden">
@@ -151,7 +149,7 @@ function Home(): JSX.Element {
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
               <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-8 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative w-auto md:h-[500px] h-auto max-w-[500px] mt-8 flex justify-center items-center transition-opacity duration-300">
+                <div className="relative ms-20  md:ms-0 left-[64px] md:left-0 w-[372px] h-[680px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"
@@ -203,10 +201,10 @@ function Home(): JSX.Element {
                   <img
                     src={profilePictures[activePost?.username] || demoPng}
                     alt={activePost.username}
-                    className="w-10 h-10 object-cover rounded-full"
+                    className="mt-8 md:mt-0 w-10 h-10 object-cover rounded-full"
                   />
                 </div>
-                <div className="absolute md:bottom-4 md:right-[-50px] z-20 right-2">
+                <div className="absolute mt-28 md:bottom-4 right-[-50px] z-10 ">
                   <VideoPostIcons
                     _id={activePost._id}
                     small={false}
@@ -223,9 +221,10 @@ function Home(): JSX.Element {
         </div>
       </div>
 
-      <div className="fixed right-4 top-1/2 z-20 flex flex-col items-center space-y-2">
+      <div className="fixed md:right-4 md:top-60  top-10 z-20 ms-40 md:ms-0 mt-6 flex flex-col md:gap-y-5 gap-y-[554px] items-center space-y-2"
+      >
         <button
-          className="bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
+          className="bg-[#30303087] hover:bg-[#383838] hidden md:flex rounded-full p-2 active:bg-[#000000fd]"
           onClick={() => {
             if (previousPosts.length > 0) {
               setActivePost(previousPosts[previousPosts.length - 1]);
@@ -236,8 +235,8 @@ function Home(): JSX.Element {
           <MdOutlineKeyboardArrowUp className="text-white" size={40} />
         </button>
         <button
-          className="bg-[#303030] hover:bg-[#383838] rounded-full p-2 active:bg-red-600"
           onClick={fetchRandomPost}
+          className="bg-[#30303087] hover:bg-[#383838] hidden md:flex rounded-full p-2 active:bg-[#000000fd]"
         >
           <MdOutlineKeyboardArrowDown className="text-white" size={40} />
         </button>
@@ -245,5 +244,4 @@ function Home(): JSX.Element {
     </div>
   );
 }
-
 export default Home;
