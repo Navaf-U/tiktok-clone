@@ -89,9 +89,7 @@ function Home(): JSX.Element {
 
   const fetchRandomPost = async () => {
     try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/posts/video/random`
-      );
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/video/random`);
       if (data && data.length > 0) {
         const newPost = data[0];
         if (activePost) {
@@ -221,10 +219,10 @@ function Home(): JSX.Element {
         </div>
       </div>
 
-      <div className="fixed md:right-4 md:top-60  top-10 z-20 ms-40 md:ms-0 mt-6 flex flex-col md:gap-y-5 gap-y-[554px] items-center space-y-2"
+      <div className="fixed md:right-4 md:top-60 top-10 z-20 ms-40 md:ms-0 mt-6 flex flex-col md:gap-y-5 gap-y-[554px] items-center space-y-2"
       >
         <button
-          className="bg-[#30303087] hover:bg-[#383838] hidden md:flex rounded-full p-2 active:bg-[#000000fd]"
+          className="bg-[#30303087] hover:bg-[#383838]  md:flex rounded-full p-2 active:bg-[#000000fd]"
           onClick={() => {
             if (previousPosts.length > 0) {
               setActivePost(previousPosts[previousPosts.length - 1]);
@@ -236,7 +234,7 @@ function Home(): JSX.Element {
         </button>
         <button
           onClick={fetchRandomPost}
-          className="bg-[#30303087] hover:bg-[#383838] hidden md:flex rounded-full p-2 active:bg-[#000000fd]"
+          className="bg-[#30303087] hover:bg-[#383838]  md:flex rounded-full p-2 active:bg-[#000000fd]"
         >
           <MdOutlineKeyboardArrowDown className="text-white" size={40} />
         </button>
