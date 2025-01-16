@@ -165,7 +165,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
         setPosts(data);
       } catch (error) {
         toast({
-          title: "Register Failed",
+          title: "Error",
           description: axiosErrorManager(error) || "An unknown error occurred.",
           className: "bg-red-500 font-semibold text-white",
         });
