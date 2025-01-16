@@ -147,7 +147,7 @@ function Home(): JSX.Element {
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
               <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-8 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative ms-20  md:ms-0 left-[64px] md:left-0 w-[372px] h-[680px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
+                <div className="relative ms-20  md:ms-0 left-[64px] md:left-0 w-[372px] h-[600px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"
@@ -219,10 +219,10 @@ function Home(): JSX.Element {
         </div>
       </div>
 
-      <div className="fixed md:right-4 md:top-60 top-10 z-20 ms-40 md:ms-0 mt-6 flex flex-col md:gap-y-5 gap-y-[554px] items-center space-y-2"
+      <div className="fixed md:right-4 md:top-60 top-14 z-20 ms-40 md:ms-0 mt-6 flex flex-col md:gap-y-5 gap-y-[524px] items-center space-y-2"
       >
         <button
-          className="bg-[#30303087] hover:bg-[#383838]  md:flex rounded-full p-2 active:bg-[#000000fd]"
+          className="bg-[#30303087] hover:bg-[#383838] flex justify-center items-center w-12 h-12 md:w-auto md:h-auto  md:flex rounded-full p-2 active:bg-[#000000fd]"
           onClick={() => {
             if (previousPosts.length > 0) {
               setActivePost(previousPosts[previousPosts.length - 1]);
@@ -234,7 +234,7 @@ function Home(): JSX.Element {
         </button>
         <button
           onClick={fetchRandomPost}
-          className="bg-[#30303087] hover:bg-[#383838]  md:flex rounded-full p-2 active:bg-[#000000fd]"
+          className="bg-[#30303087] flex justify-center items-center w-12 h-12 md:w-auto md:h-auto hover:bg-[#383838]  md:flex rounded-full p-2 active:bg-[#000000fd]"
         >
           <MdOutlineKeyboardArrowDown className="text-white" size={40} />
         </button>
