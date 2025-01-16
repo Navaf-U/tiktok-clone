@@ -174,9 +174,8 @@ function SingleVideoPage(): JSX.Element {
       }
       const isFavorite = singlePost.favorites.includes(currUser._id);
       const { data } = isFavorite
-        ? await axiosInstance.delete(`/user/favorites//${singlePost._id}`)
+        ? await axiosInstance.delete(`/user/favorites/${singlePost._id}`)
         : await axiosInstance.post(`/user/favorites/${singlePost._id}`);
-      console.log(data, "FAV DATA");
       setSinglePost((prev) =>
         prev ? { ...prev, favorites: data.favorites } : null
       );
@@ -381,7 +380,7 @@ function SingleVideoPage(): JSX.Element {
                 onClick={toggleFavorites}
                   size={32}
                   className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
-                    currUser?._id && singlePost.likes?.includes(currUser?._id)
+                    currUser?._id && singlePost.favorites?.includes(currUser?._id)
                       ? "text-red-500"
                       : ""
                   }`}                />

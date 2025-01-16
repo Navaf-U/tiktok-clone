@@ -34,7 +34,7 @@ function Home(): JSX.Element {
   const userContext = useContext(UserContext);
 
   const currUser = userContext?.currUser;
-  const { setModalType, setShowModal } = userContext || {};
+  const { setModalType, setShowModal ,setPosts } = userContext || {};
   const [activePost, setActivePost] = useState<Post | null>(null);
   const [previousPosts, setPreviousPosts] = useState<Post[]>([]);
   const [isMuted, setIsMuted] = useState<boolean>(true);
@@ -72,7 +72,6 @@ function Home(): JSX.Element {
       window.removeEventListener("keydown", handleArrowKeys);
     };
   }, [previousPosts, activePost]);
-  console.log("object");
 
   const fetchProfilePicture = async (username: string) => {
     if (profilePictures[username]) return;
@@ -102,31 +101,80 @@ function Home(): JSX.Element {
       console.error("Error fetching random post:", error);
     }
   };
-  const toggleLike = async (postId: string) => {
-    if (!currUser?._id) {
+
+  const toggleLike = async () => {
+    if (!activePost || !currUser?._id) {
       toast({
-        title: "Error",
+        title: "Like Error",
         description: "You must be logged in to like posts.",
         className: "bg-red-500 font-semibold text-white",
       });
       setModalType?.("login");
-      setShowModal?.(true);
+          setShowModal?.(true);
       return;
     }
 
     try {
-      const { data } = await axiosInstance.post(`/user/posts/like/${postId}`);
-      setActivePost((prevPost) =>
-        prevPost && prevPost._id === postId
-          ? { ...prevPost, likes: data.likes }
-          : prevPost
-      );
+      const isLiked = activePost.likes.includes(currUser._id);
+
+      const { data } = isLiked
+        ? await axiosInstance.patch(`/user/posts/like/${activePost._id}`)
+        : await axiosInstance.post(`/user/posts/like/${activePost._id}`);
+
+      setActivePost((prev) => (prev ? { ...prev, likes: data.likes } : null));
+
+      if (setPosts) {
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post._id === activePost._id) {
+              return { ...post, likes: data.likes };
+            }
+            return post;
+          })
+        );
+      }
     } catch (error) {
       console.error("Error toggling like:", error);
       toast({
         title: "Error",
         description:
           axiosErrorManager(error) || "Failed to toggle like status.",
+        className: "bg-red-500 font-semibold text-white",
+      });
+    }
+  };
+  const toggleFavorites = async () => {
+    try {
+      if (!activePost || !currUser?._id) {
+        toast({
+          title: "Like Error",
+          description: "You must be logged in to like posts.",
+          className: "bg-red-500 font-semibold text-white",
+        });
+        return;
+      }
+      const isFavorite = activePost.favorites.includes(currUser._id);
+      const { data } = isFavorite
+        ? await axiosInstance.delete(`/user/favorites//${activePost._id}`)
+        : await axiosInstance.post(`/user/favorites/${activePost._id}`);
+      console.log(data, "FAV DATA");
+      setActivePost((prev) =>
+        prev ? { ...prev, favorites: data.favorites } : null
+      );
+      if (setPosts) {
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post._id === activePost._id) {
+              return { ...post, favorites: data.favorites };
+            }
+            return post;
+          })
+        );
+      }
+    } catch (error) {
+      toast({
+        title: "Comment Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
         className: "bg-red-500 font-semibold text-white",
       });
     }
@@ -209,8 +257,10 @@ function Home(): JSX.Element {
                     like={activePost.likes.length}
                     comment={activePost.comments.length}
                     favorites={activePost.favorites.length}
-                    toggleLike={() => toggleLike(activePost._id)}
+                    toggleLike={() => toggleLike()}
+                    toggleFavorites={() => toggleFavorites()}
                     isLiked={activePost.likes.includes(currUser?._id ?? "")}
+                    isFavorite={activePost.favorites.includes(currUser?._id ?? "")}
                   />
                 </div>
               </div>

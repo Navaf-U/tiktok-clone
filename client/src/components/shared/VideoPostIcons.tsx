@@ -11,9 +11,11 @@ interface VideoPostIconsProps {
   favorites: number;
   _id : string;
   isLiked?: boolean;
+  isFavorite?: boolean;
   toggleLike?: () => void;
+  toggleFavorites?:() => void; 
 }
-function VideoPostIcons({small = false,like,comment,favorites,_id,isLiked,toggleLike} : VideoPostIconsProps): JSX.Element {
+function VideoPostIcons({small = false,like,comment,favorites,_id,isLiked,isFavorite,toggleLike,toggleFavorites} : VideoPostIconsProps): JSX.Element {
   return (
       <div className="text-center flex flex-col gap-1 justify-center items-center"> 
         <IoHeart onClick={toggleLike} size={40} className={`bg-[#2e2e2e] p-2 rounded-full cursor-pointer ${isLiked ? 'text-red-600' : ''}`} />
@@ -22,7 +24,7 @@ function VideoPostIcons({small = false,like,comment,favorites,_id,isLiked,toggle
         <FaRegCommentDots size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
         <p className={`${small ? "text-[10px]" : "text-sm" }`}>{comment}</p>
         </Link>
-        <FaBookmark size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
+        <FaBookmark size={40} onClick={toggleFavorites} className={`bg-[#2e2e2e] p-2 rounded-full cursor-pointer ${isFavorite ? 'text-red-600' : ''}`}/>
         <p className={`${small ? "text-[10px]" : "text-sm" }`}>{favorites}</p>
         <PiShareFatFill size={40} className="bg-[#2e2e2e] p-2 rounded-full cursor-pointer"/>
       </div>
