@@ -161,6 +161,44 @@ function SingleVideoPage(): JSX.Element {
     }
   };
 
+  
+  const toggleFavorites = async () => {
+    try {
+      if (!singlePost || !currUser?._id) {
+        toast({
+          title: "Like Error",
+          description: "You must be logged in to like posts.",
+          className: "bg-red-500 font-semibold text-white",
+        });
+        return;
+      }
+      const isFavorite = singlePost.favorites.includes(currUser._id);
+      const { data } = isFavorite
+        ? await axiosInstance.delete(`/user/favorites//${singlePost._id}`)
+        : await axiosInstance.post(`/user/favorites/${singlePost._id}`);
+      console.log(data, "FAV DATA");
+      setSinglePost((prev) =>
+        prev ? { ...prev, favorites: data.favorites } : null
+      );
+      if (setPosts) {
+        setPosts((prev) =>
+          prev.map((post) => {
+            if (post._id === singlePost._id) {
+              return { ...post, favorites: data.favorites };
+            }
+            return post;
+          })
+        );
+      }
+    } catch (error) {
+      toast({
+        title: "Comment Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
+      });
+    }
+  };
+
   useEffect(() => {
     const getCommentsOfPost = async () => {
       try {
@@ -340,9 +378,13 @@ function SingleVideoPage(): JSX.Element {
               </div>
               <div className="flex items-center gap-1 cursor-pointer">
                 <IoMdBookmark
+                onClick={toggleFavorites}
                   size={32}
-                  className="bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2"
-                />
+                  className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
+                    currUser?._id && singlePost.likes?.includes(currUser?._id)
+                      ? "text-red-500"
+                      : ""
+                  }`}                />
                 <p className="text-xs">{singlePost?.favorites?.length}</p>
               </div>
             </div>

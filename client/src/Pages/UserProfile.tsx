@@ -195,15 +195,21 @@ function UserProfile(): JSX.Element {
       <NavBar />
       {isCurrUser && (
         <div>
-          <div className="flex mt-24 ms-64">
-            <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
+          <div className="flex mt-24 md:ms-64">
+            <div className=" absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
               <UserProfilePicture
                 profile={currUser?.profile}
                 className="object-cover w-full h-full"
               />
             </div>
-            <div>
-              <h1 className="text-white t ext-2xl ms-5 mt-8">{username}</h1>
+            <div className="md:w-[150px] md:h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
+              <UserProfilePicture
+                profile={currUser?.profile}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div className="mt-16 md:mt-0">
+              <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
               <div className="flex">
                 <Button
                   onClick={editPorfile}
@@ -240,22 +246,28 @@ function UserProfile(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="mt-10 ms-64">
+          <div className="mt-10 md:ms-64 ms-7">
             {username && <ProfileVideoShow username={username} />}
           </div>
         </div>
       )}
       {otherUser && !isCurrUser && (
         <div>
-          <div className="flex items-center mt-24 ms-72 ">
-            <div className="w-[150px] h-[150px] flex items-center rounded-full overflow-hidden">
+          <div className="flex items-center mt-24 md:ms-72 ">
+            <div className=" absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
+              <UserProfilePicture
+                profile={otherUser?.profile}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div className="w-[150px] h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
               <UserProfilePicture
                 profile={otherUser?.profile}
                 className="object-cover w-full h-full"
               />
             </div>
             <div>
-              <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
+              <h1 className="text-white text-2xl ms-5 md:mt-8 mt-32">{username}</h1>
               <div className="flex">
                 <Button
                   variant={"pinks"}
@@ -294,7 +306,7 @@ function UserProfile(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="mt-10 ms-64">
+          <div className="mt-10 md:ms-64 ms-7">
             {username && <ProfileVideoShow username={username} />}
           </div>
         </div>
@@ -310,6 +322,7 @@ function UserProfile(): JSX.Element {
       <div className="hidden lg:flex">
         <HomeSidebar />
       </div>
+      <div className="absolute left-[-200px] top-0">
       {showUserEdit && <UserDetailsEdit />}
       {followsShow && (
         <FollowersShow
@@ -323,6 +336,7 @@ function UserProfile(): JSX.Element {
           setStage={setStage}
         />
       )}
+      </div>
     </div>
   );
 }
