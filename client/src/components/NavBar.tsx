@@ -22,6 +22,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UserProfilePicture from "./shared/UserProfilePicture";
 import axios from "axios";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
+import { toast } from "@/hooks/use-toast";
 
 interface User {
   _id: string;
@@ -88,7 +89,11 @@ function NavBar(): JSX.Element {
       });
       setSearchResults(data);
     } catch (error) {
-      console.log(axiosErrorManager(error));
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "Search error occurred.",
+        className: "bg-red-500 font-semibold text-white",
+      })
     } finally {
       setIsLoading(false);
     }

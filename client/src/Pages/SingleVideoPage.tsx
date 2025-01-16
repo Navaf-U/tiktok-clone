@@ -153,7 +153,6 @@ function SingleVideoPage(): JSX.Element {
         );
       }
     } catch (error) {
-      console.error("Error toggling like:", error);
       toast({
         title: "Error",
         description:

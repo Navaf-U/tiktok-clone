@@ -99,7 +99,11 @@ function UserProfile(): JSX.Element {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
           setUserNotFound(true);
         } else {
-          console.error(error);
+          toast({
+            title: "Error",
+            description: axiosErrorManager(error) || "An unknown error occurred.",
+            className: "bg-red-500 font-semibold text-white",
+          });
         }
       }
     };
@@ -130,7 +134,6 @@ function UserProfile(): JSX.Element {
       try {
         const userId = isCurrUser ? currUser?._id : otherUser?._id;
         if (!userId) {
-          console.error("User ID is undefined");
           return;
         }
         const { data } = await axios.get(
@@ -155,7 +158,6 @@ function UserProfile(): JSX.Element {
     try {
       const userId = otherUser?._id;
       if (!userId) {
-        console.error("User ID is undefined");
         return;
       }
       await axiosInstance.post(`/user/follow/`, {
@@ -175,7 +177,6 @@ function UserProfile(): JSX.Element {
     try {
       const userId = otherUser?._id;
       if (!userId) {
-        console.error("User ID is undefined");
         return;
       }
       await axiosInstance.post(`/user/unfollow/`, {

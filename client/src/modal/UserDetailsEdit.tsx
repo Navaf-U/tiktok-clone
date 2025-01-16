@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { FaRegTrashCan } from "react-icons/fa6";
 import axiosInstance from "../utilities/axiosInstance";
+import { toast } from "@/hooks/use-toast";
+import axiosErrorManager from "@/utilities/axiosErrorManager";
 
 function UserDetailsEdit(): JSX.Element {
   const userContext = useContext(UserContext);
@@ -49,7 +51,11 @@ function UserDetailsEdit(): JSX.Element {
       localStorage.setItem("currUser", JSON.stringify(data));
       setShowUserEdit(false);
     } catch (error) {
-      console.error("Error updating user profile:", error);
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
+      })
     }
   };
 
@@ -63,7 +69,11 @@ function UserDetailsEdit(): JSX.Element {
       setCurrUser(data);
       localStorage.setItem("currUser", JSON.stringify(data));
     } catch (error) {
-      console.error("Error deleting user profile:", error);
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "Delete prole error occurred.",
+        className: "bg-red-500 font-semibold text-white",
+      })
     }
   };
 

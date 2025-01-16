@@ -82,7 +82,11 @@ function Home(): JSX.Element {
       );
       setProfilePictures((prev) => ({ ...prev, [username]: data.profile }));
     } catch (error) {
-      console.error(`Failed to fetch profile for ${username}:`, error);
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "Failed to fetch profile picture.",
+        className: "bg-red-500 font-semibold text-white",
+      })
     }
   };
 
@@ -98,7 +102,11 @@ function Home(): JSX.Element {
         fetchProfilePicture(newPost.username);
       }
     } catch (error) {
-      console.error("Error fetching random post:", error);
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "Failed to fetch random post.",
+        className: "bg-red-500 font-semibold text-white",
+      })
     }
   };
 
@@ -134,7 +142,6 @@ function Home(): JSX.Element {
         );
       }
     } catch (error) {
-      console.error("Error toggling like:", error);
       toast({
         title: "Error",
         description:
@@ -147,8 +154,8 @@ function Home(): JSX.Element {
     try {
       if (!activePost || !currUser?._id) {
         toast({
-          title: "Like Error",
-          description: "You must be logged in to like posts.",
+          title: "Favorite Error",
+          description: "You must be logged in to Favorite posts.",
           className: "bg-red-500 font-semibold text-white",
         });
         return;
@@ -157,7 +164,6 @@ function Home(): JSX.Element {
       const { data } = isFavorite
         ? await axiosInstance.delete(`/user/favorites/${activePost._id}`)
         : await axiosInstance.post(`/user/favorites/${activePost._id}`);
-      console.log(data, "FAV DATA");
       setActivePost((prev) =>
         prev ? { ...prev, favorites: data.favorites } : null
       );
@@ -173,8 +179,8 @@ function Home(): JSX.Element {
       }
     } catch (error) {
       toast({
-        title: "Comment Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
+        title: "Favorite Error",
+        description: axiosErrorManager(error) || "Failed to toggle favorite status.",
         className: "bg-red-500 font-semibold text-white",
       });
     }

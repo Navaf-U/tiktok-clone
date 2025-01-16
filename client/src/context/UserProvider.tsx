@@ -108,13 +108,11 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       });
       navigate("/");
     } catch (err) {
-      console.log("YOO");
       toast({
         title: "Login Failed",
         description: axiosErrorManager(err) || "An unknown error occurred.",
         className: "bg-red-500 font-semibold text-white",
       });
-      console.log(axiosErrorManager(err));
     }
   };
 
