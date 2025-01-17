@@ -194,6 +194,21 @@ function Home(): JSX.Element {
     setIsMuted((prev) => !prev);
   };
 
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+        if (e.deltaY < 0 && previousPosts.length > 0) {
+            handlePreviousPost();
+        } else if (e.deltaY > 0) {
+            fetchRandomPost();
+        }
+    };
+
+    window.addEventListener("wheel", handleWheel);
+    return () => {
+        window.removeEventListener("wheel", handleWheel);
+    };
+}, [previousPosts, activePost]);
+
   return (
     <div className="h-screen overflow-hidden">
       <NavBar />
@@ -282,7 +297,7 @@ function Home(): JSX.Element {
       </div>
 
       <button
-          className="absolute left-36 top-8 md:top-16 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 flex justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute hidden md:top-16 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 md:flex justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
           onClick={() => {
           if (previousPosts.length > 0) {
             setActivePost(previousPosts[previousPosts.length - 1]);
@@ -298,7 +313,7 @@ function Home(): JSX.Element {
       <div className="w-full">
         <button
           onClick={fetchRandomPost}
-          className="absolute left-36 bottom-0 md:bottom-2 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 flex justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute hidden md:bottom-2 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
         >
           <MdOutlineKeyboardArrowDown
             className="text-white active:text-[green] md:active:text-white"
