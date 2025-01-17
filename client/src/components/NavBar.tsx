@@ -148,7 +148,7 @@ function NavBar(): JSX.Element {
             >
               <UserProfilePicture
                 profile={currUser?.profile}
-                className="object-cover w-full h-full"
+                className="object-cover w-8 h-8"
               />
             </div>
           </div>

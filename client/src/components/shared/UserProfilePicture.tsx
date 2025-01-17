@@ -14,7 +14,7 @@ function UserProfilePicture({
 }: UserProfilePictureProps): JSX.Element {
   return (
     <div
-      className={`flex items-center justify-center overflow-hidden bg-gray-700 ${className}`}
+      className={`flex items-center justify-center overflow-hidden bg-gray-700 rounded-full ${className}`}
     >
       {profile ? (
         <img
