@@ -22,38 +22,38 @@ const HomeSidebar = (): JSX.Element => {
 
   return (
     <SidebarProvider>
-      <Sidebar className="fixed top-[62px] left-0 h-[0px] bg-[#121212] border-0 text-white  transition-all w-16 lg:w-60">
+      <Sidebar className="fixed top-[62px] left-0 h-[0px] bg-[#121212] border-0 text-white  transition-all w-16 lg:w-56">
         <SidebarMenu className="">
-          <SidebarMenuItem onClick={()=>navigate("/")} className="flex gap-2 text-md lg:p-6 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem onClick={()=>navigate("/")} className="flex gap-2 text-md lg:p-4 h-12 mt-5 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <RiHome4Line size={22}  />
             <span className="hidden lg:inline">For You</span>
           </SidebarMenuItem>
-          <SidebarMenuItem onClick={()=>navigate("/explore")}  className="flex gap-2 text-md lg:p-6 h-12  font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem onClick={()=>navigate("/explore")}  className="flex gap-2 text-md lg:p-4 h-12  font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <MdOutlineExplore size={22} />
             <span className="hidden lg:inline">Explore</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem onClick={()=>navigate("/following")} className="flex gap-2 text-md lg:p-4 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <RiUserReceived2Line size={22} />
             <span className="hidden lg:inline">Following</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-4 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <LiaUserFriendsSolid size={22} />
             <span className="hidden lg:inline">Friends</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold  justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-4 h-12 font-bold  justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <RiLiveLine size={22} className="" />
             <span className="hidden lg:inline">LIVE</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+          <SidebarMenuItem className="flex gap-2 text-md lg:p-4 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <PiPaperPlaneTiltBold size={22} />
             <span className="hidden lg:inline">Messages</span>
           </SidebarMenuItem>
           {currUser && (
-            <SidebarMenuItem onClick={()=>navigate(`/profile/${currUser.username}`)} className="flex gap-2 text-md lg:p-6 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#303030]  w-[90%] rounded-md">
+            <SidebarMenuItem onClick={()=>navigate(`/profile/${currUser.username}`)} className="flex gap-2 text-md lg:p-4 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <div className="w-[30px] h-[30px] flex items-center rounded-full overflow-hidden me-1">
               <UserProfilePicture
                 profile={currUser?.profile}

@@ -116,7 +116,7 @@ function NavBar(): JSX.Element {
         <Link to="/">
           <img src={tiktokIconPng} className="w-12 md:hidden h-[30px]" alt="" />
         </Link>
-        <div className="flex relative flex-grow left-[10%] max-w-lg">
+        <div className="flex relative flex-grow left-[10%] md:left-0 max-w-lg">
           <Input
             type="text"
             placeholder="Search"

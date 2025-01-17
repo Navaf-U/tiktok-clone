@@ -133,6 +133,7 @@ getUserLikes()
         </button>
         <button
           onClick={() => setStage("favorites")}
+          ref={videoButtonRef}
           className={`w-24 border-b-2 ${
             stage === "favorites" ? "border-white" : "border-b-transparent"
           } hover:border-b-2 hover:border-white`}
@@ -148,6 +149,7 @@ getUserLikes()
         </button>
         <button
           onClick={() => setStage("liked")}
+          ref={videoButtonRef}
           className={`w-24 border-b-2 ${
             stage === "liked" ? "border-white" : "border-b-transparent"
           } hover:border-b-2 hover:border-white`}
@@ -183,7 +185,7 @@ getUserLikes()
             favorites.map((post) => (
               <Link to={`/user/video/${post._id}`} key={post._id}>
                 <VideoCard file={post.file}  />
-              </Link>
+              </Link> 
             ))
           ) : (
             <p className="text-center text-gray-500">No videos found.</p>
