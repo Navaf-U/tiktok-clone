@@ -195,17 +195,34 @@ function Home(): JSX.Element {
   };
 
   useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-        if (e.deltaY < 0 && previousPosts.length > 0) {
-            handlePreviousPost();
-        } else if (e.deltaY > 0) {
-            fetchRandomPost();
+    let touchStartY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+        touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+        if (!touchStartY) return;
+
+        const touchEndY = e.touches[0].clientY;
+        const difference = touchStartY - touchEndY;
+
+        if (Math.abs(difference) > 30) {
+            if (difference > 0) {
+                fetchRandomPost();
+            } else if (difference < 0 && previousPosts.length > 0) {
+                handlePreviousPost();
+            }
+            touchStartY = 0; 
         }
     };
 
-    window.addEventListener("wheel", handleWheel);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+
     return () => {
-        window.removeEventListener("wheel", handleWheel);
+        window.removeEventListener("touchstart", handleTouchStart);
+        window.removeEventListener("touchmove", handleTouchMove);
     };
 }, [previousPosts, activePost]);
 
