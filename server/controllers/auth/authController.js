@@ -14,7 +14,6 @@ const registerUser = async (req, res, next) => {
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
   });
-
   if (existingUser) {
     if (existingUser.email === email) {
       return next(new CustomError("Email already exists", 400));
@@ -40,7 +39,7 @@ const loginUser = async (req, res, next) => {
   if (!isPasswordCorrect) {
     return next(new CustomError("Invalid credentials", 400));
   }
-  const token = createToken(user._id, user.role, "10s");
+  const token = createToken(user._id, user.role, "1h");
   const refreshToken = createRefreshToken(user._id, user.role, "1d");
   const currUser = {
     _id: user._id,
