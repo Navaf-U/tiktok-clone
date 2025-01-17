@@ -7,6 +7,7 @@ import { MdBookmarkRemove } from "react-icons/md";
 import { TbHeartMinus } from "react-icons/tb";
 import VideoCard from "./shared/VideoCard";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function ProfileVideoShow({ username }: { username: string }): JSX.Element {
   interface Post {
@@ -20,7 +21,20 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
     description: string;
   }
 
+  interface User {
+    _id: string;
+    username: string;
+    email: string;
+    profile: string;
+    bio: string;
+    role: string;
+  }
+
+
   const [posts, setPosts] = useState<Post[]>([]);
+  const [user,setUser] = useState<User | null>(null)
+  const [favorites, setFavorites] = useState<Post[]>([]);
+  const [likes,setLikes] = useState<Post[]>([])
   const [stage, setStage] = useState<"videos" | "favorites" | "liked">(
     "videos"
   );
@@ -45,7 +59,59 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
     };
     getUserPost();
   }, [username]);
+  
+  useEffect(()=>{
+    const getUser = async()=>{
+      try {
+        const { data } = await axiosInstance.get(`/user/profile/${username}`);
+        setUser(data)
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: axiosErrorManager(error) || "An unknown error occurred.",
+        });
+      }
+    }
+    getUser()
+  },[username])
 
+useEffect(()=>{
+  const getUserFavorites = async()=>{
+    try {
+      if(user){
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/favorites/user/${user?._id}`);
+        setFavorites(data)
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: axiosErrorManager(error) || "An unknown error occurred.",
+        className: "bg-red-500 font-semibold text-white",
+      });
+    }
+  }
+  getUserFavorites()
+},[user])
+
+useEffect(()=>{
+const getUserLikes = async()=>{
+  console.log("HI ")
+  try{
+    if(user){
+      const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/like/${user?._id}`)
+      setLikes(data)
+      console.log(data)
+    }
+  }catch(err){
+    toast({
+      title: "Error",
+      description: axiosErrorManager(err) || "An unknown error occurred.",
+      className: "bg-red-500 font-semibold text-white",
+    })
+  }
+}
+getUserLikes()
+},[user])
   return (
     <div>
       <div className="flex font-semibold text-[18px] gap-5">
@@ -112,12 +178,32 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
       )}
       {stage === "favorites" && (
         <div>
-          <h1>NOW ITS FAVORITES COMPONENT</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
+          {favorites.length > 0 ? (
+            favorites.map((post) => (
+              <Link to={`/user/video/${post._id}`} key={post._id}>
+                <VideoCard file={post.file}  />
+              </Link>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">No videos found.</p>
+          )}
+        </div>
         </div>
       )}
       {stage === "liked" && (
         <div>
-          <h1>NOW ITS LIKED COMPONENT</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
+          {likes.length > 0 ? (
+            likes.map((post) => (
+              <Link to={`/user/video/${post._id}`} key={post._id}>
+                <VideoCard file={post.file}  />
+              </Link>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">No videos found.</p>
+          )}
+        </div>
         </div>
       )}
     </div>
