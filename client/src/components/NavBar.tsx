@@ -114,7 +114,7 @@ function NavBar(): JSX.Element {
           <img src={tiktokFullPng} className="w-28 hidden md:flex h-[32px]" alt="" />
         </Link>
         <Link to="/">
-          <img src={tiktokIconPng} className="w-12 md:hidden h-[30px]" alt="" />
+          <img src={tiktokIconPng} className="w-12 md:hidden h-[35px]" alt="" />
         </Link>
         <div className="flex relative flex-grow left-[10%] md:left-0 max-w-lg">
           <Input
@@ -169,7 +169,7 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className="absolute top-[60px] md:left-[44.5%] md:right-[45%] right-[28%]  w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+        <div className="absolute top-[60px] md:left-[34.5%] md:right-[45%] right-[28%]  w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
           {searchResults.map((user) => (
             <div
               key={user._id}
