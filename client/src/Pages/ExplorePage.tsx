@@ -1,6 +1,7 @@
 import NavBar from "@/components/NavBar";
 import VideoCard from "@/components/shared/VideoCard";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
+import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 import { UserContext } from "@/context/UserProvider";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
@@ -15,6 +16,9 @@ function ExplorePage(): JSX.Element {
       <div className="flex">
         <div className="w-1/5  hidden md:block">
           <HomeSidebar />
+        </div>
+        <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+          <MobileBottomBar/>
         </div>
         <div className="flex-grow mt-20 ms-8 pt-4">
           <div className="flex flex-wrap gap-6 justify-start">

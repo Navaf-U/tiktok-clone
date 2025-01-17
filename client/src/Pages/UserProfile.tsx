@@ -16,6 +16,7 @@ import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/utilities/axiosInstance";
 import FollowersShow from "@/modal/FollowersShow";
 import { FaPlus } from "react-icons/fa6";
+import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 interface User {
   _id: string;
   username: string;
@@ -323,6 +324,9 @@ function UserProfile(): JSX.Element {
       <div className="hidden lg:flex">
         <HomeSidebar />
       </div>
+      <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+          <MobileBottomBar/>
+        </div>
       <div className="absolute left-[-200px] top-0">
       {showUserEdit && <UserDetailsEdit />}
       {followsShow && (

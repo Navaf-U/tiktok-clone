@@ -18,6 +18,7 @@ import { BsMusicNoteBeamed } from "react-icons/bs";
 import { formatDistanceToNow } from "date-fns";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 
 interface Post {
   _id: string;
@@ -233,11 +234,14 @@ function Home(): JSX.Element {
         <div className="w-1/5 hidden md:block">
           <HomeSidebar />
         </div>
+        <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+          <MobileBottomBar/>
+        </div>
         <div className="flex-grow pt-4">
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
               <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-5 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative ms-20  md:ms-0 left-[66px] md:left-0 w-[385px] h-[620px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
+                <div className="relative ms-20 mt-[-57px] md:mt-0 md:ms-0 left-[66px] md:left-0 w-[385px] h-[555px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"
@@ -246,7 +250,6 @@ function Home(): JSX.Element {
                     loop
                     autoPlay
                   />
-
                   <div className="absolute bottom-2 left-2">
                     <div className="flex pb-1 items-center text-sm">
                       <Link
@@ -265,7 +268,7 @@ function Home(): JSX.Element {
                       </p>
                     </div>
                     <p className="pb-2">{activePost.description}</p>
-                    <p className="flex justify-center items-center gap-2 me-5">
+                    <p className="flex justify-center items-center gap-2 me-16 ms-0">
                       <BsMusicNoteBeamed size={15} /> original sound{" "}
                     </p>
                   </div>
@@ -289,7 +292,7 @@ function Home(): JSX.Element {
                   <img
                     src={profilePictures[activePost?.username] || demoPng}
                     alt={activePost.username}
-                    className="md:mt-0 w-10 h-10 object-cover rounded-full"
+                    className="md:mt-0 mt-[-55px] w-10 h-10 object-cover rounded-full"
                   />
                 </div>
                 <div className="absolute mt-28 md:bottom-4 right-[-50px] z-10 ">
@@ -312,9 +315,9 @@ function Home(): JSX.Element {
           </div>
         </div>
       </div>
-
+      <div className="w-full">
       <button
-          className="absolute hidden md:top-16 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 md:flex justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute hidden md:top-64 md:right-10 md:bg-[#30303087] md:hover:bg-[#383838] w-16 h-16 md:flex justify-center items-center rounded-full md:p-2 md:active:bg-[#000000fd]"
           onClick={() => {
           if (previousPosts.length > 0) {
             setActivePost(previousPosts[previousPosts.length - 1]);
@@ -324,19 +327,19 @@ function Home(): JSX.Element {
       >
         <MdOutlineKeyboardArrowUp
           className="text-white active:text-[red] md:active:text-white"
-          size={50}
+          size={40}
         />
       </button>
-      <div className="w-full">
+      
         <button
           onClick={fetchRandomPost}
-          className="absolute hidden md:bottom-2 md:left-96 md:right-0 md:bg-[#30303087] md:hover:bg-[#383838] w-20 h-20 justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute hidden md:bottom-52 md:right-10  md:bg-[#30303087] md:hover:bg-[#383838] w-16 h-16 justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
         >
           <MdOutlineKeyboardArrowDown
             className="text-white active:text-[green] md:active:text-white"
-            size={50}
+            size={40}
           />
-        </button>{" "}
+        </button>
       </div>
     </div>
   );
