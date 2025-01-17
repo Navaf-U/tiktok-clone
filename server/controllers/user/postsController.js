@@ -194,6 +194,18 @@ const removeLike = async (req, res,next) => {
   res.json(post);
 };
 
+const getUserLikes = async(req,res,next)=>{
+  const userID = req.params.id
+  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
+  const user = await User.findById(userID)
+  if(!user){
+    return next (new CustomError("User not found", 404))    
+  }
+  const posts =await Posts.find({likes:userID})
+  res.json(posts)
+}
 
 const postFavorite = async(req,res,next)=>{
   const postID = req.params.id 
@@ -231,18 +243,6 @@ const removeFavorite = async (req, res, next) => {
 };
 
 
-const getFavorites = async(req,res,next)=>{
-  const postID = req.params.id 
-  if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(400).json({ error: "Invalid post ID" });
-  }
-  const post = await Posts.findById(postID)
-  if(!post){
-    return next(new CustomError("Post not found", 404));
-  }
-  res.json(post.favorites)
-}
-
 const getUserFavorites = async(req,res,next)=>{
   const userID = req.params.id 
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -270,8 +270,8 @@ export {
   getCommentOfPost,
   postLike,
   removeLike,
+  getUserLikes,
   postFavorite,
-  getFavorites,
   getUserFavorites,
   removeFavorite
 };

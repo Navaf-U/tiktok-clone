@@ -42,7 +42,6 @@ const loginUser = async (req, res, next) => {
   }
   const token = createToken(user._id, user.role, "10s");
   const refreshToken = createRefreshToken(user._id, user.role, "1d");
-  console.log("Setting refreshToken cookie:", refreshToken);
   const currUser = {
     _id: user._id,
     username: user.username,
