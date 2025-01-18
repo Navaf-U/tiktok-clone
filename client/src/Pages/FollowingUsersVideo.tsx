@@ -49,6 +49,29 @@ function FollowingUsersVideo(): JSX.Element {
   }, [currUser, page]);
 
   const loadMore = () => setPage((prev) => prev + 1);
+
+  if (!currUser?._id) {
+    return (
+      <div>
+        <NavBar />
+        <div className="flex justify-center">
+        <div className="w-1/5 hidden md:block">
+          <HomeSidebar />
+        </div>
+        <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+          <MobileBottomBar/>
+        </div>
+        <div className="flex items-center justify-center h-screen">
+          <h1 className="text-2xl font-bold text-gray-700">
+            Please log in to view videos from users you follow.
+          </h1>
+        </div>
+        </div>
+      </div>
+    );
+  }
+
+
   return (
     <div>
       <NavBar />
