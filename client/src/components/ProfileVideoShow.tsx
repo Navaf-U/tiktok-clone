@@ -88,11 +88,9 @@ const getUserLikes = async()=>{
     if(user){
       const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/like/${user?._id}`)
       setLikes(data)
-      console.log(data)
     }
   }catch(err){
     console.error(axiosErrorManager(err));
-
   }
 }
 getUserLikes()

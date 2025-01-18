@@ -1,5 +1,5 @@
 import { UserContext } from "@/context/UserProvider";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -23,7 +23,7 @@ function Signup(): JSX.Element {
   const optionsYear: number[] = Array.from({ length: 100 }, (_, i) => i + 1950);
   const userContext = useContext(UserContext);
   const { setShowModal, setModalType, UserRegister } = userContext || {};
-
+  const [error, setError] = useState<string | null>(null);
   const handleClose = () => {
     if (setShowModal) setShowModal(false);
   };
@@ -62,7 +62,7 @@ function Signup(): JSX.Element {
       birthDay: Yup.number().required("Birth day is required"),
       birthYear: Yup.number().required("Birth year is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const { username, email, password, birthMonth, birthDay, birthYear } =
         values;
       const dob: { month: string; day: string; year: string } = {
@@ -70,12 +70,18 @@ function Signup(): JSX.Element {
         day: birthDay,
         year: birthYear,
       };
-      if (UserRegister) {
-        UserRegister(username, email, password, dob);
+      try {
+        if (UserRegister) {
+          await UserRegister(username, email, password, dob);
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        }
       }
     },
   });
-
+  console.log(error, "EEEE");
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-[#121212] relative p-8 pt-4 rounded shadow-lg max-h-[100vh] w-[460px] flex flex-col  overflow-hidden">
@@ -199,7 +205,11 @@ function Signup(): JSX.Element {
                 {formik.errors.password}
               </div>
             )}
-
+            {error && (
+              <p className="text-red-500 text-sm mb-3  font-semibold w-[90%] text-center">
+                {error}
+              </p>
+            )}
             <div className="flex items-center gap-2 mt-2 text-[#5c5c5c] text-[13px]">
               <input
                 type="checkbox"
@@ -207,7 +217,7 @@ function Signup(): JSX.Element {
                 className="ms-4 ps- transform scale-150"
                 required
               />
-
+              <div></div>
               <p className="ms-2">
                 Get trending content, newsletters, promotions, recommendations,
                 and account updates sent to your email

@@ -102,7 +102,8 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       navigate("/");
     } catch (err) {
       const errorMessage = axiosErrorManager(err);
-      throw new Error(errorMessage);    }
+      throw new Error(errorMessage);    
+    }
   };
 
   const UserRegister: (
@@ -120,7 +121,8 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       });
       setModalType("login");
     } catch (err) {
-      console.error(axiosErrorManager(err))
+      const errorMessage = axiosErrorManager(err);
+      throw new Error(errorMessage);
     }
   };
 
