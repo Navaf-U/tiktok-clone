@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axiosErrorManager from "../utilities/axiosErrorManager";
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";

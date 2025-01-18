@@ -151,7 +151,10 @@ getUserLikes()
       {stage === "videos" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
           {posts.length > 0 ? (
-            posts.map((post) => (
+            posts
+            .slice() 
+            .reverse()
+            .map((post) => (
               <Link to={`/user/video/${post._id}`} key={post._id}>
                 <VideoCard file={post.file}  />
               </Link>
@@ -165,7 +168,10 @@ getUserLikes()
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
           {favorites.length > 0 ? (
-            favorites.map((post) => (
+            favorites
+            .slice() 
+            .reverse()
+            .map((post) => (
               <Link to={`/user/video/${post._id}`} key={post._id}>
                 <VideoCard file={post.file}  />
               </Link> 
@@ -180,7 +186,10 @@ getUserLikes()
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
           {likes.length > 0 ? (
-            likes.map((post) => (
+            likes
+            .slice() 
+            .reverse()
+            .map((post) => (
               <Link to={`/user/video/${post._id}`} key={post._id}>
                 <VideoCard file={post.file}  />
               </Link>

@@ -111,7 +111,7 @@ function FollowersShow({
   };
 
   return (
-    <div className="fixed inset-0 md:left-[32%] w-full bg-[#121212] opacity-95 md:w-[500px] md:h-screen z-50">
+    <div className="fixed inset-0 md:left-[32%] w-full  bg-[#121212] opacity-95 md:w-[500px] md:h-screen z-50">
       <div className="flex justify-between items-center p-2">
         <h1 className="w-full text-center text-2xl font-semibold">
           {profileUsername}

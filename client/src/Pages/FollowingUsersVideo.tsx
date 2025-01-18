@@ -1,13 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import NavBar from "@/components/NavBar";
 import VideoCard from "@/components/shared/VideoCard";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
-import { UserContext } from "@/context/UserProvider";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 import axiosInstance from "@/utilities/axiosInstance";
+import { UserContext } from "@/context/UserProvider";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 
 interface Post {
   username: string;
@@ -22,55 +22,60 @@ interface Post {
 function FollowingUsersVideo(): JSX.Element {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
-  const userContex = useContext(UserContext);
-  const currUser = userContex?.currUser;
-  useEffect(() => {
-    if (!currUser?._id) {
-      console.error("User ID is missing or invalid.");
-      return;
-    }
-    const getFollowingUsersVid = async () => {
-      try {
-        const { data } = await axiosInstance.get(
-          `/user/following/videos/${currUser?._id}`,
-          {
-            params: { page, limit: 10 },
-          }
-        );
-        setPosts((prev) => {
-          const ids = new Set(prev.map((post) => post._id));
-          return [...prev, ...data.filter((post: Post) => !ids.has(post._id))];
-        });
-      } catch (error) {
-        console.error(axiosErrorManager(error));
-      }
-    };
-    getFollowingUsersVid();
-  }, [currUser, page]);
+  const [hasMore, setHasMore] = useState(true);
+  const userContext = useContext(UserContext);
+  const { currUser } = userContext || {};
 
-  const loadMore = () => setPage((prev) => prev + 1);
+  const fetchPosts = async (page: number) => {
+    if (!currUser?._id) return;
+    
+    try {
+      const { data } = await axiosInstance.get(`/user/following/videos/${currUser._id}`, {
+        params: { page, limit: 1 },
+      });
+
+      if (data.length > 0) {
+        setPosts((prevPosts) => [
+          ...prevPosts,
+          ...data.filter((post: Post) => !prevPosts.some((prevPost) => prevPost._id === post._id)),
+        ]);
+        setHasMore(true);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const loadMore = () => {
+    setPage((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    fetchPosts(page);
+  }, [currUser, page]);
 
   if (!currUser?._id) {
     return (
       <div>
         <NavBar />
         <div className="flex justify-center">
-        <div className="w-1/5 hidden md:block">
-          <HomeSidebar />
-        </div>
-        <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
-          <MobileBottomBar/>
-        </div>
-        <div className="flex items-center justify-center h-screen">
-          <h1 className="text-2xl font-bold text-gray-700">
-            Please log in to view videos from users you follow.
-          </h1>
-        </div>
+          <div className="w-1/5 hidden md:block">
+            <HomeSidebar />
+          </div>
+          <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+            <MobileBottomBar />
+          </div>
+          <div className="flex items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold text-gray-700">
+              Please log in to view videos from users you follow.
+            </h1>
+          </div>
         </div>
       </div>
     );
   }
-
 
   return (
     <div>
@@ -80,9 +85,9 @@ function FollowingUsersVideo(): JSX.Element {
           <HomeSidebar />
         </div>
         <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
-          <MobileBottomBar/>
+          <MobileBottomBar />
         </div>
-        <div className="mt-20 ms-8 pt-4">
+        <div className="mt-12 ms-8 pt-4 mb-20">
           <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4 pt-4">
             {posts.map((post) => (
               <div key={post._id}>
@@ -115,11 +120,19 @@ function FollowingUsersVideo(): JSX.Element {
               </div>
             ))}
           </div>
+          {hasMore && (
+            <button
+              onClick={loadMore}
+              className="bg-[#121212] text-center w-full text-white rounded-md mt-4 px-4 py-2"
+            >
+              Load More...
+            </button>
+          )}
+          {!hasMore && (
+            <p className="text-center text-gray-500 mt-4">No more posts to load.</p>
+          )}
         </div>
       </div>
-      <button onClick={loadMore} className="text-center w-full font-bold mb-2">
-        load more...
-      </button>
     </div>
   );
 }
