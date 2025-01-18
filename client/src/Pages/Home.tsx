@@ -10,7 +10,6 @@ import {
 } from "react-icons/md";
 import VideoPostIcons from "@/components/shared/VideoPostIcons";
 import axiosInstance from "@/utilities/axiosInstance";
-import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import { IoVolumeHigh } from "react-icons/io5";
 import { HiSpeakerXMark } from "react-icons/hi2";
@@ -83,12 +82,7 @@ function Home(): JSX.Element {
       );
       setProfilePictures((prev) => ({ ...prev, [username]: data.profile }));
     } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          axiosErrorManager(error) || "Failed to fetch profile picture.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
@@ -106,21 +100,12 @@ function Home(): JSX.Element {
         fetchProfilePicture(newPost.username);
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "Failed to fetch random post.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
   const toggleLike = async () => {
     if (!activePost || !currUser?._id) {
-      toast({
-        title: "Like Error",
-        description: "You must be logged in to like posts.",
-        className: "bg-red-500 font-semibold text-white",
-      });
       setModalType?.("login");
       setShowModal?.(true);
       return;
@@ -146,22 +131,14 @@ function Home(): JSX.Element {
         );
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          axiosErrorManager(error) || "Failed to toggle like status.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
   const toggleFavorites = async () => {
     try {
       if (!activePost || !currUser?._id) {
-        toast({
-          title: "Favorite Error",
-          description: "You must be logged in to Favorite posts.",
-          className: "bg-red-500 font-semibold text-white",
-        });
+        setModalType?.("login");
+        setShowModal?.(true);
         return;
       }
       const isFavorite = activePost.favorites.includes(currUser._id);
@@ -182,12 +159,7 @@ function Home(): JSX.Element {
         );
       }
     } catch (error) {
-      toast({
-        title: "Favorite Error",
-        description:
-          axiosErrorManager(error) || "Failed to toggle favorite status.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 

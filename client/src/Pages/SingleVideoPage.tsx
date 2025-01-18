@@ -15,7 +15,6 @@ import {
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { ImEmbed2 } from "react-icons/im";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
-import { toast } from "@/hooks/use-toast";
 import { UserContext } from "@/context/UserProvider";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -62,6 +61,7 @@ function SingleVideoPage(): JSX.Element {
   const userContext = useContext(UserContext);
   const currUser = userContext?.currUser;
   const setPosts = userContext?.setPosts;
+  const { setShowModal, setModalType } = userContext || {};
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,11 +71,7 @@ function SingleVideoPage(): JSX.Element {
         const { data } = await axiosInstance(`/user/posts/video/${id}`);
         setSinglePost(data);
       } catch (error) {
-        toast({
-          title: "Error",
-          description: axiosErrorManager(error) || "Failed to fetch post.",
-          className: "bg-red-500 font-semibold text-white",
-        });
+      console.error(axiosErrorManager(error));
       }
     };
     getUserSinglePost();
@@ -94,11 +90,7 @@ function SingleVideoPage(): JSX.Element {
         setPosts((prev) => prev?.filter((post) => post._id !== id));
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "Failed to delete post.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
@@ -112,11 +104,7 @@ function SingleVideoPage(): JSX.Element {
           );
           setUser(data);
         } catch (error) {
-          toast({
-            title: "Error",
-            description: axiosErrorManager(error) || "Failed to fetch user.",
-            className: "bg-red-500 font-semibold text-white",
-          });
+         console.error(axiosErrorManager(error));
         }
       }
     };
@@ -125,11 +113,8 @@ function SingleVideoPage(): JSX.Element {
 
   const toggleLike = async () => {
     if (!singlePost || !currUser?._id) {
-      toast({
-        title: "Like Error",
-        description: "You must be logged in to like posts.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      setModalType?.("login");
+      setShowModal?.(true);
       return;
     }
 
@@ -153,23 +138,15 @@ function SingleVideoPage(): JSX.Element {
         );
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          axiosErrorManager(error) || "Failed to toggle like status.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
   const toggleFavorites = async () => {
     try {
       if (!singlePost || !currUser?._id) {
-        toast({
-          title: "Favorite Error",
-          description: "You must be logged in to favorite posts.",
-          className: "bg-red-500 font-semibold text-white",
-        });
+        setModalType?.("login");
+        setShowModal?.(true);
         return;
       }
   
@@ -193,11 +170,7 @@ function SingleVideoPage(): JSX.Element {
         );
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "Failed to toggle favorite status.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
   
@@ -209,11 +182,7 @@ function SingleVideoPage(): JSX.Element {
         const { data } = await axiosInstance.get(`/user/posts/comments/${id}`);
         setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       } catch (error) {
-        toast({
-          title: "Comment Error",
-          description: axiosErrorManager(error) || "Failed to fetch comments.",
-          className: "bg-red-500 font-semibold text-white",
-        });
+        console.error(axiosErrorManager(error));
       }
     };
     getCommentsOfPost();
@@ -221,6 +190,11 @@ function SingleVideoPage(): JSX.Element {
 
   const postComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!currUser?._id) {
+      setModalType?.("login");
+      setShowModal?.(true);
+      return;
+    }
     try {
       const { data } = await axiosInstance.post(`/user/posts/comments/${id}`, {
         text: comment,
@@ -229,11 +203,7 @@ function SingleVideoPage(): JSX.Element {
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       setComment("");
     } catch (error) {
-      toast({
-        title: "Comment Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
@@ -253,11 +223,7 @@ function SingleVideoPage(): JSX.Element {
           : null
       );
     } catch (error) {
-      toast({
-        title: "Comment Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 

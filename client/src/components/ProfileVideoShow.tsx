@@ -1,4 +1,3 @@
-import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 import axiosInstance from "@/utilities/axiosInstance";
 import { useEffect, useRef, useState } from "react";
@@ -51,10 +50,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
         const { data } = await axiosInstance.get(`/user/posts/${username}`);
         setPosts(data);
       } catch (error) {
-        toast({
-          title: "Error",
-          description: axiosErrorManager(error) || "An unknown error occurred.",
-        });
+        console.error(axiosErrorManager(error));
       }
     };
     getUserPost();
@@ -66,10 +62,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
         const { data } = await axiosInstance.get(`/user/profile/${username}`);
         setUser(data)
       } catch (error) {
-        toast({
-          title: "Error",
-          description: axiosErrorManager(error) || "An unknown error occurred.",
-        });
+        console.error(axiosErrorManager(error));
       }
     }
     getUser()
@@ -83,11 +76,7 @@ useEffect(()=>{
         setFavorites(data)
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   }
   getUserFavorites()
@@ -95,7 +84,6 @@ useEffect(()=>{
 
 useEffect(()=>{
 const getUserLikes = async()=>{
-  console.log("HI ")
   try{
     if(user){
       const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/like/${user?._id}`)
@@ -103,11 +91,8 @@ const getUserLikes = async()=>{
       console.log(data)
     }
   }catch(err){
-    toast({
-      title: "Error",
-      description: axiosErrorManager(err) || "An unknown error occurred.",
-      className: "bg-red-500 font-semibold text-white",
-    })
+    console.error(axiosErrorManager(err));
+
   }
 }
 getUserLikes()

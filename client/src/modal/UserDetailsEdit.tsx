@@ -4,7 +4,6 @@ import { useContext, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { FaRegTrashCan } from "react-icons/fa6";
 import axiosInstance from "../utilities/axiosInstance";
-import { toast } from "@/hooks/use-toast";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
 
 function UserDetailsEdit(): JSX.Element {
@@ -51,11 +50,7 @@ function UserDetailsEdit(): JSX.Element {
       localStorage.setItem("currUser", JSON.stringify(data));
       setShowUserEdit(false);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      })
+      console.error(axiosErrorManager(error));
     }
   };
 
@@ -69,11 +64,7 @@ function UserDetailsEdit(): JSX.Element {
       setCurrUser(data);
       localStorage.setItem("currUser", JSON.stringify(data));
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "Delete prole error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      })
+      console.error(axiosErrorManager(error));
     }
   };
 

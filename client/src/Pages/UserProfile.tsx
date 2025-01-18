@@ -12,7 +12,6 @@ import UserProfilePicture from "../components/shared/UserProfilePicture";
 import NavBar from "@/components/NavBar";
 import ProfileVideoShow from "@/components/ProfileVideoShow";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
-import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/utilities/axiosInstance";
 import FollowersShow from "@/modal/FollowersShow";
 import { FaPlus } from "react-icons/fa6";
@@ -100,11 +99,7 @@ function UserProfile(): JSX.Element {
         if (axios.isAxiosError(error) && error.response?.status === 404) {
           setUserNotFound(true);
         } else {
-          toast({
-            title: "Error",
-            description: axiosErrorManager(error) || "An unknown error occurred.",
-            className: "bg-red-500 font-semibold text-white",
-          });
+          console.error(axiosErrorManager(error));
         }
       }
     };
@@ -119,11 +114,7 @@ function UserProfile(): JSX.Element {
         );
         setIsFollowing(res.data.isFollowing);
       } catch (error) {
-        toast({
-          title: "Error",
-          description: axiosErrorManager(error) || "An unknown error occurred.",
-          className: "bg-red-500 font-semibold text-white",
-        })
+        console.error(axiosErrorManager(error));
       }
     };
 
@@ -145,11 +136,7 @@ function UserProfile(): JSX.Element {
         setFollowingCount(data.following.count);
         setFollowersCount(data.followers.count);
       } catch (error) {
-        toast({
-          title: "Error",
-          description: axiosErrorManager(error) || "An unknown error occurred.",
-          className: "bg-red-500 font-semibold text-white",
-        });
+        console.error(axiosErrorManager(error));
       }
     };
     getFollowes();
@@ -166,11 +153,7 @@ function UserProfile(): JSX.Element {
       });
       setIsFollowing(true);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-        className: "bg-red-500 font-semibold text-white",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
@@ -185,10 +168,7 @@ function UserProfile(): JSX.Element {
       });
       setIsFollowing(false);
     } catch (error) {
-      toast({
-        title: "Error",
-        description: axiosErrorManager(error) || "An unknown error occurred.",
-      });
+      console.error(axiosErrorManager(error));
     }
   };
 
