@@ -101,8 +101,8 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       setShowModal(false);
       navigate("/");
     } catch (err) {
-     console.error(axiosErrorManager(err))
-    }
+      const errorMessage = axiosErrorManager(err);
+      throw new Error(errorMessage);    }
   };
 
   const UserRegister: (

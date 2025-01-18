@@ -5,6 +5,7 @@ import { IoIosClose } from "react-icons/io";
 function Login(): JSX.Element {
   const userContext = useContext(UserContext);
   const { setShowModal, setModalType, LoginUser } = userContext || {};
+  const [error, setError] = useState<string | null>(null);
 
   interface FormState {
     emailOrUsername: string;
@@ -36,12 +37,24 @@ function Login(): JSX.Element {
     setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { emailOrUsername, password } = formState;
-    if (LoginUser) {
-      LoginUser(emailOrUsername, password);
-    }
+
+    setError(null);
+
+   
+      try {
+        if (LoginUser) {
+        await LoginUser(emailOrUsername, password);
+        }
+      } catch (err){
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred.");
+        }
+      }
   };
 
   const hasLetters = (text: string) => /[a-zA-Z]/.test(text);
@@ -85,6 +98,11 @@ function Login(): JSX.Element {
             onChange={handleInputChange}
             className="bg-[#2e2e2e] text-[#e8e8e8] rounded w-[90%] p-3 mb-1"
           />
+          {error && (
+            <p className="text-red-500 text-sm mb-3 w-[90%] text-center">
+              {error}
+            </p>
+          )}
           <div className="flex justify-between w-[90%]">
             <h1 className="text-[#e8e8e8] mb-4 text-[13px]">
               Forgot password?
