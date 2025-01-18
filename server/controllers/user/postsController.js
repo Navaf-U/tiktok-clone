@@ -3,7 +3,7 @@ import cloudinary from "../../config/CloudinaryConfig.js";
 import Posts from "../../models/postsSchema.js";
 import User from "../../models/userSchema.js";
 import CustomError from "../../util/CustomError.js";
-const userVideoPost = async (req, res,next) => {
+const userVideoPost = async (req, res, next) => {
   const uploadedFile = req.uploadedFile;
   const userID = req.user.id;
   if (uploadedFile) {
@@ -34,7 +34,7 @@ const userVideoPost = async (req, res,next) => {
   });
 };
 
-const userVideoDescription = async (req, res,next) => {
+const userVideoDescription = async (req, res, next) => {
   const { description } = req.body;
   const postID = req.params.id;
   const post = await Posts.findById(postID);
@@ -46,7 +46,7 @@ const userVideoDescription = async (req, res,next) => {
   return res.status(200).json({ message: "Post updated successfully", post });
 };
 
-const userDeleteVideo = async (req, res,next) => {
+const userDeleteVideo = async (req, res, next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
@@ -57,13 +57,23 @@ const userDeleteVideo = async (req, res,next) => {
   res.json({ message: "Post deleted successfully" });
 };
 
-const getAllPosts = async (req, res,next) => {
+const getAllPosts = async (req, res, next) => {
   const posts = await Posts.find();
   if (!posts) return next(new CustomError("Post not found", 404));
   res.json(posts);
 };
 
-const getAllPostsOfUser = async (req, res,next) => {
+const getAllPostsForExplore = async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query;
+  const posts = await Posts.find()
+    .sort({ date: -1 })
+    .skip((page - 1) * limit)
+    .limit(Number(limit));
+  if (!posts) return next(new CustomError("Post not found", 404));
+  res.json(posts);
+};
+
+const getAllPostsOfUser = async (req, res, next) => {
   const username = req.params.username;
   const user = await User.findOne({ username });
   if (!user) {
@@ -90,8 +100,7 @@ const randomSinglePost = async (req, res, next) => {
   res.json(post);
 };
 
-
-const postComment = async (req, res,next) => {
+const postComment = async (req, res, next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID);
   if (!post) {
@@ -119,7 +128,7 @@ const postComment = async (req, res,next) => {
   res.json(updatedPost.comments);
 };
 
-const removeComment = async (req, res,next) => {
+const removeComment = async (req, res, next) => {
   const postID = req.params.id;
   const commentID = req.params.commentID;
   const userID = req.user.id;
@@ -138,15 +147,14 @@ const removeComment = async (req, res,next) => {
     comment.user.toString() !== userID &&
     post.uploader.toString() !== userID
   ) {
-   return next(new CustomError("You are not authorized", 404));
-
+    return next(new CustomError("You are not authorized", 404));
   }
   post.comments.splice(commentIndex, 1);
   await post.save();
   res.json(post.comments);
 };
 
-const getCommentOfPost = async (req, res,next) => {
+const getCommentOfPost = async (req, res, next) => {
   const postID = req.params.id;
   const post = await Posts.findById(postID).populate(
     "comments.user",
@@ -158,7 +166,7 @@ const getCommentOfPost = async (req, res,next) => {
   res.json(post.comments);
 };
 
-const postLike = async (req, res,next) => {
+const postLike = async (req, res, next) => {
   const postID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid post ID" });
@@ -177,7 +185,7 @@ const postLike = async (req, res,next) => {
   res.json(post);
 };
 
-const removeLike = async (req, res,next) => {
+const removeLike = async (req, res, next) => {
   const postID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid post ID" });
@@ -194,36 +202,38 @@ const removeLike = async (req, res,next) => {
   res.json(post);
 };
 
-const getUserLikes = async(req,res,next)=>{
-  const userID = req.params.id
+const getUserLikes = async (req, res, next) => {
+  const userID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid user ID" });
   }
-  const user = await User.findById(userID)
-  if(!user){
-    return next (new CustomError("User not found", 404))    
+  const user = await User.findById(userID);
+  if (!user) {
+    return next(new CustomError("User not found", 404));
   }
-  const posts =await Posts.find({likes:userID})
-  res.json(posts)
-}
+  const posts = await Posts.find({ likes: userID });
+  res.json(posts);
+};
 
-const postFavorite = async(req,res,next)=>{
-  const postID = req.params.id 
+const postFavorite = async (req, res, next) => {
+  const postID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid post ID" });
   }
-  const post = await Posts.findById(postID)
-  if(!post){
+  const post = await Posts.findById(postID);
+  if (!post) {
     return next(new CustomError("Post not found", 404));
   }
-  if(post.favorites.includes(req.user.id)){
-    return res.status(400).json({message:"You have already favorited this post"})
+  if (post.favorites.includes(req.user.id)) {
+    return res
+      .status(400)
+      .json({ message: "You have already favorited this post" });
   }
 
-  post.favorites.push(req.user.id)
-  await post.save()
-  res.json(post)
-}
+  post.favorites.push(req.user.id);
+  await post.save();
+  res.json(post);
+};
 
 const removeFavorite = async (req, res, next) => {
   const postID = req.params.id;
@@ -235,34 +245,37 @@ const removeFavorite = async (req, res, next) => {
     return next(new CustomError("Post not found", 404));
   }
   if (!post.favorites.includes(req.user.id)) {
-    return res.status(400).json({ message: "You have not favorited this post" });
+    return res
+      .status(400)
+      .json({ message: "You have not favorited this post" });
   }
   post.favorites = post.favorites.filter((id) => id !== req.user.id);
   await post.save();
-  res.json({ message: "Favorite removed successfully", favorites: post.favorites });
+  res.json({
+    message: "Favorite removed successfully",
+    favorites: post.favorites,
+  });
 };
 
-
-const getUserFavorites = async(req,res,next)=>{
-  const userID = req.params.id 
+const getUserFavorites = async (req, res, next) => {
+  const userID = req.params.id;
   if (!req.params.id || !mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ error: "Invalid user ID" });
   }
-  const user = await User.findById(userID)
-  if(!user){
+  const user = await User.findById(userID);
+  if (!user) {
     return next(new CustomError("User not found", 404));
   }
-  const posts = await Posts.find({favorites:userID})
-  res.json(posts)
-}
-
-
+  const posts = await Posts.find({ favorites: userID });
+  res.json(posts);
+};
 
 export {
   userVideoPost,
   userVideoDescription,
   userDeleteVideo,
   getAllPosts,
+  getAllPostsForExplore,
   getAllPostsOfUser,
   getSinglePostOfUser,
   randomSinglePost,
@@ -274,5 +287,5 @@ export {
   getUserLikes,
   postFavorite,
   getUserFavorites,
-  removeFavorite
+  removeFavorite,
 };

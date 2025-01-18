@@ -4,7 +4,7 @@ import { getOneUser, searchUser, userProfileDelete, userUpdate } from "../contro
 import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
-import { getAllPosts, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, getUserFavorites, getUserLikes, postComment, postFavorite, postLike, randomSinglePost, removeComment, removeFavorite, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
+import { getAllPosts, getAllPostsForExplore, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, getUserFavorites, getUserLikes, postComment, postFavorite, postLike, randomSinglePost, removeComment, removeFavorite, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
 import { followingUserPosts, getFollowersAndFollowing, isFollowing, userFollow, userUnfollow } from "../controllers/user/followController.js";
 const Router = express.Router();
 Router
@@ -21,6 +21,7 @@ Router
 
 //user post get
 .get("/posts",tryCatch(getAllPosts))
+.get("/posts/explore",tryCatch(getAllPostsForExplore))
 .get("/posts/:username",tryCatch(getAllPostsOfUser))
 .get("/posts/video/random",tryCatch(randomSinglePost))
 .get("/posts/video/:id",tryCatch(getSinglePostOfUser))

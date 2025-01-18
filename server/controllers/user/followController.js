@@ -95,8 +95,7 @@ const getFollowersAndFollowing = async (req, res, next) => {
 
 const followingUserPosts = async (req, res, next) => {
   const userID = req.params.id;
-  const { page = 1, limit = 10 } = req.query;
-
+  const { page = 1, limit = 8 } = req.query;
   if (!mongoose.Types.ObjectId.isValid(userID)) {
     return res.status(400).json({ message: "Invalid user ID provided." });
   }
