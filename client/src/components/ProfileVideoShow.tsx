@@ -149,7 +149,7 @@ getUserLikes()
       </div>
       <hr className="opacity-10 text-gray-500" />
       {stage === "videos" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4 mb-16 md:mb-0 ">
           {posts.length > 0 ? (
             posts
             .slice() 
@@ -166,7 +166,7 @@ getUserLikes()
       )}
       {stage === "favorites" && (
         <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4 mb-16 md:mb-0">
           {favorites.length > 0 ? (
             favorites
             .slice() 
@@ -184,7 +184,7 @@ getUserLikes()
       )}
       {stage === "liked" && (
         <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4 mb-16 md:mb-0">
           {likes.length > 0 ? (
             likes
             .slice() 

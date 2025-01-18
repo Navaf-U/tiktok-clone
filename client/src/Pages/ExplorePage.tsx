@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import NavBar from "@/components/NavBar";
 import VideoCard from "@/components/shared/VideoCard";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";

@@ -86,7 +86,7 @@ function UserDetailsEdit(): JSX.Element {
             <h2 className="font-medium text-[#e8e8e8] text-lg whitespace-nowrap">
               Profile photo
             </h2>
-            <div className="flex flex-col items-center sm:items-start gap-2">
+            <div className="flex flex-col md:flex-row items-center md:justify-end -end md:w-full gap-2">
               <input
                 type="file"
                 accept="image/*"

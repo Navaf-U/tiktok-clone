@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "@/components/NavBar";
 import demoPng from "../assets/userDemoPfp.png";
@@ -75,7 +76,6 @@ function Home(): JSX.Element {
 
   const fetchProfilePicture = async (username: string) => {
     if (profilePictures[username]) return;
-
     try {
       const { data } = await axios.get(
         `${import.meta.env.VITE_API_URL}/user/profile/${username}`
@@ -169,7 +169,6 @@ function Home(): JSX.Element {
 
   useEffect(() => {
     let touchStartY = 0;
-
     const handleTouchStart = (e: TouchEvent) => {
         touchStartY = e.touches[0].clientY;
     };
@@ -222,7 +221,7 @@ function Home(): JSX.Element {
                     loop
                     autoPlay
                   />
-                  <div className="absolute bottom-2 left-2">
+                  <div className="absolute bottom-2 left-3 md:left-1">
                     <div className="flex pb-1 items-center text-sm">
                       <Link
                         className="me-1"
@@ -240,7 +239,7 @@ function Home(): JSX.Element {
                       </p>
                     </div>
                     <p className="pb-2">{activePost.description}</p>
-                    <p className="flex justify-center items-center gap-2 me-16 ms-0">
+                    <p className="flex justify-center items-center gap-2 me-16 ms-[-3px] md:ms-0">
                       <BsMusicNoteBeamed size={15} /> original sound{" "}
                     </p>
                   </div>
@@ -264,10 +263,10 @@ function Home(): JSX.Element {
                   <img
                     src={profilePictures[activePost?.username] || demoPng}
                     alt={activePost.username}
-                    className="md:mt-0 mt-[-55px] w-10 h-10 object-cover rounded-full"
+                    className="md:mt-0 mt-[-20px] w-10 h-10 me-[9.5px] md:me-0 object-cover rounded-full"
                   />
                 </div>
-                <div className="absolute mt-28 md:bottom-4 right-[-50px] z-10 ">
+                <div className="absolute mt-48 md:bottom-4 right-[-40px] md:right-[-50px] z-10">
                   <VideoPostIcons
                     _id={activePost._id}
                     small={false}

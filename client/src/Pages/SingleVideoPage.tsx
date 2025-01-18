@@ -287,11 +287,11 @@ function SingleVideoPage(): JSX.Element {
             controls
             autoPlay
             loop
-            className="w-[100%] ms-2.5  h-[auto] md:h-screen "
+            className="w-[100%] md:ms-2.5  h-[auto] md:h-screen "
           ></video>
         </div>
       </div>
-      <div className="bg-[#121212] w-[94%] md:w-[37%] m-5 flex flex-col relative">
+      <div className="bg-[#121212] w-[94%] md:w-[37%] md:m-5 ms-3 md:ms-0 flex flex-col relative">
         <div className="bg-[#1c1c1c] h-[120px] rounded-md">
           <div className="p-3 flex justify-between">
             <div>
@@ -413,7 +413,7 @@ function SingleVideoPage(): JSX.Element {
           </div>
           <hr className="w-full opacity-50 bg-purple-800" />
         </div>
-        <div className="flex-1 overflow-y-scroll" id="commentsContainer">
+        <div className="flex-1 overflow-y-scroll pb-10" id="commentsContainer">
           {stage === "comments" &&
             singlePost?.comments
               .slice()
@@ -429,7 +429,7 @@ function SingleVideoPage(): JSX.Element {
                       className="rounded-full w-9 h-9"
                     />
                     <div className="flex flex-col">
-                      <h4 className="text-[13px] ">{comment.user.username}</h4>
+                      <h4 className="text-[13px]">{comment.user.username}</h4>
                       <p className="text-md mt-[-4px] font-semibold">
                         {comment.text}
                       </p>
@@ -474,14 +474,14 @@ function SingleVideoPage(): JSX.Element {
           <input
             type="text"
             placeholder="Add a comment"
-            className="w-full text-white bg-[#2e2e2e] p-2 rounded-md outline-none"
+            className="w-full mb-2 text-white bg-[#2e2e2e] p-2 rounded-md outline-none"
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
           <button type="submit" disabled={comment.length < 1}>
             <IoPaperPlaneOutline
               size={28}
-              className={`md:hidden ${
+              className={`md:hidden me-2 ${
                 comment.length > 0
                   ? "bg-[#FF007C] text-white rounded-full p-1 flex justify-center items-center"
                   : "text-gray-400"
