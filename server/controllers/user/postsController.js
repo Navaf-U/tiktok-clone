@@ -69,8 +69,7 @@ const getAllPostsForExplore = async (req, res, next) => {
     .sort({ date: -1 })
     .skip((page - 1) * limit)
     .limit(Number(limit));
-  if (!posts) return next(new CustomError("Post not found", 404));
-  res.json(posts);
+    res.json(posts);
 };
 
 const getAllPostsOfUser = async (req, res, next) => {
