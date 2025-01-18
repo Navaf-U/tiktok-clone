@@ -31,7 +31,7 @@ function FollowingUsersVideo(): JSX.Element {
     
     try {
       const { data } = await axiosInstance.get(`/user/following/videos/${currUser._id}`, {
-        params: { page, limit: 1 },
+        params: { page, limit: 8 },
       });
 
       if (data.length > 0) {

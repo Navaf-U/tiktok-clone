@@ -30,11 +30,7 @@ function ExplorePage(): JSX.Element {
 
     setIsFetching(true);
     try {
-      const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/posts/explore`,
-        { params: { page: pageNum, limit: 10 } }
-      );
-
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/explore`,{params: {page: pageNum,limit:10}});
       if (data.length > 0) {
         setPosts((prevPosts) => [
           ...prevPosts,
@@ -86,7 +82,6 @@ function ExplorePage(): JSX.Element {
     };
   }, [hasMore, isFetching]);
 
-  console.log(page, "pageeee");
   return (
     <div>
       <NavBar />
