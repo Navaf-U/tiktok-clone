@@ -151,7 +151,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
       </div>
       <hr className="opacity-10 text-gray-500" />
       {stage === "videos" && (
-        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-">
+        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-3">
           {posts.length > 0 ? (
             posts
               .slice()
@@ -173,7 +173,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
       )}
 
       {stage === "favorites" && (
-        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-">
+        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-3">
           {favorites.length > 0 ? (
             favorites
               .slice()
@@ -194,7 +194,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
         </div>
       )}
       {stage === "liked" && (
-        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt- ">
+        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-3">
           {likes.length > 0 ? (
             likes
               .slice()

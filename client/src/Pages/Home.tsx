@@ -33,7 +33,6 @@ interface Post {
 
 function Home(): JSX.Element {
   const userContext = useContext(UserContext);
-
   const currUser = userContext?.currUser;
   const { setModalType, setShowModal, setPosts } = userContext || {};
   const [activePost, setActivePost] = useState<Post | null>(null);
@@ -166,37 +165,36 @@ function Home(): JSX.Element {
   const toggleMute = () => {
     setIsMuted((prev) => !prev);
   };
-
   useEffect(() => {
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
-        touchStartY = e.touches[0].clientY;
+      touchStartY = e.touches[0].clientY;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-        if (!touchStartY) return;
+      if (!touchStartY) return;
 
-        const touchEndY = e.touches[0].clientY;
-        const difference = touchStartY - touchEndY;
+      const touchEndY = e.touches[0].clientY;
+      const difference = touchStartY - touchEndY;
 
-        if (Math.abs(difference) > 30) {
-            if (difference > 0) {
-                fetchRandomPost();
-            } else if (difference < 0 && previousPosts.length > 0) {
-                handlePreviousPost();
-            }
-            touchStartY = 0; 
+      if (Math.abs(difference) > 30) {
+        if (difference > 0) {
+          fetchRandomPost();
+        } else if (difference < 0 && previousPosts.length > 0) {
+          handlePreviousPost();
         }
+        touchStartY = 0;
+      }
     };
 
     window.addEventListener("touchstart", handleTouchStart);
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
-        window.removeEventListener("touchstart", handleTouchStart);
-        window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
     };
-}, [previousPosts, activePost]);
+  }, [previousPosts, activePost]);
 
   return (
     <div className="h-screen overflow-hidden">
@@ -206,13 +204,13 @@ function Home(): JSX.Element {
           <HomeSidebar />
         </div>
         <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
-          <MobileBottomBar/>
+          <MobileBottomBar />
         </div>
         <div className="flex-grow pt-4">
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
-              <div className="w-auto md:h-[500px] h-auto max-w-[800px] ml-[-200px] mt-5 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative ms-20 mt-[-57px] md:mt-0 md:ms-0 left-[66px] md:left-0 w-[385px] h-[555px] max-w-[500px] md:h-[530px]   flex justify-center items-center transition-opacity duration-300">
+              <div className="w-auto md:h-[500px] h-[86%] max-w-[800px] ml-[-200px] mt-5 absolute flex justify-center items-center transition-opacity duration-300">
+                <div className="relative ms-[69px] mt-[-57px] h-full md:mt-0 md:ms-0 left-[66px] md:left-0 w-[380px] md:w-[385px] max-w-[800px] md:h-[530px] flex justify-center items-center transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"
@@ -239,7 +237,7 @@ function Home(): JSX.Element {
                       </p>
                     </div>
                     <p className="pb-2">{activePost.description}</p>
-                    <p className="flex justify-center items-center gap-2 me-16 ms-[-3px] md:ms-0">
+                    <p className="flex justify-center items-center gap-2 me-16 ms-[-2px] md:ms-0">
                       <BsMusicNoteBeamed size={15} /> original sound{" "}
                     </p>
                   </div>
@@ -256,17 +254,17 @@ function Home(): JSX.Element {
                   </button>
                 </div>
 
-                <div
-                  onClick={() => navigate(`/profile/${activePost.username}`)}
-                  className="absolute top-[190px] cursor-pointer right-[-51px]"
-                >
-                  <img
-                    src={profilePictures[activePost?.username] || demoPng}
-                    alt={activePost.username}
-                    className="md:mt-0 mt-[-20px] w-10 h-10 me-[9.5px] md:me-0 object-cover rounded-full"
-                  />
-                </div>
-                <div className="absolute mt-48 md:bottom-4 right-[-40px] md:right-[-50px] z-10">
+                <div className="absolute mt-48 md:bottom-4 flex justify-start items-start right-[-50px] md:right-[-50px] z-10">
+                  <div
+                    onClick={() => navigate(`/profile/${activePost.username}`)}
+                    className="absolute top-[-135px] md:top-40 cursor-pointer right-[-5px]"
+                  >
+                    <img
+                      src={profilePictures[activePost?.username] || demoPng}
+                      alt={activePost.username}
+                      className="md:mt-0 mt-20 w-10 h-10 me-[9.5px] md:me-0 object-cover rounded-full"
+                    />
+                  </div>
                   <VideoPostIcons
                     _id={activePost._id}
                     small={false}
@@ -287,21 +285,21 @@ function Home(): JSX.Element {
         </div>
       </div>
       <div className="w-full">
-      <button
+        <button
           className="absolute hidden md:top-64 md:right-10 md:bg-[#30303087] md:hover:bg-[#383838] w-16 h-16 md:flex justify-center items-center rounded-full md:p-2 md:active:bg-[#000000fd]"
           onClick={() => {
-          if (previousPosts.length > 0) {
-            setActivePost(previousPosts[previousPosts.length - 1]);
-            setPreviousPosts((prev) => prev.slice(0, -1));
-          }
-        }}
-      >
-        <MdOutlineKeyboardArrowUp
-          className="text-white active:text-[red] md:active:text-white"
-          size={40}
-        />
-      </button>
-      
+            if (previousPosts.length > 0) {
+              setActivePost(previousPosts[previousPosts.length - 1]);
+              setPreviousPosts((prev) => prev.slice(0, -1));
+            }
+          }}
+        >
+          <MdOutlineKeyboardArrowUp
+            className="text-white active:text-[red] md:active:text-white"
+            size={40}
+          />
+        </button>
+
         <button
           onClick={fetchRandomPost}
           className="absolute hidden md:bottom-52 md:right-10  md:bg-[#30303087] md:hover:bg-[#383838] w-16 h-16 justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"

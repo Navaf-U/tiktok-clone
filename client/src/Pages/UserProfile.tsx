@@ -191,8 +191,8 @@ function UserProfile(): JSX.Element {
               />
             </div>
             <div className="mt-16 md:mt-0">
-              <h1 className="text-white text-2xl text-center md:text-start md:ms-5 mt-16 md:mt-0">{username}</h1>
-              <div className="flex ms-14 md:ms-0 md:mt-0">
+              <h1 className="text-white text-2xl text-center ms-10 md:text-start md:ms-5 mt-16 md:mt-0">{username}</h1>
+              <div className="flex ms-10 md:ms-0 md:mt-0">
                 <Button
                   onClick={editPorfile}
                   variant={"pinks"}
@@ -228,7 +228,7 @@ function UserProfile(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="mt-10 md:mt-7 md:ms-64 ms-2">
+          <div className="mt-5 md:mt-7 md:ms-64 ms-2">
             {username && <ProfileVideoShow username={username} />}
           </div>
         </div>

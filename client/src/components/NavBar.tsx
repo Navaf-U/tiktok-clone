@@ -6,7 +6,6 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/UserProvider";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { CiSearch } from "react-icons/ci";
-import { TiHomeOutline } from "react-icons/ti";
 import { BiUser } from "react-icons/bi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaAdn } from "react-icons/fa6";
@@ -22,6 +21,7 @@ import { Link, useNavigate } from "react-router-dom";
 import UserProfilePicture from "./shared/UserProfilePicture";
 import axios from "axios";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
+import { LiaUserFriendsSolid } from "react-icons/lia";
 
 interface User {
   _id: string;
@@ -203,9 +203,9 @@ function NavBar(): JSX.Element {
               },
               { Icon: FaTiktok, text: "Get Coins", to: "/get-coins" },
               {
-                Icon: TiHomeOutline,
-                text: "Creator Tools",
-                to: "/creator-tools",
+                Icon: LiaUserFriendsSolid,
+                text: "Friends",
+                to: "/friends",
               },
               { Icon: IoSettingsOutline, text: "Settings", to: "/settings" },
               { Icon: FaAdn, text: "Language", to: "/language" },
