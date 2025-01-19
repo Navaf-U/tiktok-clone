@@ -40,7 +40,7 @@ const loginUser = async (req, res, next) => {
     return next(new CustomError("Invalid credentials", 400));
   }
   const token = createToken(user._id, user.role, "1h");
-  const refreshToken = createRefreshToken(user._id, user.role, "1d");
+  const refreshToken = createRefreshToken(user._id, user.role, "3d");
   const currUser = {
     _id: user._id,
     username: user.username,

@@ -132,10 +132,24 @@ const followingUserPosts = async (req, res, next) => {
   res.status(200).json(postsWithUserProfile);
 };
 
+const unfollowedUsers = async (req, res, next) => {
+    const userID = req.user.id;
+    const { page = 1, limit = 20 } = req.query;
+    const followedUserIds = await Follows.find({ follower: userID }).distinct("following");
+    const users = await User.aggregate([
+      {$match: {_id: { $ne: userID, $nin: followedUserIds }},},
+      {$addFields: { randomSortKey: { $rand: {}}}},{$sort: { randomSortKey: 1 }},
+      {$skip: (page - 1) * Number(limit)},{$limit: Number(limit),},{$project: { username: 1, profile: 1 },},
+    ]);
+    res.status(200).json(users);
+};
+
+
 export {
   userFollow,
   userUnfollow,
   getFollowersAndFollowing,
   isFollowing,
   followingUserPosts,
+  unfollowedUsers
 };
