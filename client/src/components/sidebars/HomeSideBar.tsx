@@ -38,7 +38,7 @@ const HomeSidebar = (): JSX.Element => {
             <span className="hidden lg:inline">Following</span>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="flex gap-2 text-md lg:p-4 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
+          <SidebarMenuItem onClick={()=>navigate("/friends")} className="flex gap-2 text-md lg:p-4 h-12 font-bold justify-center items-center lg:justify-start cursor-pointer hover:bg-[#30303051]  w-[90%] rounded-md">
             <LiaUserFriendsSolid size={22} />
             <span className="hidden lg:inline">Friends</span>
           </SidebarMenuItem>

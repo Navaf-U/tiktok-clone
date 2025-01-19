@@ -6,6 +6,7 @@ import UploadPage from "./Pages/UploadPage";
 import SingleVideoPage from "./Pages/SingleVideoPage";
 import ExplorePage from "./Pages/ExplorePage";
 import FollowingUsersVideo from "./Pages/FollowingUsersVideo";
+import FriendsPage from "./Pages/FriendsPage";
 
 function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ function AppRoutes() {
         <Route path="/upload/video" element={<UploadPage/>} />
         <Route path="/user/video/:id" element={<SingleVideoPage/>} />
         <Route path="/following" element={<FollowingUsersVideo />} />
+        <Route path="/friends" element={<FriendsPage/>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
