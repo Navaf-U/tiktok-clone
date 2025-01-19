@@ -46,6 +46,18 @@ const userProfileDelete = async (req, res, next) => {
   res.json(user);
 };
 
+const userAccountDelete = async (req, res, next) => {
+  const user = await User.findOne({ _id: req.user.id }, { password: 0 });
+  if (!user) {
+    return next(new CustomError("User not found", 404));
+  }
+  if (user.profile) {
+    await cloudinary.uploader.destroy(user.profile).catch(console.error);
+  }
+  await User.deleteOne({ _id: req.user.id });
+  res.json({ message: "Account deleted successfully" });
+};
+
 const searchUser = async (req,res,next) =>{
   const { query } = req.query;
   if (!query) {
@@ -55,4 +67,4 @@ const searchUser = async (req,res,next) =>{
   return res.json(users);
 }
 
-export { getOneUser, userUpdate , searchUser , userProfileDelete };
+export { getOneUser, userUpdate , searchUser , userProfileDelete ,userAccountDelete };

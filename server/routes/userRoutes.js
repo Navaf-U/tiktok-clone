@@ -1,6 +1,6 @@
 import express from "express";
 import tryCatch from "../util/tryCatch.js";
-import { getOneUser, searchUser, userProfileDelete, userUpdate } from "../controllers/user/userController.js";
+import { getOneUser, searchUser, userAccountDelete, userProfileDelete, userUpdate } from "../controllers/user/userController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
@@ -49,5 +49,8 @@ Router
 .post("/follow",verifyToken,tryCatch(userFollow))
 .post("/unfollow",verifyToken,tryCatch(userUnfollow))
 
+
+//user account delete
+.delete("/delete/account",verifyToken,tryCatch(userAccountDelete))
 
 export default Router;
