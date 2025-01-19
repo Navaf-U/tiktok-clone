@@ -191,8 +191,8 @@ function UserProfile(): JSX.Element {
               />
             </div>
             <div className="mt-16 md:mt-0">
-              <h1 className="text-white text-2xl ms-5 mt-8">{username}</h1>
-              <div className="flex">
+              <h1 className="text-white text-2xl text-center md:text-start md:ms-5 mt-16 md:mt-0">{username}</h1>
+              <div className="flex ms-14 md:ms-0 md:mt-0">
                 <Button
                   onClick={editPorfile}
                   variant={"pinks"}
@@ -204,7 +204,7 @@ function UserProfile(): JSX.Element {
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
                 <FaPlus onClick={()=>navigate("/upload/video")} className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
-              <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
+              <div className="flex gap-5 ms-16 mt-5 md:ms-5 md:mt-2 text-white font-semibold">
                 <p
                   onClick={followingHandler}
                   className="hover:underline cursor-pointer"
@@ -219,7 +219,7 @@ function UserProfile(): JSX.Element {
                 </p>
                 <p className="hover:underline cursor-pointer">0 Likes</p>
               </div>
-              <div className="mt-2 ms-5 font-normal text-[17px]">
+              <div className="mt-2 ms-16 md:mt-2 md:ms-5 font-normal text-[17px]">
                 {isCurrUser && currUser?.bio ? (
                   <h1>{currUser.bio}</h1>
                 ) : (
@@ -228,7 +228,7 @@ function UserProfile(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="mt-10 md:ms-64 ms-7">
+          <div className="mt-10 md:mt-7 md:ms-64 ms-2">
             {username && <ProfileVideoShow username={username} />}
           </div>
         </div>
@@ -249,8 +249,8 @@ function UserProfile(): JSX.Element {
               />
             </div>
             <div>
-              <h1 className="text-white text-2xl ms-5 md:mt-8 mt-32">{username}</h1>
-              <div className="flex">
+              <h1 className="text-white text-2xl text-center md:text-start md:ms-5 md:mt-8 mt-32">{username}</h1>
+              <div className="flex ms-5">
                 <Button
                   variant={"pinks"}
                   onClick={isFollowing ? unfollowUser : followUser}
@@ -264,7 +264,7 @@ function UserProfile(): JSX.Element {
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
                 <HiDotsHorizontal className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
-              <div className="flex gap-5 ms-5 mt-2 text-white font-semibold">
+              <div className="flex gap-5 ms-16 mt-2 text-white font-semibold">
                 <p
                   onClick={followingHandler}
                   className="hover:underline cursor-pointer"
@@ -288,7 +288,7 @@ function UserProfile(): JSX.Element {
               </div>
             </div>
           </div>
-          <div className="mt-10 md:ms-64 ms-7">
+          <div className="mt-10 md:ms-64">
             {username && <ProfileVideoShow username={username} />}
           </div>
         </div>

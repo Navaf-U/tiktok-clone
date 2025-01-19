@@ -93,7 +93,7 @@ function ExplorePage(): JSX.Element {
         <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
           <MobileBottomBar />
         </div>
-        <div className="ms-8 md:ms-0 mt-20 md:mb-6 mb-20 w-full">
+        <div className="flex justify-center md:ms-0 mt-20 md:mb-6 mb-20 w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {posts.map((post) => (
               <Link to={`/user/video/${post._id}`} key={post._id}>

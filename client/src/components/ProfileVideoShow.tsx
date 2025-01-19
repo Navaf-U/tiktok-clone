@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { HiOutlineAdjustmentsVertical } from "react-icons/hi2";
 import { MdBookmarkRemove } from "react-icons/md";
 import { TbHeartMinus } from "react-icons/tb";
-import VideoCard from "./shared/VideoCard";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -29,11 +28,10 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
     role: string;
   }
 
-
   const [posts, setPosts] = useState<Post[]>([]);
-  const [user,setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null);
   const [favorites, setFavorites] = useState<Post[]>([]);
-  const [likes,setLikes] = useState<Post[]>([])
+  const [likes, setLikes] = useState<Post[]>([]);
   const [stage, setStage] = useState<"videos" | "favorites" | "liked">(
     "videos"
   );
@@ -55,46 +53,50 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
     };
     getUserPost();
   }, [username]);
-  
-  useEffect(()=>{
-    const getUser = async()=>{
+
+  useEffect(() => {
+    const getUser = async () => {
       try {
         const { data } = await axiosInstance.get(`/user/profile/${username}`);
-        setUser(data)
+        setUser(data);
       } catch (error) {
         console.error(axiosErrorManager(error));
       }
-    }
-    getUser()
-  },[username])
+    };
+    getUser();
+  }, [username]);
 
-useEffect(()=>{
-  const getUserFavorites = async()=>{
-    try {
-      if(user){
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/favorites/user/${user?._id}`);
-        setFavorites(data)
+  useEffect(() => {
+    const getUserFavorites = async () => {
+      try {
+        if (user) {
+          const { data } = await axios.get(
+            `${import.meta.env.VITE_API_URL}/user/favorites/user/${user?._id}`
+          );
+          setFavorites(data);
+        }
+      } catch (error) {
+        console.error(axiosErrorManager(error));
       }
-    } catch (error) {
-      console.error(axiosErrorManager(error));
-    }
-  }
-  getUserFavorites()
-},[user])
+    };
+    getUserFavorites();
+  }, [user]);
 
-useEffect(()=>{
-const getUserLikes = async()=>{
-  try{
-    if(user){
-      const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/like/${user?._id}`)
-      setLikes(data)
-    }
-  }catch(err){
-    console.error(axiosErrorManager(err));
-  }
-}
-getUserLikes()
-},[user])
+  useEffect(() => {
+    const getUserLikes = async () => {
+      try {
+        if (user) {
+          const { data } = await axios.get(
+            `${import.meta.env.VITE_API_URL}/user/posts/like/${user?._id}`
+          );
+          setLikes(data);
+        }
+      } catch (err) {
+        console.error(axiosErrorManager(err));
+      }
+    };
+    getUserLikes();
+  }, [user]);
   return (
     <div>
       <div className="flex font-semibold text-[18px] gap-5">
@@ -149,55 +151,67 @@ getUserLikes()
       </div>
       <hr className="opacity-10 text-gray-500" />
       {stage === "videos" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4 mb-16 md:mb-0 ">
+        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-">
           {posts.length > 0 ? (
             posts
-            .slice() 
-            .reverse()
-            .map((post) => (
-              <Link to={`/user/video/${post._id}`} key={post._id}>
-                <VideoCard file={post.file}  />
-              </Link>
-            ))
+              .slice()
+              .reverse()
+              .map((post) => (
+                <Link to={`/user/video/${post._id}`} key={post._id}>
+                  <video
+                    className="w-full h-auto object-cover"
+                    src={post.file}
+                  ></video>
+                </Link>
+              ))
           ) : (
-            <p className="text-center text-gray-500">No videos found.</p>
+            <p className="text-center text-gray-500 col-span-full">
+              No videos found.
+            </p>
           )}
         </div>
       )}
+
       {stage === "favorites" && (
-        <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4 mb-16 md:mb-0">
+        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-">
           {favorites.length > 0 ? (
             favorites
-            .slice() 
-            .reverse()
-            .map((post) => (
-              <Link to={`/user/video/${post._id}`} key={post._id}>
-                <VideoCard file={post.file}  />
-              </Link> 
-            ))
+              .slice()
+              .reverse()
+              .map((post) => (
+                <Link to={`/user/video/${post._id}`} key={post._id}>
+                  <video
+                    className="w-full h-auto object-cover"
+                    src={post.file}
+                  ></video>
+                </Link>
+              ))
           ) : (
-            <p className="text-center text-gray-500">No videos found.</p>
+            <p className="text-center text-gray-500 col-span-full">
+              No videos found.
+            </p>
           )}
-        </div>
         </div>
       )}
       {stage === "liked" && (
-        <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 pt-4 mb-16 md:mb-0">
+        <div className="grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt- ">
           {likes.length > 0 ? (
             likes
-            .slice() 
-            .reverse()
-            .map((post) => (
-              <Link to={`/user/video/${post._id}`} key={post._id}>
-                <VideoCard file={post.file}  />
-              </Link>
-            ))
+              .slice()
+              .reverse()
+              .map((post) => (
+                <Link to={`/user/video/${post._id}`} key={post._id}>
+                  <video
+                    className="w-full h-auto object-cover"
+                    src={post.file}
+                  ></video>
+                </Link>
+              ))
           ) : (
-            <p className="text-center text-gray-500">No videos found.</p>
+            <p className="text-center text-gray-500 col-span-full">
+              No videos found.
+            </p>
           )}
-        </div>
         </div>
       )}
     </div>

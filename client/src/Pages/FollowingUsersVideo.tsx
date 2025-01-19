@@ -87,8 +87,8 @@ function FollowingUsersVideo(): JSX.Element {
         <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
           <MobileBottomBar />
         </div>
-        <div className="mt-12 ms-8 pt-4 mb-20">
-          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4 pt-4">
+        <div className="mt-12 pt-4 mb-20">
+          <div className="flex flex-wrap justify-center gap-5 mt-2">
             {posts.map((post) => (
               <div key={post._id}>
                 <Link to={`/user/video/${post._id}`}>
