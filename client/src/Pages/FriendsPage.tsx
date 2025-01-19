@@ -139,6 +139,10 @@ function FriendsPage(): JSX.Element {
       {!hasMore && users.length > 0 && (
         <p className="text-center font-semibold text-gray-500 mt-4">No more posts to load.</p>
       )}
+      {isFetching && (
+        <p className="text-center font-semibold text-gray-500 mt-4">Loading more posts...</p>
+      )}
+
     </div>
   );
 }

@@ -53,6 +53,8 @@ interface UserContextType {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   followsShow: boolean;
   setFollowsShow: React.Dispatch<React.SetStateAction<boolean>>;
+  showAccountDelete: boolean;
+  setShowAccountDelete: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -70,6 +72,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<"login" | "signup">("login");
   const [showUserEdit, setShowUserEdit] = useState<boolean>(false);
+  const [showAccountDelete, setShowAccountDelete] = useState<boolean>(false);
   const [followsShow, setFollowsShow] = useState<boolean>(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const navigate = useNavigate();
@@ -127,7 +130,6 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
 
   const logoutUser: () => void = () => {
     const confirm = window.confirm("Are you sure you want to logout?");
-
     if (confirm) {
       localStorage.removeItem("token");
       localStorage.removeItem("currUser");
@@ -166,6 +168,8 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     setIsLoading,
     followsShow,
     setFollowsShow,
+    showAccountDelete,
+    setShowAccountDelete
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

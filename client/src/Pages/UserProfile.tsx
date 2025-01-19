@@ -16,6 +16,7 @@ import axiosInstance from "@/utilities/axiosInstance";
 import FollowersShow from "@/modal/FollowersShow";
 import { FaPlus } from "react-icons/fa6";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
+import DeleteUserAccount from "@/modal/DeleteUserAccount";
 interface User {
   _id: string;
   username: string;
@@ -55,6 +56,8 @@ function UserProfile(): JSX.Element {
     setShowUserEdit,
     followsShow,
     setFollowsShow,
+    showAccountDelete,
+    setShowAccountDelete
   } = userContext;
   const { username } = useParams();
   const [otherUser, setOtherUser] = useState<User | null>(null);
@@ -200,7 +203,7 @@ function UserProfile(): JSX.Element {
                 >
                   Edit Profile
                 </Button>
-                <IoSettingsOutline className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+                <IoSettingsOutline onClick={()=>setShowAccountDelete(true)} className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
                 <FaPlus onClick={()=>navigate("/upload/video")} className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
@@ -228,6 +231,7 @@ function UserProfile(): JSX.Element {
               </div>
             </div>
           </div>
+          {showAccountDelete && <DeleteUserAccount />}
           <div className="mt-5 md:mt-7 md:ms-64 ms-2">
             {username && <ProfileVideoShow username={username} />}
           </div>
