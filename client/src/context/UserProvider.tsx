@@ -169,7 +169,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     followsShow,
     setFollowsShow,
     showAccountDelete,
-    setShowAccountDelete
+    setShowAccountDelete,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

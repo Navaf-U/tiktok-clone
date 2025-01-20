@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import NavBar from "@/components/NavBar";
 import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";

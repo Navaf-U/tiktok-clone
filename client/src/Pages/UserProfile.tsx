@@ -150,7 +150,7 @@ function UserProfile(): JSX.Element {
       if (userID) {
         getUserLikes(userID);
       }
-    }, [currUser, otherUser]);
+    }, [currUser, isCurrUser, otherUser]);
 
   useEffect(() => {
     const getFollowes = async (): Promise<void> => {
