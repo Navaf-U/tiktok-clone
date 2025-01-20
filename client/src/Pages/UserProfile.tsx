@@ -58,7 +58,7 @@ function UserProfile(): JSX.Element {
     followsShow,
     setFollowsShow,
     showAccountDelete,
-    setShowAccountDelete
+    setShowAccountDelete,
   } = userContext;
   const { username } = useParams();
   const [otherUser, setOtherUser] = useState<User | null>(null);
@@ -69,8 +69,11 @@ function UserProfile(): JSX.Element {
   const [followingCount, setFollowingCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [profileShow, setProfileShow] = useState<boolean>(false);
-  const [stage, setStage] = useState<"following" | "followers" | "suggested">("following" );
-  const navigate = useNavigate()
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [stage, setStage] = useState<"following" | "followers" | "suggested">(
+    "following"
+  );
+  const navigate = useNavigate();
 
   const editPorfile = () => {
     setShowUserEdit(true);
@@ -115,7 +118,9 @@ function UserProfile(): JSX.Element {
         if (!userID) return;
 
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/user/followers/${otherUserID}/${userID}`
+          `${
+            import.meta.env.VITE_API_URL
+          }/user/followers/${otherUserID}/${userID}`
         );
         setIsFollowing(res.data.isFollowing);
       } catch (error) {
@@ -125,6 +130,22 @@ function UserProfile(): JSX.Element {
 
     FetchUser();
   }, [username, currUser]);
+
+  useEffect(() => {
+    const getUserLikes = async () => {
+      try {
+        if (currUser) {
+          const { data } = await axios.get(
+            `${import.meta.env.VITE_API_URL}/user/posts/like/${currUser?._id}`
+          );
+          setLikeCount(data.length);
+        }
+      } catch (err) {
+        console.error(axiosErrorManager(err));
+      }
+    };
+    getUserLikes();
+  }, [currUser]);
 
   useEffect(() => {
     const getFollowes = async (): Promise<void> => {
@@ -183,21 +204,34 @@ function UserProfile(): JSX.Element {
       {isCurrUser && (
         <div>
           <div className="flex mt-24 md:ms-64">
-            <div onClick={()=>setProfileShow(true)} className="absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
+            <div
+              onClick={() => setProfileShow(true)}
+              className="absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden"
+            >
               <UserProfilePicture
                 profile={currUser?.profile}
                 className="object-cover cursor-pointer w-full h-full"
               />
             </div>
-            <div onClick={()=>setProfileShow(true)} className="md:w-[150px] md:h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
+            <div
+              onClick={() => setProfileShow(true)}
+              className="md:w-[150px] md:h-[150px] hidden md:flex items-center rounded-full overflow-hidden"
+            >
               <UserProfilePicture
                 profile={currUser?.profile}
                 className="object-cover cursor-pointer w-full h-full"
               />
             </div>
-            {profileShow && currUser?.profile && <PfpOnlyShow profile={currUser.profile} setProfileShow={setProfileShow} />}
+            {profileShow && currUser?.profile && (
+              <PfpOnlyShow
+                profile={currUser.profile}
+                setProfileShow={setProfileShow}
+              />
+            )}
             <div className="mt-16 md:mt-0">
-              <h1 className="text-white text-2xl text-center ms-10 md:text-start md:ms-5 mt-16 md:mt-0">{username}</h1>
+              <h1 className="text-white text-2xl text-center ms-10 md:text-start md:ms-5 mt-16 md:mt-0">
+                {username}
+              </h1>
               <div className="flex ms-10 md:ms-0 md:mt-0">
                 <Button
                   onClick={editPorfile}
@@ -206,9 +240,15 @@ function UserProfile(): JSX.Element {
                 >
                   Edit Profile
                 </Button>
-                <IoSettingsOutline onClick={()=>setShowAccountDelete(true)} className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+                <IoSettingsOutline
+                  onClick={() => setShowAccountDelete(true)}
+                  className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer"
+                />
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
-                <FaPlus onClick={()=>navigate("/upload/video")} className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+                <FaPlus
+                  onClick={() => navigate("/upload/video")}
+                  className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer"
+                />
               </div>
               <div className="flex gap-5 ms-16 mt-5 md:ms-5 md:mt-2 text-white font-semibold">
                 <p
@@ -223,7 +263,7 @@ function UserProfile(): JSX.Element {
                 >
                   {followersCount} Followers
                 </p>
-                <p className="hover:underline cursor-pointer">0 Likes</p>
+                <p className="hover:underline cursor-pointer">{likeCount} Likes</p>
               </div>
               <div className="mt-2 ms-16 md:mt-2 md:ms-5 font-normal text-[17px]">
                 {isCurrUser && currUser?.bio ? (
@@ -243,21 +283,34 @@ function UserProfile(): JSX.Element {
       {otherUser && !isCurrUser && (
         <div>
           <div className="flex items-center mt-24 md:ms-72 ">
-            <div onClick={()=>setProfileShow(true)} className="absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
+            <div
+              onClick={() => setProfileShow(true)}
+              className="absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden"
+            >
               <UserProfilePicture
                 profile={otherUser?.profile}
                 className="object-cover w-full cursor-pointer h-full"
               />
             </div>
-            <div onClick={()=>setProfileShow(true)} className="w-[150px] h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
+            <div
+              onClick={() => setProfileShow(true)}
+              className="w-[150px] h-[150px] hidden md:flex items-center rounded-full overflow-hidden"
+            >
               <UserProfilePicture
                 profile={otherUser?.profile}
                 className="object-cover cursor-pointer w-full h-full"
               />
             </div>
-            {profileShow && <PfpOnlyShow profile={otherUser?.profile} setProfileShow={setProfileShow} />}
+            {profileShow && (
+              <PfpOnlyShow
+                profile={otherUser?.profile}
+                setProfileShow={setProfileShow}
+              />
+            )}
             <div>
-              <h1 className="text-white text-2xl text-center  md:text-start md:ms-9 md:mt-8 mt-32">{username}</h1>
+              <h1 className="text-white text-2xl text-center  md:text-start md:ms-9 md:mt-8 mt-32">
+                {username}
+              </h1>
               <div className="flex ms-5">
                 <Button
                   variant={"pinks"}
@@ -313,22 +366,22 @@ function UserProfile(): JSX.Element {
         <HomeSidebar />
       </div>
       <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
-          <MobileBottomBar/>
-        </div>
+        <MobileBottomBar />
+      </div>
       <div className="absolute left-[-200px] top-0">
-      {showUserEdit && <UserDetailsEdit />}
-      {followsShow && (
-        <FollowersShow
-          followingCount={followingCount}
-          followersCount={followersCount}
-          following={following}
-          followers={followers}
-          setFollowing={setFollowing}
-          setFollowingCount={setFollowingCount}
-          stage={stage}
-          setStage={setStage}
-        />
-      )}
+        {showUserEdit && <UserDetailsEdit />}
+        {followsShow && (
+          <FollowersShow
+            followingCount={followingCount}
+            followersCount={followersCount}
+            following={following}
+            followers={followers}
+            setFollowing={setFollowing}
+            setFollowingCount={setFollowingCount}
+            stage={stage}
+            setStage={setStage}
+          />
+        )}
       </div>
     </div>
   );

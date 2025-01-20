@@ -197,7 +197,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
               .map((post) => (
                 <Link to={`/user/video/${post._id}`} key={post._id}>
                   <video
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                     src={post.file}
                     muted
                     loop
@@ -222,7 +222,7 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
               .map((post) => (
                 <Link to={`/user/video/${post._id}`} key={post._id}>
                   <video
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                     src={post.file}
                     muted
                     loop

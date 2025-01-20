@@ -286,7 +286,7 @@ function Home(): JSX.Element {
       </div>
       <div className="w-full">
         <button
-          className="absolute hidden md:top-64 md:right-10 md:bg-[#30303087] md:hover:bg-[#383838] w-16 h-16 md:flex justify-center items-center rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute hidden md:top-64 md:right-10 md:bg-[#30303087] md:hover:bg-[#383838] w-12 h-12 md:flex justify-center items-center rounded-full md:p-2 md:active:bg-[#000000fd]"
           onClick={() => {
             if (previousPosts.length > 0) {
               setActivePost(previousPosts[previousPosts.length - 1]);
@@ -302,7 +302,7 @@ function Home(): JSX.Element {
 
         <button
           onClick={fetchRandomPost}
-          className="absolute hidden md:bottom-52 md:right-10  md:bg-[#30303087] md:hover:bg-[#383838] w-16 h-16 justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
+          className="absolute hidden md:bottom-60 md:right-10  md:bg-[#30303087] md:hover:bg-[#383838] w-12 h-12 justify-center items-center md:flex rounded-full md:p-2 md:active:bg-[#000000fd]"
         >
           <MdOutlineKeyboardArrowDown
             className="text-white active:text-[green] md:active:text-white"
