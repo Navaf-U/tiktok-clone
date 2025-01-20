@@ -467,31 +467,31 @@ function SingleVideoPage(): JSX.Element {
               ))}
         </div>
         <form
-          className="sticky bottom-0 w-full bg-[#121212]  md:p-3 flex gap-2 items-center"
+          className="sticky z-20 bottom-0 w-full bg-[#1c1c1c] md:p-3 pt-2 ps-2 flex gap-2 items-center"
           action=""
           onSubmit={postComment}
         >
           <input
             type="text"
             placeholder="Add a comment"
-            className="w-full mb-2 text-white bg-[#2e2e2e] p-2 rounded-md outline-none"
+            className="w-full mb-2 text-white bg-[#2e2e2e]  p-2  rounded-md outline-none"
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
           <button type="submit" disabled={comment.length < 1}>
             <IoPaperPlaneOutline
               size={28}
-              className={`md:hidden me-2 ${
+              className={`md:hidden ${
                 comment.length > 0
-                  ? "bg-[#FF007C] text-white rounded-full p-1 flex justify-center items-center"
+                  ? "text-[#FF007C]"
                   : "text-gray-400"
               }`}
             />
             <p
-              className={`hidden md:flex ${
+              className={`hidden md:flex  ${
                 comment.length > 0
-                  ? "bg-[#FF007C] text-white rounded-md p-1.5 w-[80px] flex justify-center items-center"
-                  : "text-gray-400 bg-[#2e2e2e] rounded-md p-1.5 w-[80px] flex justify-center items-center"
+                  ? "bg-[#FF007C] text-white rounded-md mb-2 p-2 w-[80px] flex justify-center items-center"
+                  : "text-gray-400 bg-[#2e2e2e] rounded-md mb-2 p-2 w-[80px] flex justify-center items-center"
               }`}
             >
               Post

@@ -257,7 +257,7 @@ function Home(): JSX.Element {
                 <div className="absolute mt-48 md:bottom-4 flex justify-start items-start right-[-50px] md:right-[-50px] z-10">
                   <div
                     onClick={() => navigate(`/profile/${activePost.username}`)}
-                    className="absolute top-[-135px]  md:top-[-50px] cursor-pointer right-[-5px]"
+                    className="absolute top-[-135px]  md:top-[-55px] cursor-pointer right-[-5px] md:right-[-2px]"
                   >
                     <img
                       src={profilePictures[activePost?.username] || demoPng}

@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/Home";
 import UserProfile from "./Pages/UserProfile";
-import NotFound from "./Pages/NotFound";
 import UploadPage from "./Pages/UploadPage";
 import SingleVideoPage from "./Pages/SingleVideoPage";
 import ExplorePage from "./Pages/ExplorePage";
@@ -19,7 +18,7 @@ function AppRoutes() {
         <Route path="/user/video/:id" element={<SingleVideoPage/>} />
         <Route path="/following" element={<FollowingUsersVideo />} />
         <Route path="/friends" element={<FriendsPage/>} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<HomePage />} />
       </Routes>
     </>
   );

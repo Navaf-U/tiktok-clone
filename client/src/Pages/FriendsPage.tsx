@@ -88,13 +88,34 @@ function FriendsPage(): JSX.Element {
   const handleFollow = async (userIdToFollow: string) => {
     try {
       const { data } = await axiosInstance.post("/user/follow", { userIdToFollow });
-      if (data.message === "Followed successfully!") {
+      if (data.message) {
         setFollowing((prev) => new Set(prev.add(userIdToFollow)));
       }
     } catch (err) {
       console.error("Error following user:", err);
     }
   };
+
+  if (!currUser?._id) {
+    return (
+      <div>
+        <NavBar />
+        <div className="flex justify-center">
+          <div className="w-1/5 hidden md:block">
+            <HomeSidebar />
+          </div>
+          <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+            <MobileBottomBar />
+          </div>
+          <div className="flex items-center justify-center h-screen">
+            <h1 className="text-2xl font-bold text-gray-700">
+              Please log in to view friends suggestions.
+            </h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full overflow-hidden">
@@ -106,8 +127,8 @@ function FriendsPage(): JSX.Element {
           <div className="flex flex-grow flex-wrap md:ms-48 justify-center md:justify-start gap-4 md:gap-8 md:ps-6 pb-20 md:pb-0">
             {users.map((user) => (
               <div key={user._id} className="bg-white flex justify-center items-center h-52 w-40 rounded-lg shadow-md cursor-pointer">
-                <div className="flex flex-col items-center">
-                  <div onClick={() => navigate(`/profile/${user.username}`)}>
+                <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center" onClick={() => navigate(`/profile/${user.username}`)}>
                     <UserProfilePicture profile={user.profile} className="w-16 h-16" />
                     <h2 className="text-lg font-semibold text-red-500 text-center">{user.username}</h2>
                   </div>

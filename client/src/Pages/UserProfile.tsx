@@ -253,7 +253,7 @@ function UserProfile(): JSX.Element {
               />
             </div>
             <div>
-              <h1 className="text-white text-2xl text-center md:text-start md:ms-5 md:mt-8 mt-32">{username}</h1>
+              <h1 className="text-white text-2xl text-center  md:text-start md:ms-9 md:mt-8 mt-32">{username}</h1>
               <div className="flex ms-5">
                 <Button
                   variant={"pinks"}
@@ -262,11 +262,11 @@ function UserProfile(): JSX.Element {
                 >
                   {isFollowing ? "Unfollow" : "Follow"}
                 </Button>
-                <button className="ms-4 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer">
+                <button className="ms-2 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer">
                   Message
                 </button>
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
-                <HiDotsHorizontal className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
+                <HiDotsHorizontal className="ms-2 mt-3 me-1 w-[40px] p-2 h-[40px]  bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
               </div>
               <div className="flex gap-5 ms-16 mt-2 text-white font-semibold">
                 <p
@@ -283,7 +283,7 @@ function UserProfile(): JSX.Element {
                 </p>
                 <p className="hover:underline cursor-pointer">0 Likes</p>
               </div>
-              <div className="mt-2 ms-5 font-normal text-[17px]">
+              <div className="mt-2 ms-16  font-normal text-[17px]">
                 {otherUser && otherUser?.bio ? (
                   <h1>{otherUser.bio}</h1>
                 ) : (
