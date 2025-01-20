@@ -23,12 +23,13 @@ function FollowingUsersVideo(): JSX.Element {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
   const userContext = useContext(UserContext);
   const { currUser } = userContext || {};
 
   const fetchPosts = async (page: number) => {
     if (!currUser?._id) return;
-    
+    setLoading(true);
     try {
       const { data } = await axiosInstance.get(`/user/following/videos/${currUser._id}`, {
         params: { page, limit: 8 },
@@ -45,6 +46,8 @@ function FollowingUsersVideo(): JSX.Element {
       }
     } catch (error) {
       console.error(error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -120,7 +123,7 @@ function FollowingUsersVideo(): JSX.Element {
               </div>
             ))}
           </div>
-          {hasMore && (
+          {hasMore && !loading && (
             <button
               onClick={loadMore}
               className="bg-[#121212] text-center w-full text-white rounded-md mt-4 px-4 py-2"
@@ -130,6 +133,9 @@ function FollowingUsersVideo(): JSX.Element {
           )}
           {!hasMore && (
             <p className="text-center text-gray-500 mt-4">No more posts to load.</p>
+          )}
+          {loading && (
+              <p className="text-center text-gray-500 mt-4">Loading...</p>
           )}
         </div>
       </div>

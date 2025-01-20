@@ -17,6 +17,7 @@ import FollowersShow from "@/modal/FollowersShow";
 import { FaPlus } from "react-icons/fa6";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 import DeleteUserAccount from "@/modal/DeleteUserAccount";
+import PfpOnlyShow from "@/modal/PfpOnlyShow";
 interface User {
   _id: string;
   username: string;
@@ -67,6 +68,7 @@ function UserProfile(): JSX.Element {
   const [followers, setFollowers] = useState<Follower[]>([]);
   const [followingCount, setFollowingCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
+  const [profileShow, setProfileShow] = useState<boolean>(false);
   const [stage, setStage] = useState<"following" | "followers" | "suggested">("following" );
   const navigate = useNavigate()
 
@@ -181,18 +183,19 @@ function UserProfile(): JSX.Element {
       {isCurrUser && (
         <div>
           <div className="flex mt-24 md:ms-64">
-            <div className=" absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
+            <div onClick={()=>setProfileShow(true)} className="absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
               <UserProfilePicture
                 profile={currUser?.profile}
-                className="object-cover w-full h-full"
+                className="object-cover cursor-pointer w-full h-full"
               />
             </div>
-            <div className="md:w-[150px] md:h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
+            <div onClick={()=>setProfileShow(true)} className="md:w-[150px] md:h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
               <UserProfilePicture
                 profile={currUser?.profile}
-                className="object-cover w-full h-full"
+                className="object-cover cursor-pointer w-full h-full"
               />
             </div>
+            {profileShow && currUser?.profile && <PfpOnlyShow profile={currUser.profile} setProfileShow={setProfileShow} />}
             <div className="mt-16 md:mt-0">
               <h1 className="text-white text-2xl text-center ms-10 md:text-start md:ms-5 mt-16 md:mt-0">{username}</h1>
               <div className="flex ms-10 md:ms-0 md:mt-0">
@@ -240,18 +243,19 @@ function UserProfile(): JSX.Element {
       {otherUser && !isCurrUser && (
         <div>
           <div className="flex items-center mt-24 md:ms-72 ">
-            <div className=" absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
+            <div onClick={()=>setProfileShow(true)} className="absolute left-28 w-[150px] h-[150px] top-16 flex md:hidden items-center rounded-full overflow-hidden">
               <UserProfilePicture
                 profile={otherUser?.profile}
-                className="object-cover w-full h-full"
+                className="object-cover w-full cursor-pointer h-full"
               />
             </div>
-            <div className="w-[150px] h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
+            <div onClick={()=>setProfileShow(true)} className="w-[150px] h-[150px] hidden md:flex items-center rounded-full overflow-hidden">
               <UserProfilePicture
                 profile={otherUser?.profile}
-                className="object-cover w-full h-full"
+                className="object-cover cursor-pointer w-full h-full"
               />
             </div>
+            {profileShow && <PfpOnlyShow profile={otherUser?.profile} setProfileShow={setProfileShow} />}
             <div>
               <h1 className="text-white text-2xl text-center  md:text-start md:ms-9 md:mt-8 mt-32">{username}</h1>
               <div className="flex ms-5">
