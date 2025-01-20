@@ -69,7 +69,8 @@ function UserProfile(): JSX.Element {
   const [followingCount, setFollowingCount] = useState<number>(0);
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [profileShow, setProfileShow] = useState<boolean>(false);
-  const [likeCount, setLikeCount] = useState<number>(0);
+  const [likeCountOfUser, setlikeCountOfUser] = useState<number>(0);
+
   const [stage, setStage] = useState<"following" | "followers" | "suggested">(
     "following"
   );
@@ -131,21 +132,25 @@ function UserProfile(): JSX.Element {
     FetchUser();
   }, [username, currUser]);
 
-  useEffect(() => {
-    const getUserLikes = async () => {
+    const getUserLikes = async (userID: string) => {
       try {
-        if (currUser) {
+        if (userID) {
           const { data } = await axios.get(
-            `${import.meta.env.VITE_API_URL}/user/posts/like/${currUser?._id}`
+            `${import.meta.env.VITE_API_URL}/user/posts/like/${userID}`
           );
-          setLikeCount(data.length);
+          setlikeCountOfUser(data.length);
         }
       } catch (err) {
         console.error(axiosErrorManager(err));
       }
     };
-    getUserLikes();
-  }, [currUser]);
+
+    useEffect(() => {
+      const userID = isCurrUser ? currUser?._id : otherUser?._id;
+      if (userID) {
+        getUserLikes(userID);
+      }
+    }, [currUser, otherUser]);
 
   useEffect(() => {
     const getFollowes = async (): Promise<void> => {
@@ -263,7 +268,7 @@ function UserProfile(): JSX.Element {
                 >
                   {followersCount} Followers
                 </p>
-                <p className="hover:underline cursor-pointer">{likeCount} Likes</p>
+                <p className="hover:underline cursor-pointer">{likeCountOfUser} Likes</p>
               </div>
               <div className="mt-2 ms-16 md:mt-2 md:ms-5 font-normal text-[17px]">
                 {isCurrUser && currUser?.bio ? (
@@ -338,7 +343,7 @@ function UserProfile(): JSX.Element {
                 >
                   {followersCount} Followers
                 </p>
-                <p className="hover:underline cursor-pointer">0 Likes</p>
+                <p className="hover:underline cursor-pointer">{likeCountOfUser} Likes</p>
               </div>
               <div className="mt-2 ms-16  font-normal text-[17px]">
                 {otherUser && otherUser?.bio ? (
