@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function DeleteUserAccount(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const userContext = useContext(UserContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { setShowAccountDelete, setCurrUser } = userContext || {};
   const delteUserAccount = async () => {
     try {
@@ -20,7 +20,7 @@ function DeleteUserAccount(): JSX.Element {
         await axiosInstance.delete("/user/delete/account");
         localStorage.removeItem("token");
         localStorage.removeItem("currUser");
-        if(setCurrUser){
+        if (setCurrUser) {
           setCurrUser(null);
         }
         if (setShowAccountDelete) {

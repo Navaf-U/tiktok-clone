@@ -8,6 +8,7 @@ import axiosInstance from "@/utilities/axiosInstance";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdCheckCircle } from "react-icons/md";
+import axiosErrorManager from "@/utilities/axiosErrorManager";
 
 interface User {
   _id: string;
@@ -48,12 +49,11 @@ function FriendsPage(): JSX.Element {
         setHasMore(false);
       }
     } catch (err) {
-      console.log(err);
+      console.error(axiosErrorManager(err));
     } finally {
       setIsFetching(false);
     }
   };
-
   useEffect(() => {
     getNonFollowedUsers(page);
   }, [page]);
