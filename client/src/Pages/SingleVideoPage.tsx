@@ -298,7 +298,7 @@ function SingleVideoPage(): JSX.Element {
               <div className="flex">
                 <UserProfilePicture
                   profile={user?.profile}
-                  className="rounded-full w-10"
+                  className="rounded-full w-10 h-10"
                 />
                 <div className="flex flex-col ms-2">
                   <h4 className="text-lg font-semibold ms-2">
@@ -335,7 +335,7 @@ function SingleVideoPage(): JSX.Element {
 
         <div className="p-2">
           <div className="flex justify-between w-auto">
-            <div className="flex gap-5 mt-2">
+            <div className="flex gap-2 md:gap-5 mt-2">
               <div className="flex items-center gap-1 cursor-pointer">
                 {singlePost && (
                   <IoHeart
@@ -370,7 +370,7 @@ function SingleVideoPage(): JSX.Element {
                 <p className="text-xs">{singlePost?.favorites?.length}</p>
               </div>
             </div>
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 mt-1 items-center">
               <ImEmbed2 size={22} className="bg-[#2e2e2e] rounded-full p-1" />
               <PiPaperPlaneTiltFill
                 size={22}
