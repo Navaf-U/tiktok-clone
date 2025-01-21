@@ -165,6 +165,7 @@ function Home(): JSX.Element {
   const toggleMute = () => {
     setIsMuted((prev) => !prev);
   };
+
   useEffect(() => {
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
@@ -186,7 +187,6 @@ function Home(): JSX.Element {
         touchStartY = 0;
       }
     };
-
     window.addEventListener("touchstart", handleTouchStart);
     window.addEventListener("touchmove", handleTouchMove, { passive: false });
 

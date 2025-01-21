@@ -80,6 +80,7 @@ function NavBar(): JSX.Element {
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
+
   const searchUsers = async (query: string): Promise<void> => {
     setIsLoading(true);
     try {
