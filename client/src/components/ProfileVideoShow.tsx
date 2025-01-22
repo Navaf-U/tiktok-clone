@@ -187,32 +187,32 @@ function ProfileVideoShow({ username }: { username: string }): JSX.Element {
           )}
         </div>
       )}
+     {stage === "favorites" && (
+  <div className="min-h-[200px] grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-3">
+    {favorites.length > 0 ? (
+      favorites
+        .slice()
+        .reverse()
+        .map((post) => (
+          <Link to={`/user/video/${post._id}`} key={post._id}>
+            <video
+              className="w-full h-[180px] md:h-[450px] border border-gray-900 object-cover"
+              src={post.file}
+              muted
+              loop
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            ></video>
+          </Link>
+        ))
+    ) : (
+      <p className="text-center text-gray-500 col-span-full">
+        No videos found.
+      </p>
+    )}
+  </div>
+)}
 
-      {stage === "favorites" && (
-        <div className="min-h-[200px] grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-3">
-          {favorites.length > 0 ? (
-            favorites
-              .slice()
-              .reverse()
-              .map((post) => (
-                <Link to={`/user/video/${post._id}`} key={post._id}>
-                  <video
-                    className="w-full h-full object-cover"
-                    src={post.file}
-                    muted
-                    loop
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  ></video>
-                </Link>
-              ))
-          ) : (
-            <p className="text-center text-gray-500 col-span-full">
-              No videos found.
-            </p>
-          )}
-        </div>
-      )}
       {stage === "liked" && (
         <div className=" min-h-[200px] grid grid-cols-3 gap-4 sm:grid-cols-3 md:grid-cols-4 me-3 pb-20 mt-3">
           {likes.length > 0 ? (
