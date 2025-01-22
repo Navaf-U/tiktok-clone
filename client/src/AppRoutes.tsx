@@ -19,7 +19,7 @@ function AppRoutes() {
         <Route path="/user/video/:id" element={<SingleVideoPage/>} />
         <Route path="/following" element={<FollowingUsersVideo />} />
         <Route path="/friends" element={<FriendsPage/>} />
-        <Route path="/user/messages" element={<Messages/>}/>
+        <Route path="/user/messages/" element={<Messages/>}/>
         <Route path="*" element={<HomePage />} />
       </Routes>
     </>

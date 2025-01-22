@@ -324,7 +324,7 @@ function UserProfile(): JSX.Element {
                 >
                   {isFollowing ? "Unfollow" : "Follow"}
                 </Button>
-                <button className="ms-2 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer">
+                <button onClick={() => navigate(`/user/messages?u=${otherUser.username}`)} className="ms-2 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer">
                   Message
                 </button>
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
