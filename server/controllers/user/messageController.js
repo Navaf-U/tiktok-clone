@@ -2,49 +2,61 @@ import Message from "../../models/messageSchema.js";
 import { users } from "../../services/socketHandler.js";
 import { io } from "../../index.js";
 import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 const getConversations = async (req, res) => {
-  const userID = req.user.id;
-  const conversations = await Message.aggregate([
-    {
-      $match: {
-        $or: [{ senderId: userID }, { receiverId: userID }],
-      },
-    },
-    { $sort: { createdAt: -1 } },
-    {
-      $group: {
-        _id: {
-          $cond: {
-            if: { $eq: ["$senderId", userID] },
-            then: "$receiverId",
-            else: "$senderId",
+    const userID =  new ObjectId(req.user.id);
+  
+    try {
+      const conversations = await Message.aggregate([
+        {
+          $match: {
+            $or: [{ senderId: userID }, { receiverId: userID }],
           },
         },
-        lastMessage: { $first: "$$ROOT" },
-      },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "_id",
-        foreignField: "_id",
-        as: "userDetails",
-      },
-    },
-    {
-      $unwind: "$userDetails",
-    },
-    {
-      $project: {
-        _id: 1,
-        lastMessage: 1,
-        username: "$userDetails.username",
-        profile: "$userDetails.profile",
-      },
-    },
-  ]);
-  res.json(conversations);
-};
+        {
+          $sort: { createdAt: -1 },
+        },
+        {
+          $group: {
+            _id: {
+              $cond: {
+                if: { $eq: ["$senderId", userID] },
+                then: "$receiverId",
+                else: "$senderId",
+              },
+            },
+            lastMessage: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "_id",
+            foreignField: "_id",
+            as: "userDetails",
+          },
+        },
+        {
+          $unwind: "$userDetails",
+        },
+        {
+          $project: {
+            _id: 1, 
+            lastMessage: 1,
+            username: "$userDetails.username",
+            profile: "$userDetails.profile",
+          },
+        },
+      ]);
+
+      console.log(conversations)
+  
+      res.json(conversations);
+    } catch (err) {
+      console.error("Error fetching conversations:", err);
+      res.status(500).json({ error: "Failed to fetch conversations" });
+    }
+  };
 
 const getMessages = async (req, res) => {
   const { otherUserId } = req.params;

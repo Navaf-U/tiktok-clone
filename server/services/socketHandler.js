@@ -20,8 +20,6 @@ const setupSocket = (io) => {
         // this will run when user connects
       socket.on('join', () => {
         users.set(socket.user.id, socket.id);
-        console.log(`User ${socket.user.id} connected`);
-        console.log(users)
       });
   
   
@@ -29,7 +27,6 @@ const setupSocket = (io) => {
       socket.on('disconnect', () => {
         if (socket.user.id) {
           users.delete(socket.user.id);
-          console.log(`User ${socket.user.id} disconnected`);
         }
       });
     });
