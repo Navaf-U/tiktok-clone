@@ -6,6 +6,7 @@ import upload from "../config/MulterConfig.js";
 import { uploadToCloudinary } from "../middlewares/fileUpload.js";
 import { getAllPosts, getAllPostsForExplore, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, getUserFavorites, getUserLikes, postComment, postFavorite, postLike, randomSinglePost, removeComment, removeFavorite, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
 import { followingUserPosts, getFollowersAndFollowing, isFollowing, unfollowedUsers, userFollow, userUnfollow } from "../controllers/user/followController.js";
+import { getConversations, getMessages, sendMessage } from "../controllers/user/messageController.js";
 const Router = express.Router();
 Router
 
@@ -49,6 +50,11 @@ Router
 .post("/follow",verifyToken,tryCatch(userFollow))
 .post("/unfollow",verifyToken,tryCatch(userUnfollow))
 
+
+//messages
+.get("/messages",verifyToken,tryCatch(getConversations))
+.get("/messages/:otherUserId",verifyToken,tryCatch(getMessages))
+.post("/messages",verifyToken,tryCatch(sendMessage))
 
 //user account delete
 .delete("/delete/account",verifyToken,tryCatch(userAccountDelete))
