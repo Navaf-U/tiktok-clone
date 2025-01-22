@@ -69,7 +69,7 @@ const getAllPostsForExplore = async (req, res, next) => {
     .sort({ date: -1 })
     .skip((page - 1) * limit)
     .limit(Number(limit));
-    res.json(posts);
+    res.json(posts)
 };
 
 const getAllPostsOfUser = async (req, res, next) => {

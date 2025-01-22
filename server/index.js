@@ -6,10 +6,25 @@ import userRoutes from "./routes/userRoutes.js";
 import manageError from "./middlewares/manageError.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import http from "http";
+import {Server} from "socket.io";
+import setupSocket from "./services/socketHandler.js";
 const app = express();
-app.use(cookieParser());  
-const PORT = process.env.PORT || 3000;
 dotenv.config();
+const server = http.createServer(app);
+export const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST"],
+  }
+});
+
+
+
+setupSocket(io); 
+app.use(cookieParser());  
+
+const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 ConnectDataBase();
@@ -27,6 +42,6 @@ app.all("*", (req, res) => {
 
 app.use(manageError);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
 });
