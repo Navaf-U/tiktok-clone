@@ -25,19 +25,21 @@ interface Message {
   message: string;
   senderId: {
     _id: string;
-    username: string
-  }
+    username: string;
+  };
   receiverId: {
     _id: string;
-    username: string
-  }
+    username: string;
+  };
   createdAt: string;
   read: boolean;
 }
 
 interface Conversation {
   _id: string;
-  lastMessage: string;
+  lastMessage: {
+    message: string;
+  };
   username: string;
   profile: string;
   userId: string;
@@ -60,12 +62,10 @@ function Messages(): JSX.Element {
   };
 
   useEffect(() => {
-
     const fetchConversations = async () => {
       try {
         const { data } = await axiosInstance.get("/user/messages");
         setConversations(data);
-        console.log(data,"CONVERS")
       } catch (error) {
         console.error(axiosErrorManager(error));
       }
@@ -140,7 +140,7 @@ function Messages(): JSX.Element {
     setSearchParams({ u: username });
   };
 
-
+  console.log(conversations);
 
   return (
     <div className="min-h-screen bg-black">
@@ -149,7 +149,7 @@ function Messages(): JSX.Element {
         <div>
           <TiArrowLeft
             onClick={() => navigate(-1)}
-            className="text-[#b5b5b5] bg-[#1c1c1c] rounded-full mt-3 p-1 cursor-pointer hover:bg-[#2c2c2c]"
+            className="hidden md:flex text-[#b5b5b5] bg-[#1c1c1c] rounded-full mt-3 p-1 cursor-pointer hover:bg-[#2c2c2c]"
             size={35}
           />
         </div>
@@ -165,9 +165,9 @@ function Messages(): JSX.Element {
           <div className="mt-4 overflow-y-auto h-[440px] custom-scrollbar">
             {conversations.map((conv) => (
               <div
-              key={conv._id}
-              onClick={() => selectConversation(conv.username)}
-              className={`flex items-center p-3 hover:bg-[#303030] cursor-pointer transition-colors ${
+                key={conv._id}
+                onClick={() => selectConversation(conv.username)}
+                className={`flex items-center p-3 hover:bg-[#303030] cursor-pointer transition-colors ${
                   username === conv.username ? "bg-[#303030]" : ""
                 }`}
               >
@@ -176,10 +176,12 @@ function Messages(): JSX.Element {
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div className="ml-3 flex-1 min-w-0">
-                  <p className="text-white font-medium">{conv.username}</p>
+                  <p className="text-white hidden md:flex font-medium">{conv.username}</p>
                   {conv.lastMessage && (
-                    <p className="text-gray-400 text-sm truncate">
-                      {conv.lastMessage}
+                    <p className="text-gray-400 hidden md:flex text-sm truncate">
+                      {typeof conv.lastMessage === "string"
+                        ? conv.lastMessage
+                        : conv.lastMessage.message}{" "}
                     </p>
                   )}
                 </div>
@@ -188,7 +190,7 @@ function Messages(): JSX.Element {
           </div>
         </div>
 
-       <div className="w-[600px] h-[500px] rounded-md bg-[#262626] flex flex-col overflow-hidden">
+        <div className="w-[600px] h-[500px] rounded-md bg-[#262626] flex flex-col overflow-hidden">
           {user ? (
             <>
               <div className="p-4 border-b border-[#363636]">
@@ -206,7 +208,9 @@ function Messages(): JSX.Element {
                     <div
                       key={msg._id}
                       className={`flex ${
-                        msg.receiverId.username === username ? "justify-end" : "justify-star"
+                        msg.receiverId.username === username
+                          ? "justify-end"
+                          : "justify-start"
                       }`}
                     >
                       <div
@@ -216,7 +220,7 @@ function Messages(): JSX.Element {
                             : "bg-[#363636] text-white"
                         }`}
                       >
-                        {msg.message}
+                        {msg.message} zz
                       </div>
                     </div>
                   ))}
