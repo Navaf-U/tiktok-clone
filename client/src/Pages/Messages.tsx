@@ -207,8 +207,8 @@ function Messages(): JSX.Element {
                   <p className="ml-3 text-white font-medium">{user.username}</p>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                <div className="flex flex-col space-y-4 pb-5">
+              <div className="flex-1 overflow-y-auto p-4 mb-5 custom-scrollbar">
+                <div className="flex flex-col space-y-4">
                   {messages.map((msg) => (
                     <div
                       key={msg._id}
@@ -233,7 +233,7 @@ function Messages(): JSX.Element {
                 </div>
               </div>
               <div className="md:p-4">
-                <div className="flex items-center gap-2 w-full absolute bottom-1.5">
+                <div className="flex items-center gap-2 w-full relative bottom-1.5">
                   <input
                     type="text"
                     value={message}
