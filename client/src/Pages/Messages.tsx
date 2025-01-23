@@ -10,6 +10,8 @@ import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import axiosInstance from "@/utilities/axiosInstance";
 // import { UserContext } from "@/context/UserProvider";
 import { socket } from "@/hooks/useConnectSocket";
+import { PiPaperPlaneTiltFill } from "react-icons/pi";
+import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 
 interface User {
   _id: string;
@@ -143,9 +145,12 @@ function Messages(): JSX.Element {
   console.log(conversations);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen  md:mb-0 bg-black">
       <NavBar />
-      <div className="w-full pt-16 flex justify-center gap-4">
+      <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
+        <MobileBottomBar />
+      </div>
+      <div className="w-full flex pt-14 md:pt-16 h-screen  md:h-screen justify-center gap-4">
         <div>
           <TiArrowLeft
             onClick={() => navigate(-1)}
@@ -154,11 +159,11 @@ function Messages(): JSX.Element {
           />
         </div>
 
-        <div className="w-[300px] h-[500px] rounded-md bg-[#262626] overflow-hidden">
+        <div className="w-[150px] md:w-[300px] ms-[-12px] mb-14 md:h-[530px] rounded-md bg-[#262626] overflow-hidden">
           <div className="flex mx-5 mt-2 justify-between items-center">
-            <p className="font-semibold text-[23px] text-white">Messages</p>
+            <p className="font-semibold text-[23px] text-white hidden md:flex">Messages</p>
             <IoSettingsOutline
-              className="mt-1 text-white cursor-pointer hover:text-gray-300"
+              className="mt-1 text-white cursor-pointer hover:text-gray-300 hidden md:flex"
               size={25}
             />
           </div>
@@ -190,7 +195,7 @@ function Messages(): JSX.Element {
           </div>
         </div>
 
-        <div className="w-[600px] h-[500px] rounded-md bg-[#262626] flex flex-col overflow-hidden">
+        <div className="w-[400px] me-0.5 md:me-0 ms-[-13px] md:ms-0 md:w-[600px] relative mb-14 md:h-[530px] rounded-md bg-[#262626] flex flex-col overflow-hidden">
           {user ? (
             <>
               <div className="p-4 border-b border-[#363636]">
@@ -203,7 +208,7 @@ function Messages(): JSX.Element {
                 </div>
               </div>
               <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-                <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-4 pb-5">
                   {messages.map((msg) => (
                     <div
                       key={msg._id}
@@ -227,22 +232,25 @@ function Messages(): JSX.Element {
                   <div ref={messagesEndRef} />
                 </div>
               </div>
-              <div className="p-4 border-t border-[#363636]">
-                <div className="flex items-center gap-2">
+              <div className="md:p-4">
+                <div className="flex items-center gap-2 w-full absolute bottom-1.5">
                   <input
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                     placeholder="Send a message..."
-                    className="flex-1 bg-[#363636] text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className=" bg-[#363636] text-white ps-5 rounded-lg px-2 ms-[-5px] md:ms-0 md:px-6 w-full md:w-[450px] md:flex-1 md:py-2.5 py-1.5 focus:outline-none md:focus:ring-1 md:focus:ring-pink-500"
                   />
                   <button
                     onClick={sendMessage}
                     disabled={!message.trim()}
-                    className="bg-pink-500 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="bg-pink-500 hidden md:flex text-white px-6 py-2.5 rounded-lg font-medium hover:bg-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Send
+                  </button>
+                  <button onClick={sendMessage} disabled={!message.trim()} className="md:hidden">
+                  <PiPaperPlaneTiltFill  color={message.trim() ? "#ff2b56" : "white"} size={25}/>
                   </button>
                 </div>
               </div>

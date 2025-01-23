@@ -1,4 +1,6 @@
+import { UserContext } from "@/context/UserProvider";
 import axios from "axios";
+import { useContext } from "react";
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,
   withCredentials: true,
@@ -35,7 +37,12 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
+        const userContext = useContext(UserContext);
+        const { setCurrUser } = userContext || {};
         localStorage.removeItem("token");
+        if (setCurrUser) {
+          setCurrUser(null);
+        }
         localStorage.removeItem("currUser");
         return Promise.reject(err);
       }
