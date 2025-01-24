@@ -1,5 +1,5 @@
-import axiosErrorManager from "@/utilities/axiosErrorManager";
-import axiosInstance from "@/utilities/axiosInstance";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
+import axiosInstance from "@/utilities/axiosInstance.ts";
 import { useEffect, useRef, useState } from "react";
 import { HiOutlineAdjustmentsVertical } from "react-icons/hi2";
 import { MdBookmarkRemove } from "react-icons/md";

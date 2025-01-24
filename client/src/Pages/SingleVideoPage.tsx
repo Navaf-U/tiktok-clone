@@ -1,5 +1,5 @@
 import UserProfilePicture from "@/components/shared/UserProfilePicture";
-import axiosInstance from "@/utilities/axiosInstance";
+import axiosInstance from "@/utilities/axiosInstance.ts";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { ImEmbed2 } from "react-icons/im";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 import { UserContext } from "@/context/UserProvider";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";

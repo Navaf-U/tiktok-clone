@@ -20,7 +20,7 @@ import Signup from "../modal/Singup";
 import { Link, useNavigate } from "react-router-dom";
 import UserProfilePicture from "./shared/UserProfilePicture";
 import axios from "axios";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 import { LiaUserFriendsSolid } from "react-icons/lia";
 
 interface User {

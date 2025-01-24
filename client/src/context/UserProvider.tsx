@@ -1,4 +1,5 @@
-import axiosErrorManager from "../utilities/axiosErrorManager";
+import userManager from "@/components/shared/userManager";
+import axiosErrorManager from "../utilities/axiosErrorManager.ts";
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
@@ -84,6 +85,15 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       setCurrUser(JSON.parse(user));
     }
   }, []);
+
+  useEffect(() => {
+    userManager.setUserUpdater(setCurrUser); 
+    return () => {
+      userManager.setUserUpdater(() => null);
+    };
+  }, [currUser]);
+
+
   const LoginUser: (
     emailOrUsername: string,
     password: string

@@ -3,8 +3,8 @@ import { UserContext } from "@/context/UserProvider";
 import { useContext, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import { FaRegTrashCan } from "react-icons/fa6";
-import axiosInstance from "../utilities/axiosInstance";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosInstance from "../utilities/axiosInstance.ts";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 
 function UserDetailsEdit(): JSX.Element {
   const userContext = useContext(UserContext);

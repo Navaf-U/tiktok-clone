@@ -3,7 +3,7 @@ import NavBar from "@/components/NavBar";
 import VideoCard from "@/components/shared/VideoCard";
 import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
-import axiosInstance from "@/utilities/axiosInstance";
+import axiosInstance from "@/utilities/axiosInstance.ts";
 import { UserContext } from "@/context/UserProvider";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";

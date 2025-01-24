@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { UserContext } from "@/context/UserProvider";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
-import axiosInstance from "@/utilities/axiosInstance";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
+import axiosInstance from "@/utilities/axiosInstance.ts";
 import { useContext, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";

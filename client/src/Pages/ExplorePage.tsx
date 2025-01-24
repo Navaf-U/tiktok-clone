@@ -6,7 +6,7 @@ import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 
 interface Post {
   _id: string;

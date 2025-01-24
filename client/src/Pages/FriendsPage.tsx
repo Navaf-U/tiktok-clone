@@ -5,11 +5,11 @@ import HomeSidebar from "@/components/sidebars/HomeSideBar";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 import { Button } from "@/components/ui/button";
 import { UserContext } from "@/context/UserProvider";
-import axiosInstance from "@/utilities/axiosInstance";
+import axiosInstance from "@/utilities/axiosInstance.ts";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdCheckCircle } from "react-icons/md";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 
 interface User {
   _id: string;
