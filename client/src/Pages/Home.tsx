@@ -10,8 +10,8 @@ import {
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
 import VideoPostIcons from "@/components/shared/VideoPostIcons";
-import axiosInstance from "@/utilities/axiosInstance";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosInstance from "@/utilities/axiosInstance.ts";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 import { IoVolumeHigh } from "react-icons/io5";
 import { HiSpeakerXMark } from "react-icons/hi2";
 import { BsMusicNoteBeamed } from "react-icons/bs";
@@ -199,18 +199,18 @@ function Home(): JSX.Element {
   return (
     <div className="h-screen overflow-hidden">
       <NavBar />
-      <div className="flex">
+      <div className="flex pt-7">
         <div className="w-1/5 hidden md:block">
           <HomeSidebar />
         </div>
         <div className="fixed z-30 bottom-[-1px] w-full md:hidden">
           <MobileBottomBar />
         </div>
-        <div className="flex-grow pt-4">
+        <div className="flex-grow ">
           <div className="flex flex-col justify-center items-center overflow-hidden h-screen relative">
             {activePost && (
-              <div className="w-auto md:h-[500px] h-[86%] max-w-[800px] ml-[-200px] mt-5 absolute flex justify-center items-center transition-opacity duration-300">
-                <div className="relative ms-[69px] mt-[-57px] h-full md:mt-0 md:ms-0 left-[66px] md:left-0 w-[380px] md:w-[385px] max-w-[800px] md:h-[530px] flex justify-center items-center transition-opacity duration-300">
+              <div className="w-auto md:h-screen h-[86%] max-w-[800px] ml-[-200px]  absolute flex justify-center items-center transition-opacity duration-300 ">
+                <div className="relative ms-[69px] mt-[-57px] h-full   md:mt-0 md:h-[90%] left-[66px] md:left-0 w-[380px] md:w-[385px] max-w-[800px] md: flex justify-center items-center  transition-opacity duration-300">
                   <video
                     ref={videoRefs.current}
                     className="w-full h-full object-cover rounded-md"

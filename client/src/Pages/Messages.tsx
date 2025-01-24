@@ -1,5 +1,5 @@
 import NavBar from "@/components/NavBar";
-import axiosErrorManager from "@/utilities/axiosErrorManager";
+import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 // import { useContext } from "react";
@@ -7,7 +7,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TiArrowLeft } from "react-icons/ti";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import UserProfilePicture from "@/components/shared/UserProfilePicture";
-import axiosInstance from "@/utilities/axiosInstance";
+import axiosInstance from "@/utilities/axiosInstance.ts";
 // import { UserContext } from "@/context/UserProvider";
 import { socket } from "@/hooks/useConnectSocket";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
@@ -159,7 +159,7 @@ function Messages(): JSX.Element {
           />
         </div>
 
-        <div className="w-[150px] md:w-[300px] ms-[-12px] mb-14 md:h-[530px] rounded-md bg-[#262626] overflow-hidden">
+        <div className="w-[80px] md:w-[300px] ms-[-12px] mb-14 md:h-[530px] rounded-md bg-[#262626] overflow-hidden">
           <div className="flex mx-5 mt-2 justify-between items-center">
             <p className="font-semibold text-[23px] text-white hidden md:flex">Messages</p>
             <IoSettingsOutline
@@ -178,7 +178,7 @@ function Messages(): JSX.Element {
               >
                 <UserProfilePicture
                   profile={conv.profile}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="md:w-12 md:h-12 w-10 h-7 rounded-full object-cover"
                 />
                 <div className="ml-3 flex-1 min-w-0">
                   <p className="text-white hidden md:flex font-medium">{conv.username}</p>
@@ -199,7 +199,7 @@ function Messages(): JSX.Element {
           {user ? (
             <>
               <div className="p-4 border-b border-[#363636]">
-                <div className="flex items-center">
+                <div className="flex items-center" onClick={() => navigate(`/profile/${user.username}`)}>
                   <UserProfilePicture
                     profile={user.profile}
                     className="w-10 h-10 rounded-full object-cover"
@@ -207,7 +207,7 @@ function Messages(): JSX.Element {
                   <p className="ml-3 text-white font-medium">{user.username}</p>
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto p-4 mb-5 custom-scrollbar">
+              <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                 <div className="flex flex-col space-y-4">
                   {messages.map((msg) => (
                     <div
@@ -225,7 +225,7 @@ function Messages(): JSX.Element {
                             : "bg-[#363636] text-white"
                         }`}
                       >
-                        {msg.message} zz
+                        {msg.message}
                       </div>
                     </div>
                   ))}
