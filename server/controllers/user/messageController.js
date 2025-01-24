@@ -48,8 +48,6 @@ const getConversations = async (req, res) => {
           },
         },
       ]);
-
-      console.log(conversations)
   
       res.json(conversations);
     } catch (err) {

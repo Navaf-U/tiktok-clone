@@ -19,8 +19,6 @@ export const io = new Server(server, {
   }
 });
 
-
-
 setupSocket(io); 
 app.use(cookieParser());  
 
