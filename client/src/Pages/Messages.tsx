@@ -76,6 +76,38 @@ function Messages(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    socket.on("newMessage", (data: Message) => {
+      console.log(data);
+      if (!conversations.some((conv) => conv.userId === data.senderId._id)) {
+        const newConversation: Conversation = {
+          _id: data.senderId._id,
+          lastMessage: { message: data.message },
+          username: data.senderId.username,
+          profile:  "",
+          userId: data.senderId._id,
+        };
+
+        setConversations((prev) => [...prev, newConversation]);
+
+        if (!username) {
+          setSearchParams({ u: data.senderId.username });
+        }
+      }
+      if (
+        data.senderId.username === username ||
+        (user && data.senderId._id === user._id)
+      ) {
+        setMessages((prev) => [...prev, data]);
+        scrollToBottom();
+      }
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [username, user, conversations]);
+
+  useEffect(() => {
     const fetchUser = async () => {
       if (!username) return setUser(null);
       try {
@@ -127,17 +159,6 @@ function Messages(): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    socket.on("newMessage", (data: Message) => {
-      if (data.senderId.username === username) {
-        setMessages((prev) => [...prev, data]);
-        scrollToBottom();
-      }
-    });
-    return () => {
-      socket.off("newMessage");
-    };
-  }, [username]);
   const selectConversation = (username: string) => {
     setSearchParams({ u: username });
   };
@@ -161,7 +182,9 @@ function Messages(): JSX.Element {
 
         <div className="w-[80px] md:w-[300px] ms-[-12px] mb-14 md:h-[530px] rounded-md bg-[#262626] overflow-hidden">
           <div className="flex mx-5 mt-2 justify-between items-center">
-            <p className="font-semibold text-[23px] text-white hidden md:flex">Messages</p>
+            <p className="font-semibold text-[23px] text-white hidden md:flex">
+              Messages
+            </p>
             <IoSettingsOutline
               className="mt-1 text-white cursor-pointer hover:text-gray-300 hidden md:flex"
               size={25}
@@ -181,7 +204,9 @@ function Messages(): JSX.Element {
                   className="md:w-12 md:h-12 w-10 h-7 rounded-full object-cover"
                 />
                 <div className="ml-3 flex-1 min-w-0">
-                  <p className="text-white hidden md:flex font-medium">{conv.username}</p>
+                  <p className="text-white hidden md:flex font-medium">
+                    {conv.username}
+                  </p>
                   {conv.lastMessage && (
                     <p className="text-gray-400 hidden md:flex text-sm truncate">
                       {typeof conv.lastMessage === "string"
@@ -199,7 +224,10 @@ function Messages(): JSX.Element {
           {user ? (
             <>
               <div className="p-4 border-b border-[#363636]">
-                <div className="flex items-center" onClick={() => navigate(`/profile/${user.username}`)}>
+                <div
+                  className="flex items-center"
+                  onClick={() => navigate(`/profile/${user.username}`)}
+                >
                   <UserProfilePicture
                     profile={user.profile}
                     className="w-10 h-10 rounded-full object-cover"
@@ -249,8 +277,15 @@ function Messages(): JSX.Element {
                   >
                     Send
                   </button>
-                  <button onClick={sendMessage} disabled={!message.trim()} className="md:hidden">
-                  <PiPaperPlaneTiltFill  color={message.trim() ? "#ff2b56" : "white"} size={25}/>
+                  <button
+                    onClick={sendMessage}
+                    disabled={!message.trim()}
+                    className="md:hidden"
+                  >
+                    <PiPaperPlaneTiltFill
+                      color={message.trim() ? "#ff2b56" : "white"}
+                      size={25}
+                    />
                   </button>
                 </div>
               </div>
