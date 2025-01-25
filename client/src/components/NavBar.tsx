@@ -13,6 +13,7 @@ import { FaTiktok } from "react-icons/fa";
 import { GoQuestion } from "react-icons/go";
 import { MdOutlineDarkMode } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
+import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import tiktokFullPng from "../assets/tiktok-full-icon.png";
 import tiktokIconPng from "../assets/tiktok-icon.png";
 import Login from "../modal/Login";
@@ -133,6 +134,7 @@ function NavBar(): JSX.Element {
             >
               <FaPlus /> Upload
             </Button>
+            <PiPaperPlaneTiltFill onClick={() => navigate("/user/messages")} size={25} className="text-[#c9c9c9] cursor-pointer "/>
             <div className="cursor-pointer">
               <div className="bg-red-600  absolute top-2 right-16 rounded-md md:w-[1.5%] w-[3%] h-[15px] flex justify-center items-center text-[11px]">0</div>
             <BiMessageMinus className="text-[#c9c9c9]" size={25} />
