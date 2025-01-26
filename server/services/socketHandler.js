@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import Notification from "../models/notificationSchema.js";
 import Message from "../models/messageSchema.js";
+import User from '../models/userSchema.js'
 export const users = new Map();
 const setupSocket = (io) => {
   io.use((socket, next) => {
@@ -31,42 +32,60 @@ const setupSocket = (io) => {
       }
     });
 
-    socket.on("sendMessage", async (data) => {
+    socket.on('sendMessage', async (data) => {
       try {
+        const sender = await User.findById(socket.user.id, 'username profile');
         const message = await Message.create({
           sender: socket.user.id,
           receiver: data.receiverId,
           message: data.content,
         });
-         const notification = await Notification.create({
+         
+        const notification = await Notification.create({
           receiver: data.receiverId,
           sender: socket.user.id,
           type: "message"
         });
-  
+     
         if (users.has(data.receiverId)) {
           io.to(users.get(data.receiverId)).emit("receiveMessage", message);
-          io.to(users.get(data.receiverId)).emit("newNotification", notification);
+          io.to(users.get(data.receiverId)).emit("newNotification", {
+            ...notification.toObject(),
+            sender: {
+              _id: sender._id,
+              username: sender.username,
+              profile: sender.profile
+            }
+          });
         }
       } catch (error) {
         console.log("Error in sendMessage:", error);
       }
     });
-
-    socket.on("follow",async(data)=>{
+    
+    socket.on('follow', async (data) => {
       try {
+        const sender = await User.findById(socket.user.id, 'username profile');
         const notification = await Notification.create({
-          receiver : data.receiverId,
-          sender : socket.user.id,
-          type : "follow"
-        })
-        if(users.has(data.receiverId)){
-          io.to(users.get(data.receiverId)).emit("newNotification",notification);
+          receiver: data.receiverId,
+          sender: socket.user.id,
+          type: "follow"
+        });
+    
+        if (users.has(data.receiverId)) {
+          io.to(users.get(data.receiverId)).emit("newNotification", {
+            ...notification.toObject(),
+            sender: {
+              _id: sender._id,
+              username: sender.username,
+              profile: sender.profile
+            }
+          });
         }
       } catch (error) {
         console.log("Error in follow notification:", error);
       }
-    })
+    });
 
   });
 };

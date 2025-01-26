@@ -7,6 +7,7 @@ import { uploadToCloudinary } from "../middlewares/fileUpload.js";
 import { getAllPosts, getAllPostsForExplore, getAllPostsOfUser, getCommentOfPost, getSinglePostOfUser, getUserFavorites, getUserLikes, postComment, postFavorite, postLike, randomSinglePost, removeComment, removeFavorite, removeLike, userDeleteVideo, userVideoDescription, userVideoPost } from "../controllers/user/postsController.js";
 import { followingUserPosts, getFollowersAndFollowing, isFollowing, unfollowedUsers, userFollow, userUnfollow } from "../controllers/user/followController.js";
 import { getConversations, getMessages, sendMessage } from "../controllers/user/messageController.js";
+import { getNotifications, getUnreadCount, markAsRead } from "../controllers/user/notificationController.js";
 const Router = express.Router();
 Router
 
@@ -58,5 +59,11 @@ Router
 
 //user account delete
 .delete("/delete/account",verifyToken,tryCatch(userAccountDelete))
+
+
+//notification routes
+.get('/notifications', verifyToken, tryCatch(getNotifications))
+.get('/notifications/unread-count', verifyToken, tryCatch(getUnreadCount))
+.patch('/notifications/mark-read', verifyToken, tryCatch(markAsRead))
 
 export default Router;
