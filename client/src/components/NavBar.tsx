@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BiMessageMinus } from "react-icons/bi";
@@ -23,6 +24,8 @@ import UserProfilePicture from "./shared/UserProfilePicture";
 import axios from "axios";
 import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 import { LiaUserFriendsSolid } from "react-icons/lia";
+import { useNotifications } from "@/context/NotificationProvider";
+import NotificationShow from "@/modal/NotificationShow";
 
 interface User {
   _id: string;
@@ -39,6 +42,9 @@ function NavBar(): JSX.Element {
   if (!userContext) {
     throw new Error("UserContext is not available");
   }
+  const [showNotifications, setShowNotifications] = useState(false);
+  const { unreadCount, notifications } = useNotifications();
+
   const {
     currUser,
     showModal,
@@ -81,13 +87,15 @@ function NavBar(): JSX.Element {
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
-
   const searchUsers = async (query: string): Promise<void> => {
     setIsLoading(true);
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/search`, {
-        params: { query },
-      });
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/user/search`,
+        {
+          params: { query },
+        }
+      );
       setSearchResults(data);
     } catch (error) {
       console.error(axiosErrorManager(error));
@@ -108,7 +116,11 @@ function NavBar(): JSX.Element {
     <div className="fixed z-20 bg-[#121212] w-full h-[58px] flex justify-center items-center top-0 border-b border-b-[#ffffff18]">
       <div className="flex items-center w-full justify-between my-2  lg:my-0 px-4">
         <Link to="/">
-          <img src={tiktokFullPng} className="w-28 hidden md:flex h-[32px]" alt="" />
+          <img
+            src={tiktokFullPng}
+            className="w-28 hidden md:flex h-[32px]"
+            alt=""
+          />
         </Link>
         <Link to="/">
           <img src={tiktokIconPng} className="w-12 md:hidden h-[35px]" alt="" />
@@ -134,10 +146,22 @@ function NavBar(): JSX.Element {
             >
               <FaPlus /> Upload
             </Button>
-            <PiPaperPlaneTiltFill onClick={() => navigate("/user/messages")} size={25} className="text-[#c9c9c9] cursor-pointer "/>
+            <PiPaperPlaneTiltFill
+              onClick={() => navigate("/user/messages")}
+              size={25}
+              className="text-[#c9c9c9] cursor-pointer "
+            />
             <div className="cursor-pointer">
-              <div className="bg-red-600  absolute top-2 right-16 rounded-md md:w-[1.5%] w-[3%] h-[15px] flex justify-center items-center text-[11px]">0</div>
-            <BiMessageMinus className="text-[#c9c9c9]" size={25} />
+              <div className="bg-red-600  absolute top-2 right-16 rounded-md md:w-[1.5%] w-[3%] h-[15px] flex justify-center items-center text-[11px]">
+                {unreadCount}
+              </div>
+              <div
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="cursor-pointer relative"
+              >
+                {" "}
+              <BiMessageMinus className="text-[#c9c9c9]" size={25} />
+              </div>
             </div>
             <div
               onMouseEnter={handleMouseEnter}
@@ -167,7 +191,7 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className="absolute top-[60px] md:left-[34.5%] md:right-[45%] right-[28%]  w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+        <div className="absolute top-[55px] md:left-[32.5%] md:right-[45%] right-[35%]  w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
           {searchResults.map((user) => (
             <div
               key={user._id}
@@ -234,6 +258,12 @@ function NavBar(): JSX.Element {
             <p className="text-white ml-4 font-semibold">Log out</p>
           </button>
         </div>
+      )}
+      {showNotifications && (
+        <NotificationShow
+          notifications={notifications}
+          onClose={() => setShowNotifications(false)}
+        />
       )}
     </div>
   );
