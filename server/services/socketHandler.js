@@ -52,6 +52,22 @@ const setupSocket = (io) => {
         console.log("Error in sendMessage:", error);
       }
     });
+
+    socket.on("follow",async(data)=>{
+      try {
+        const notification = await Notification.create({
+          receiver : data.receiverId,
+          sender : socket.user.id,
+          type : "follow"
+        })
+        if(users.has(data.receiverId)){
+          io.to(users.get(data.receiverId)).emit("newNotification",notification);
+        }
+      } catch (error) {
+        console.log("Error in follow notification:", error);
+      }
+    })
+
   });
 };
 

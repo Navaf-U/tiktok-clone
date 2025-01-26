@@ -2,6 +2,11 @@ import User from "../../models/userSchema.js";
 import Follows from "../../models/followsSchema.js";
 import mongoose from "mongoose";
 import Posts from "../../models/postsSchema.js";
+import CustomError from "../../util/CustomError.js";
+import Notification from "../../models/notificationSchema.js";
+import { io } from "../../index.js";
+import { users } from "../../services/socketHandler.js";
+
 const userFollow = async (req, res, next) => {
   const { userIdToFollow } = req.body;
   const { id: userID } = req.user;
@@ -18,9 +23,17 @@ const userFollow = async (req, res, next) => {
   if (existingFollow) {
     return res.status(400).json({ message: "Already following this user." });
   }
-
   const follow = new Follows({ follower: userID, following: userIdToFollow });
   await follow.save();
+  const follower = await User.findById(userID, "username profile fullname");
+  const notification = await Notification.create({
+    receiver: userIdToFollow,
+    sender: req.user.id,
+    type: "follow"
+})
+if(users[userIdToFollow]){
+    io.to(users[userIdToFollow]).emit("newNotification", {...notification._doc ,sender:{username:follower.username,profile:follower.profile,fullname:follower.fullname}});
+}
   res.status(200).json({ message: "Followed successfully!" });
 };
 
