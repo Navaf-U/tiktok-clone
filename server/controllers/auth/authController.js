@@ -59,6 +59,12 @@ const loginUser = async (req, res, next) => {
 };
 
 
+const userLogout = async (req, res, next) => {
+  res.clearCookie("refreshToken");
+  res.json({ message: "Logout successful" });
+};
+
+
 const refreshingToken = async (req, res, next) => {
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
@@ -72,4 +78,4 @@ const refreshingToken = async (req, res, next) => {
     });
 };
 
-export { registerUser, loginUser, refreshingToken };
+export { registerUser, loginUser, refreshingToken,userLogout };
