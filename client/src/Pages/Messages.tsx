@@ -173,7 +173,6 @@ function Messages(): JSX.Element {
     setSearchParams({ u: username });
   };
 
-  console.log(conversations);
 
   return (
     <div className="min-h-screen  md:mb-0 bg-black">

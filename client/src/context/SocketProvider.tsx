@@ -1,5 +1,4 @@
 /* eslint-disable react-refresh/only-export-components */
-// context/SocketProvider.tsx
 import React, { createContext, useContext, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { UserContext } from "@/context/UserProvider";
@@ -16,6 +15,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const userContext = useContext(UserContext);
   const currUser = userContext ? userContext.currUser : null;
   const socketRef = useRef<Socket | null>(null);
+  
 
   useEffect(() => {
     if (!currUser) return;

@@ -19,7 +19,8 @@ import { UserContext } from "@/context/UserProvider";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { BsThreeDots } from "react-icons/bs";
-import { getSocket } from "@/components/shared/socket";
+import { useSocketContext } from "@/context/SocketProvider";
+// import { getSocket } from "@/components/shared/socket";
 function SingleVideoPage(): JSX.Element {
   interface Post {
     _id: string;
@@ -63,6 +64,7 @@ function SingleVideoPage(): JSX.Element {
   const currUser = userContext?.currUser;
   const setPosts = userContext?.setPosts;
   const { setShowModal, setModalType } = userContext || {};
+  const { socket } = useSocketContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -140,8 +142,8 @@ function SingleVideoPage(): JSX.Element {
       }
 
       if (!isLiked) {
-        const socket = getSocket();
-        socket.emit('like', {
+        
+        socket?.emit('like', {
           receiverId: user?._id,
           postId: singlePost._id
         });
@@ -185,8 +187,6 @@ function SingleVideoPage(): JSX.Element {
     }
   };
   
-  
-
   useEffect(() => {
     const getCommentsOfPost = async () => {
       try {
@@ -213,8 +213,7 @@ function SingleVideoPage(): JSX.Element {
       });
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       setComment("");
-      const socket = getSocket();
-      socket.emit('comment', {
+      socket?.emit('comment', {
         receiverId: user?._id,
         postId: id
       });

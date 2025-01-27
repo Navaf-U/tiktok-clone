@@ -97,8 +97,6 @@ function UserProfile(): JSX.Element {
   const isCurrUser = currUser?.username === username;
 
 
-  
-
   useEffect(() => {
     const newSocket = io(import.meta.env.VITE_API_URL, {
       auth: {
