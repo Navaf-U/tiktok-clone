@@ -4,7 +4,7 @@ import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axiosInstance from "@/utilities/axiosInstance.ts";
 interface User {
   _id: string;
   email: string;
@@ -138,9 +138,12 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     }
   };
 
-  const logoutUser: () => void = () => {
+  const logoutUser: () => void = async() => {
+
     const confirm = window.confirm("Are you sure you want to logout?");
     if (confirm) {
+      const {data} = await axiosInstance.post("/auth/logout");
+      console.log(data)
       localStorage.removeItem("token");
       localStorage.removeItem("currUser");
       setCurrUser(null);

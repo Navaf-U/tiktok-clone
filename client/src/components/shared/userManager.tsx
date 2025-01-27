@@ -1,3 +1,5 @@
+import axiosInstance from "@/utilities/axiosInstance";
+
 type UserUpdater = (user: null) => void;
 
 const userManager = (() => {
@@ -7,12 +9,13 @@ const userManager = (() => {
     setCurrUser = updater;
   };
 
-  const clearUser = () => {
+  const clearUser = async () => {
     if (setCurrUser) {
       setCurrUser(null);
     }
     localStorage.removeItem("token");
     localStorage.removeItem("currUser");
+    await axiosInstance.post("/auth/logout");
   };
 
   return {
