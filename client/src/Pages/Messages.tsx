@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import axiosInstance from "@/utilities/axiosInstance.ts";
 // import { UserContext } from "@/context/UserProvider";
-import { socket } from "@/hooks/useConnectSocket";
+import { getSocket } from "@/components/shared/socket.ts";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 
@@ -66,33 +66,43 @@ function Messages(): JSX.Element {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const { data } = await axiosInstance.get("/user/messages");
+        const { data } = await axiosInstance.get<Conversation[]>("/user/messages");
         setConversations(data);
       } catch (error) {
         console.error(axiosErrorManager(error));
       }
     };
+
     fetchConversations();
   }, []);
 
   useEffect(() => {
+    const socket = getSocket();
+
     socket.on("newMessage", (data: Message) => {
-      console.log(data);
-      if (!conversations.some((conv) => conv.userId === data.senderId._id)) {
+      const existingConversation = conversations.find(
+        (conv) => conv.userId === data.senderId._id
+      );
+
+      if (!existingConversation) {
         const newConversation: Conversation = {
           _id: data.senderId._id,
           lastMessage: { message: data.message },
           username: data.senderId.username,
-          profile:  "",
+          profile: "",
           userId: data.senderId._id,
         };
-
         setConversations((prev) => [...prev, newConversation]);
-
-        if (!username) {
-          setSearchParams({ u: data.senderId.username });
-        }
+      } else {
+        setConversations((prev) =>
+          prev.map((conv) =>
+            conv.userId === data.senderId._id
+              ? { ...conv, lastMessage: { message: data.message } }
+              : conv
+          )
+        );
       }
+
       if (
         data.senderId.username === username ||
         (user && data.senderId._id === user._id)
@@ -120,7 +130,7 @@ function Messages(): JSX.Element {
       }
     };
     fetchUser();
-  }, [username]);
+  }, [username, user?._id]);
 
   useEffect(() => {
     const fetchMessages = async () => {

@@ -265,6 +265,8 @@ function Home(): JSX.Element {
                       className="mt-20 md:mt-0 w-10 h-10 me-[9.5px] md:me-0 object-cover rounded-full"
                     />
                   </div>
+
+                  <div className="mb-[15px]">
                   <VideoPostIcons
                     _id={activePost._id}
                     small={false}
@@ -278,6 +280,7 @@ function Home(): JSX.Element {
                       currUser?._id ?? ""
                     )}
                   />
+                  </div>
                 </div>
               </div>
             )}

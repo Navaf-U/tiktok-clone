@@ -19,6 +19,7 @@ import { UserContext } from "@/context/UserProvider";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { BsThreeDots } from "react-icons/bs";
+import { getSocket } from "@/components/shared/socket";
 function SingleVideoPage(): JSX.Element {
   interface Post {
     _id: string;
@@ -137,6 +138,16 @@ function SingleVideoPage(): JSX.Element {
           })
         );
       }
+
+      if (!isLiked) {
+        const socket = getSocket();
+        socket.emit('like', {
+          receiverId: singlePost.username,
+          postId: singlePost._id
+        });
+      }
+
+      
     } catch (error) {
       console.error(axiosErrorManager(error));
     }
@@ -202,6 +213,11 @@ function SingleVideoPage(): JSX.Element {
       });
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       setComment("");
+      const socket = getSocket();
+      socket.emit('comment', {
+        receiverId: singlePost?.username,
+        postId: id
+      });
     } catch (error) {
       console.error(axiosErrorManager(error));
     }
