@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useContext, useEffect } from "react";
-import io from "socket.io-client";
 import { UserContext } from "./UserProvider";
 import axiosInstance from "@/utilities/axiosInstance";
 import axiosErrorManager from "@/utilities/axiosErrorManager";
+import { getSocket } from "@/components/shared/socket";
 
 interface Notification {
   _id: string;
@@ -38,17 +38,9 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (!userContext?.currUser) return;
   
-    const socket = io(import.meta.env.VITE_API_URL, {
-      auth: {
-        token: localStorage.getItem("token"),
-      },
-      transports: ["websocket"],
-    });
-  
-    socket.on("connect", () => {
-      socket.emit("join", { userId: userContext.currUser?._id });
-      console.log("Socket connected");
-    });
+    const socket = getSocket();
+    
+    socket.emit("join", { userId: userContext.currUser?._id });
   
     socket.on("newNotification", (newNotification: Notification) => {
       console.log("New notification received:", newNotification);
@@ -56,15 +48,27 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       setUnreadCount((prev) => prev + 1);
     });
   
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
-    });
-  
     return () => {
-      socket.disconnect();
+      socket.off("newNotification");
     };
-  }, [userContext?.currUser, setNotifications, setUnreadCount]);
+  }, [userContext?.currUser]);
   
+useEffect(() => {
+  if (!userContext?.currUser) return;
+
+  const socket = getSocket();
+
+  socket.on("newNotification", (newNotification) => {
+    console.log("New notification:", newNotification);
+    setNotifications((prev) => [newNotification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  });
+
+  return () => {
+    socket.off("newNotification");
+  };
+}, [userContext?.currUser]);
+
 
   const fetchNotifications = async () => {
     try {
