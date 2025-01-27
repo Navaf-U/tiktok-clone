@@ -87,6 +87,56 @@ const setupSocket = (io) => {
       }
     });
 
+    socket.on("like", async (data) => {
+      try {
+        const sender = await User.findById(socket.user.id, "username profile");
+        const notification = await Notification.create({
+          receiver: data.receiverId,
+          sender: socket.user.id,
+          type: "like",
+          media: data.postId || "null",
+        });
+    
+        if (users.has(data.receiverId)) {
+          io.to(users.get(data.receiverId)).emit("newNotification", {
+            ...notification.toObject(),
+            sender: {
+              id: sender.id,
+              username: sender.username,
+              profile: sender.profile,
+            },
+          });
+        }
+      } catch (error) {
+        console.log("Error in like notification:", error);
+      }
+    });
+
+    socket.on("comment", async (data) => {
+      try {
+        const sender = await User.findById(socket.user.id, "username profile");
+        const notification = await Notification.create({
+          receiver: data.receiverId,
+          sender: socket.user.id,
+          type: "comment",
+          media: data.postId || "null",
+        });
+    
+        if (users.has(data.receiverId)) {
+          io.to(users.get(data.receiverId)).emit("newNotification", {
+            ...notification.toObject(),
+            sender: {
+              id: sender.id,
+              username: sender.username,
+              profile: sender.profile,
+            },
+          });
+        }
+      } catch (error) {
+        console.log("Error in comment notification:", error);
+      }
+    });
+    
   });
 };
 

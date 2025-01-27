@@ -112,13 +112,14 @@ const postComment = async (req, res, next) => {
   if (!user) {
     return next(new CustomError("User not found", 404));
   }
+
   const newComment = {
     user,
     text,
   };
   post.comments.push(newComment);
   await post.save();
-
+  
   const updatedPost = await Posts.findById(postID).populate(
     "comments.user",
     "username profile"
