@@ -142,7 +142,7 @@ function SingleVideoPage(): JSX.Element {
       if (!isLiked) {
         const socket = getSocket();
         socket.emit('like', {
-          receiverId: singlePost.username,
+          receiverId: user?._id,
           postId: singlePost._id
         });
       }
@@ -215,7 +215,7 @@ function SingleVideoPage(): JSX.Element {
       setComment("");
       const socket = getSocket();
       socket.emit('comment', {
-        receiverId: singlePost?.username,
+        receiverId: user?._id,
         postId: id
       });
     } catch (error) {
