@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BiMessageMinus } from "react-icons/bi";
@@ -71,9 +70,21 @@ function NavBar(): JSX.Element {
     setHideTimeout(timeout);
   };
 
-  const handleLogout: () => void = () => {
+  const handleLogout = () => {
     setShowDropdown(false);
     logoutUser();
+  };
+
+  const handleNavigateToMessages = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    navigate("/user/messages");
+  };
+
+  const handleNotificationClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setShowNotifications(!showNotifications);
   };
 
   useEffect(() => {
@@ -107,6 +118,7 @@ function NavBar(): JSX.Element {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
   };
+
   const handleUserClick = (username: string) => {
     navigate(`/profile/${username}`);
     setSearchResults([]);
@@ -114,7 +126,7 @@ function NavBar(): JSX.Element {
 
   return (
     <div className="fixed z-20 bg-[#121212] w-full h-[58px] flex justify-center items-center top-0 border-b border-b-[#ffffff18]">
-      <div className="flex items-center w-full justify-between my-2  lg:my-0 px-4">
+      <div className="flex items-center w-full justify-between my-2 lg:my-0 px-4">
         <Link to="/">
           <img
             src={tiktokFullPng}
@@ -130,11 +142,11 @@ function NavBar(): JSX.Element {
             type="text"
             placeholder="Search"
             onChange={handleSearchChange}
-            className="rounded-full h-[35px] me-10 md:me:0 sm:inline sm:h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-[80%] lg:w-[90%]  border-0"
+            className="rounded-full h-[35px] me-10 md:me:0 sm:inline sm:h-[45px] text-[#c9c9c9] placeholder:text-[#c9c9c9] placeholder:text-[16px] font-medium bg-[#2e2e2e] w-[80%] lg:w-[90%] border-0"
           />
           <CiSearch
             size={30}
-            className="text-[#757575] hidden md:inline p-1   absolute top-2 right-16"
+            className="text-[#757575] hidden md:inline p-1 absolute top-2 right-16"
           />
         </div>
         {currUser ? (
@@ -146,27 +158,30 @@ function NavBar(): JSX.Element {
             >
               <FaPlus /> Upload
             </Button>
-            <PiPaperPlaneTiltFill
-              onClick={() => navigate("/user/messages")}
-              size={25}
-              className="text-[#c9c9c9] cursor-pointer "
-            />
-            <div className="cursor-pointer">
-              <div className="bg-red-600  absolute top-2 right-16 rounded-md md:w-[1.5%] w-[3%] h-[15px] flex justify-center items-center text-[11px]">
+            <button
+              onClick={handleNavigateToMessages}
+              className="p-2 hover:bg-[#2e2e2e] rounded-full"
+            >
+              <PiPaperPlaneTiltFill
+                size={25}
+                className="text-[#c9c9c9] cursor-pointer"
+              />
+            </button>
+            <div className="relative">
+              <div className="bg-red-600 absolute -top-2 -right-2 rounded-md px-1.5 min-w-[20px] h-[20px] flex justify-center items-center text-[11px] text-white">
                 {unreadCount}
               </div>
-              <div
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="cursor-pointer relative"
+              <button
+                onClick={handleNotificationClick}
+                className="p-2 hover:bg-[#2e2e2e] rounded-full"
               >
-                {" "}
-              <BiMessageMinus className="text-[#c9c9c9]" size={25} />
-              </div>
+                <BiMessageMinus className="text-[#c9c9c9]" size={25} />
+              </button>
             </div>
             <div
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              className="w-[40px] h-[40px] flex items-center rounded-full overflow-hidden"
+              className="w-[40px] h-[40px] flex items-center rounded-full overflow-hidden cursor-pointer"
             >
               <UserProfilePicture
                 profile={currUser?.profile}
@@ -191,7 +206,7 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className="absolute top-[55px] md:left-[32.5%] md:right-[45%] right-[35%]  w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+        <div className="absolute top-[55px] md:left-[32.5%] md:right-[45%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
           {searchResults.map((user) => (
             <div
               key={user._id}
@@ -216,7 +231,7 @@ function NavBar(): JSX.Element {
         <div
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[214px] h-[345px] rounded-md"
+          className="absolute top-[60px] right-3 bg-[#2e2e2e] w-[214px] h-[345px] rounded-md z-30"
         >
           <div
             className="flex flex-col items-start py-2"
