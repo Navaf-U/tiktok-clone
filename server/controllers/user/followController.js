@@ -31,9 +31,7 @@ const userFollow = async (req, res, next) => {
     sender: req.user.id,
     type: "follow"
 })
-if(users[userIdToFollow]){
-    io.to(users[userIdToFollow]).emit("newNotification", {...notification._doc ,sender:{username:follower.username,profile:follower.profile,fullname:follower.fullname}});
-}
+
   res.status(200).json({ message: "Followed successfully!" });
 };
 
