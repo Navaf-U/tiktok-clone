@@ -2,13 +2,13 @@ import NavBar from "@/components/NavBar";
 import axiosErrorManager from "@/utilities/axiosErrorManager.ts";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-// import { useContext } from "react";
+import { useContext } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TiArrowLeft } from "react-icons/ti";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import axiosInstance from "@/utilities/axiosInstance.ts";
-// import { UserContext } from "@/context/UserProvider";
+import { UserContext } from "@/context/UserProvider";
 import { useSocketContext } from "@/context/SocketProvider";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
@@ -54,8 +54,8 @@ function Messages(): JSX.Element {
   const username = searchParams.get("u") || "";
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
-  // const userContext = useContext(UserContext);
-  // const { currUser } = userContext || {};
+  const userContext = useContext(UserContext);
+  const { currUser } = userContext || {};
   const [user, setUser] = useState<User | null>(null);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -78,7 +78,6 @@ function Messages(): JSX.Element {
   }, []);
 
   useEffect(() => {
-
     socket?.on("newMessage", (data: Message) => {
       const existingConversation = conversations.find(
         (conv) => conv.userId === data.senderId._id
@@ -119,7 +118,7 @@ function Messages(): JSX.Element {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (!username) return setUser(null);
+      if (!username ) return setUser(null);
       try {
         const { data } = await axios.get(
           `${import.meta.env.VITE_API_URL}/user/profile/${username}`
@@ -134,6 +133,7 @@ function Messages(): JSX.Element {
 
   useEffect(() => {
     const fetchMessages = async () => {
+      if(username === currUser?.username) return
       if (!user?._id) return setMessages([]);
       try {
         const { data } = await axiosInstance.get(`/user/messages/${user._id}`);
@@ -148,7 +148,7 @@ function Messages(): JSX.Element {
 
   const sendMessage = async () => {
     if (!message.trim() || !user?._id) return;
-
+    if(username === currUser?.username) return
     try {
       const { data } = await axiosInstance.post(`/user/messages/`, {
         receiverId: user._id,
@@ -173,6 +173,9 @@ function Messages(): JSX.Element {
     setSearchParams({ u: username });
   };
 
+  useEffect(() => {
+    setMessage("");
+  }, [username]);
 
   return (
     <div className="min-h-screen  md:mb-0 bg-black">
