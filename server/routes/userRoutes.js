@@ -64,6 +64,6 @@ Router
 //notification routes
 .get('/notifications', verifyToken, tryCatch(getNotifications))
 .get('/notifications/unread-count', verifyToken, tryCatch(getUnreadCount))
-.patch('/notifications/mark-read', verifyToken, tryCatch(markAsRead))
+.patch('/notifications/mark-read/:notificationId', verifyToken, tryCatch(markAsRead));
 
 export default Router;
