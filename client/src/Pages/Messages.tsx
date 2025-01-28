@@ -61,7 +61,7 @@ function Messages(): JSX.Element {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "auto" });
   };
 
   useEffect(() => {
@@ -76,6 +76,7 @@ function Messages(): JSX.Element {
 
     fetchConversations();
   }, []);
+  
 
   useEffect(() => {
     socket?.on("newMessage", (data: Message) => {
@@ -138,7 +139,9 @@ function Messages(): JSX.Element {
       try {
         const { data } = await axiosInstance.get(`/user/messages/${user._id}`);
         setMessages(data);
-        scrollToBottom();
+        if (data.length > 0) {
+          scrollToBottom(); 
+        }
       } catch (error) {
         console.error(axiosErrorManager(error));
       }
