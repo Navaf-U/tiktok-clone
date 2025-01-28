@@ -18,8 +18,7 @@ import { FaPlus } from "react-icons/fa6";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 import DeleteUserAccount from "@/modal/DeleteUserAccount";
 import PfpOnlyShow from "@/modal/PfpOnlyShow";
-import { Socket } from "socket.io-client";
-import { io } from "socket.io-client";
+import { useSocketContext } from "@/context/SocketProvider";
 interface User {
   _id: string;
   username: string;
@@ -49,6 +48,7 @@ interface Following {
 }
 
 function UserProfile(): JSX.Element {
+  const { socket, isConnected } = useSocketContext();
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext is not available");
@@ -72,7 +72,6 @@ function UserProfile(): JSX.Element {
   const [followersCount, setFollowersCount] = useState<number>(0);
   const [profileShow, setProfileShow] = useState<boolean>(false);
   const [likeCountOfUser, setlikeCountOfUser] = useState<number>(0);
-  const [socket, setSocket] = useState<Socket | null>(null);
 
 
   const [stage, setStage] = useState<"following" | "followers" | "suggested">(
@@ -95,28 +94,6 @@ function UserProfile(): JSX.Element {
   };
 
   const isCurrUser = currUser?.username === username;
-
-
-  useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_API_URL, {
-      auth: {
-        token: localStorage.getItem('token')
-      }
-    });
-
-    newSocket.on('connect', () => {
-      newSocket.emit('join');
-    });
-
-    newSocket.on('newNotification', (notification) => {
-      console.log('New Notification:', notification);
-    });
-
-    setSocket(newSocket);
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
 
   useEffect(() => {
     const FetchUser = async (): Promise<void> => {
@@ -209,10 +186,8 @@ function UserProfile(): JSX.Element {
         userIdToFollow: userId,
       });
       setIsFollowing(true);
-       if (socket) {
-        socket.emit('follow', { 
-          receiverId: userId 
-        });
+      if (socket && isConnected) {
+        socket.emit('follow', { receiverId: userId });
       }
     } catch (error) {
       console.error(axiosErrorManager(error));
