@@ -10,13 +10,13 @@ import { SocketProvider } from "./context/SocketProvider.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-        <UserProvider>
+      <UserProvider>
+        <SocketProvider>
           <NotificationProvider>
-      <SocketProvider>
             <App />
-      </SocketProvider>
           </NotificationProvider>
-        </UserProvider>
+        </SocketProvider>
+      </UserProvider>
     </BrowserRouter>
   </StrictMode>
 );

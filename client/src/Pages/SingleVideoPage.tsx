@@ -142,10 +142,10 @@ function SingleVideoPage(): JSX.Element {
       }
 
       if (!isLiked) {
-        
-        socket?.emit('like', {
-          receiverId: user?._id,
-          postId: singlePost._id
+        const receiverId = user?._id;
+        socket?.emit("like", {
+          receiverId,
+          postId: singlePost._id,
         });
       }
 
@@ -213,9 +213,10 @@ function SingleVideoPage(): JSX.Element {
       });
       setSinglePost((prev) => (prev ? { ...prev, comments: data } : null));
       setComment("");
-      socket?.emit('comment', {
-        receiverId: user?._id,
-        postId: id
+      const receiverId = user?._id;
+      socket?.emit("comment", {
+        receiverId,
+        postId: id,
       });
     } catch (error) {
       console.error(axiosErrorManager(error));

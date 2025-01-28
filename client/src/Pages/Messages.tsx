@@ -9,7 +9,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import UserProfilePicture from "@/components/shared/UserProfilePicture";
 import axiosInstance from "@/utilities/axiosInstance.ts";
 // import { UserContext } from "@/context/UserProvider";
-import { getSocket } from "@/components/shared/socket.ts";
+import { useSocketContext } from "@/context/SocketProvider";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import MobileBottomBar from "@/components/sidebars/MobileBottomBar";
 
@@ -48,6 +48,7 @@ interface Conversation {
 }
 
 function Messages(): JSX.Element {
+  const { socket } = useSocketContext();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const username = searchParams.get("u") || "";
@@ -77,9 +78,8 @@ function Messages(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    const socket = getSocket();
 
-    socket.on("newMessage", (data: Message) => {
+    socket?.on("newMessage", (data: Message) => {
       const existingConversation = conversations.find(
         (conv) => conv.userId === data.senderId._id
       );
@@ -113,9 +113,9 @@ function Messages(): JSX.Element {
     });
 
     return () => {
-      socket.off("newMessage");
+      socket?.off("newMessage");
     };
-  }, [username, user, conversations]);
+  }, [username, user, conversations, socket]);
 
   useEffect(() => {
     const fetchUser = async () => {

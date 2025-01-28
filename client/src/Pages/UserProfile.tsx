@@ -48,7 +48,7 @@ interface Following {
 }
 
 function UserProfile(): JSX.Element {
-  const { socket, isConnected } = useSocketContext();
+  const { socket } = useSocketContext();
   const userContext = useContext(UserContext);
   if (!userContext) {
     throw new Error("UserContext is not available");
@@ -95,6 +95,8 @@ function UserProfile(): JSX.Element {
 
   const isCurrUser = currUser?.username === username;
 
+
+ 
   useEffect(() => {
     const FetchUser = async (): Promise<void> => {
       try {
@@ -186,7 +188,7 @@ function UserProfile(): JSX.Element {
         userIdToFollow: userId,
       });
       setIsFollowing(true);
-      if (socket && isConnected) {
+      if (socket) {
         socket.emit('follow', { receiverId: userId });
       }
     } catch (error) {
