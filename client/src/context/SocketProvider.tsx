@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { UserContext } from "@/context/UserProvider";
@@ -37,10 +38,6 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
   }, [currUser]);
-
-  useEffect(() => {
-    console.log('Socket connected:', isConnected); // Add this for debugging
-  }, [isConnected]);
 
   return (
     <SocketContext.Provider value={{ socket, isConnected }}>

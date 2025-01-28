@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSocketContext } from "@/context/SocketProvider";
 import axiosInstance from "@/utilities/axiosInstance";
@@ -13,49 +14,68 @@ interface Notification {
 interface NotificationContextType {
   notifications: Notification[];
   unreadCount: number;
+  markNotificationAsRead: (notificationId: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { socket } = useSocketContext();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const { data } = await axiosInstance.get("/user/notifications");
-      setNotifications(data.notifications);
-      setUnreadCount(data.unreadCount);
-    };
-
-    fetchNotifications();
-
-    if (socket) {
-      socket.on("newNotification", (newNotification: Notification) => {
-        setNotifications((prev) => [newNotification, ...prev]);
-        setUnreadCount((prev) => prev + 1);
-      });
-
-      return () => {
-        socket.off("newNotification");
+  export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { socket } = useSocketContext();
+    const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+  
+    useEffect(() => {
+      const fetchNotifications = async () => {
+        const { data } = await axiosInstance.get("/user/notifications");
+        setNotifications(data.notifications);
+        setUnreadCount(data.unreadCount);
       };
-    }
-  }, [socket]);
-
-  const markAllAsRead = async () => {
-    await axiosInstance.patch("/user/notifications/mark-read");
-    setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
-    setUnreadCount(0);
+  
+      fetchNotifications();
+  
+      if (socket) {
+        socket.on("newNotification", (newNotification: Notification) => {
+          setNotifications((prev) => [newNotification, ...prev]);
+          setUnreadCount((prev) => prev + 1);
+        });
+  
+        return () => {
+          socket.off("newNotification");
+        };
+      }
+    }, [socket]);
+  
+    const markNotificationAsRead = async (notificationId: string) => {
+      try {
+        await axiosInstance.patch(`/user/notifications/mark-read/${notificationId}`);
+    
+        setNotifications((prev) => {
+          const updatedNotifications = prev.map((notification) =>
+            notification._id === notificationId ? { ...notification, read: true } : notification
+          );
+          return updatedNotifications;
+        });
+  
+        setUnreadCount((prev) => prev - 1);
+      } catch (error) {
+        console.error("Error marking notification as read:", error);
+      }
+    };
+    
+  
+    const markAllAsRead = async () => {
+      await axiosInstance.patch("/user/notifications/mark-read");
+      setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
+      setUnreadCount(0);
+    };
+  
+    return (
+      <NotificationContext.Provider value={{ notifications, unreadCount, markAllAsRead, markNotificationAsRead }}>
+        {children}
+      </NotificationContext.Provider>
+    );
   };
-
-  return (
-    <NotificationContext.Provider value={{ notifications, unreadCount, markAllAsRead }}>
-      {children}
-    </NotificationContext.Provider>
-  );
-};
 
 export const useNotifications = () => {
   const context = useContext(NotificationContext);

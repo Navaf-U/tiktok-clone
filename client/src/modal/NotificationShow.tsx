@@ -21,13 +21,11 @@ interface NotificationDropdownProps {
   onClose: () => void;
 }
 
-const NotificationShow = ({ 
-  notifications
-}: NotificationDropdownProps): JSX.Element => {
+const NotificationShow = ({ notifications }: NotificationDropdownProps): JSX.Element => {
   const { markNotificationAsRead } = useNotifications();
 
   const getNotificationMessage = (notification: Notification): string => {
-    switch(notification.type) {
+    switch (notification.type) {
       case 'follow':
         return `${notification.sender.username} started following you`;
       case 'like':
@@ -53,16 +51,16 @@ const NotificationShow = ({
       ) : (
         <div className="max-h-96 overflow-y-auto">
           {notifications.map((notification) => (
-            <div 
-              key={notification._id} 
+            <div
+              key={notification._id}
               className={`flex items-center p-4 hover:bg-[#2A2A2A] cursor-pointer ${!notification.read ? 'bg-[#2A2A2A]' : ''}`}
-              onClick={() => markNotificationAsRead(notification._id)}
+              onClick={() => markNotificationAsRead(notification._id)}  // Ensure this is correctly triggering the mark as read
             >
-              <Link to={`/profile/${notification.sender.username}`} >
-              <UserProfilePicture 
-                profile={notification.sender.profile} 
-                className="w-10 h-10 rounded-full mr-3" 
-              />
+              <Link to={`/profile/${notification.sender.username}`}>
+                <UserProfilePicture 
+                  profile={notification.sender.profile} 
+                  className="w-10 h-10 rounded-full mr-3" 
+                />
               </Link>
               <div>
                 <p className="text-white text-sm">
@@ -79,5 +77,6 @@ const NotificationShow = ({
     </div>
   );
 };
+
 
 export default NotificationShow;
