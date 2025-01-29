@@ -71,18 +71,32 @@ const socketHandler = (io) => {
       }
     };
 
-    socket.on('sendMessage', async (data) => {
+      socket.on('sendMessage', async (data) => {
       try {
+        const { receiverId, content } = data;
+        let conversation = await Message.findOne({
+          $or: [
+            { users: { $all: [socket.user.id, receiverId] } }
+          ]
+        });
+        if (!conversation) {
+          conversation = await Message.create({
+            users: [socket.user.id, receiverId],
+            messages: []
+          });
+        }
         const message = await Message.create({
           sender: socket.user.id,
-          receiver: data.receiverId,
-          message: data.content,
+          receiver: receiverId,
+          message: content,
         });
-        
-        await createAndEmitNotification(data.receiverId, "message");
-        
-        if (users.has(data.receiverId)) {
-          io.to(users.get(data.receiverId)).emit("receiveMessage", message);
+        conversation.messages.push(message._id);
+        await conversation.save();
+
+        await createAndEmitNotification(receiverId, "message");
+
+        if (users.has(receiverId)) {
+          io.to(users.get(receiverId)).emit("receiveMessage", message);
         }
       } catch (error) {
         console.log("Error in sendMessage:", error);
