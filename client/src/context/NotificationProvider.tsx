@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSocketContext } from "@/context/SocketProvider";
 import axiosInstance from "@/utilities/axiosInstance";
+import { UserContext } from "./UserProvider";
 
 interface Notification {
   _id: string;
@@ -22,6 +23,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 
   export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { socket } = useSocketContext();
+    const { currUser } = useContext(UserContext) || {};
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
   
@@ -32,7 +34,9 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
         setUnreadCount(data.unreadCount);
       };
   
-      fetchNotifications();
+      if(currUser){
+        fetchNotifications();
+      }
   
       if (socket) {
         socket.on("newNotification", (newNotification: Notification) => {
@@ -44,7 +48,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
           socket.off("newNotification");
         };
       }
-    }, [socket]);
+    }, [socket,currUser]);
   
     const markNotificationAsRead = async (notificationId: string) => {
       try {

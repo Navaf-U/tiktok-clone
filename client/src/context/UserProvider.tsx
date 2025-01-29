@@ -87,12 +87,11 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    userManager.setUserUpdater(setCurrUser); 
+    userManager.setUserUpdater(setCurrUser);
     return () => {
       userManager.setUserUpdater(() => null);
     };
   }, [currUser]);
-
 
   const LoginUser: (
     emailOrUsername: string,
@@ -114,7 +113,7 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
       navigate("/");
     } catch (err) {
       const errorMessage = axiosErrorManager(err);
-      throw new Error(errorMessage);    
+      throw new Error(errorMessage);
     }
   };
 
@@ -138,27 +137,29 @@ function UserProvider({ children }: UserProviderProps): JSX.Element {
     }
   };
 
-  const logoutUser: () => void = async() => {
-
+  const logoutUser: () => void = async () => {
     const confirm = window.confirm("Are you sure you want to logout?");
     if (confirm) {
-      const {data} = await axiosInstance.post("/auth/logout");
-      console.log(data)
-      localStorage.removeItem("token");
-      localStorage.removeItem("currUser");
-      setCurrUser(null);
-      setShowModal(false);
-      navigate("/");
+      if (currUser) {
+        await axiosInstance.post("/auth/logout");
+        localStorage.removeItem("token");
+        localStorage.removeItem("currUser");
+        setCurrUser(null);
+        setShowModal(false);
+        navigate("/");
+      }
     }
   };
 
   useEffect(() => {
     const getAllPosts = async () => {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts`);
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/user/posts`
+        );
         setPosts(data);
       } catch (error) {
-        console.error(axiosErrorManager(error))
+        console.error(axiosErrorManager(error));
       }
     };
     getAllPosts();
