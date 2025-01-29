@@ -81,7 +81,7 @@ function Messages(): JSX.Element {
   useEffect(() => {
     socket?.on("newMessage", (data: Message) => {
       const existingConversation = conversations.find(
-        (conv) => conv.userId === data.senderId._id
+        (conv) => conv._id === data?.senderId?._id
       );
 
       if (!existingConversation) {
