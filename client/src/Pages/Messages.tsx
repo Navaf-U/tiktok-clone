@@ -147,15 +147,15 @@ function Messages(): JSX.Element {
       }
     };
     fetchMessages();
-  }, [user]);
+  }, [currUser?.username, user, username]);
 
   const sendMessage = async () => {
     if (!message.trim() || !user?._id) return;
     if(username === currUser?.username) return
     try {
       const { data } = await axiosInstance.post(`/user/messages/`, {
-        receiverId: user._id,
-        message: message.trim(),
+        receiverId: user?._id,
+        message: message?.trim(),
       });
 
       setMessages((prev) => [...prev, data]);

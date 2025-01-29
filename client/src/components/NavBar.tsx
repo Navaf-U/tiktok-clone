@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BiMessageMinus } from "react-icons/bi";
@@ -168,7 +169,7 @@ function NavBar(): JSX.Element {
               />
             </button>
             <div className="relative">
-              <div className="bg-red-600 absolute -top-2 -right-2 rounded-md px-1.5 min-w-[20px] h-[20px] flex justify-center items-center text-[11px] text-white">
+              <div className="bg-red-600 absolute -top-1 -right-1 rounded-md px-1.5 min-w-[20px] h-[20px] flex justify-center items-center text-[11px] text-white">
                 {unreadCount}
               </div>
               <button
@@ -206,7 +207,7 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className="absolute top-[55px] md:left-[32.5%] md:right-[45%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10">
+        <div className={ currUser ? `absolute top-[55px] md:left-[31%] md:right-[45%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10` : `absolute top-[55px] md:left-[37.5%] md:right-[65%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10`}>
           {searchResults.map((user) => (
             <div
               key={user._id}
