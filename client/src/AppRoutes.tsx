@@ -7,6 +7,7 @@ import ExplorePage from "./Pages/ExplorePage";
 import FollowingUsersVideo from "./Pages/FollowingUsersVideo";
 import FriendsPage from "./Pages/FriendsPage";
 import Messages from "./Pages/Messages";
+import Comingsoon from "./Pages/Comingsoon";
 
 function AppRoutes() {
   return (
@@ -20,7 +21,7 @@ function AppRoutes() {
         <Route path="/following" element={<FollowingUsersVideo />} />
         <Route path="/friends" element={<FriendsPage/>} />
         <Route path="/user/messages/" element={<Messages/>}/>
-        <Route path="*" element={<HomePage />} />
+        <Route path="*" element={<Comingsoon />} />
       </Routes>
     </>
   );
