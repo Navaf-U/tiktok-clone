@@ -35,7 +35,6 @@ const socketHandler = (io) => {
     const createAndEmitNotification = async (receiverId, type, data = {}) => {
       try {
         const sender = await User.findById(socket.user.id, 'username profile');
-        
         const existingNotification = await Notification.findOne({
           receiver: receiverId,
           sender: socket.user.id,
