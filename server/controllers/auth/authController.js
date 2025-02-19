@@ -2,6 +2,8 @@ import User from "../../models/userSchema.js";
 import CustomError from "../../util/CustomError.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import generateOTP from "../../util/otpGenerator.js";
+import Otp from "../../models/otpSchema.js";
 const createToken = (id, role, expiresIn) => {
   return jwt.sign({ id, role }, process.env.JWT_TOKEN, { expiresIn });
 };
@@ -9,8 +11,32 @@ const createRefreshToken = (id, role, expiresIn) => {
   return jwt.sign({ id, role }, process.env.JWT_REFRESH_TOKEN, { expiresIn });
 };
 
+const sendOtp = async (req, res, next) => {
+  const { email, username } = req.body;
+  const existingEmail = await User.findOne({ email });
+  const existingUsername = await User.findOne({ username });
+  if (existingEmail || existingUsername) {
+    return next(new CustomError("User already exist", 400));
+  }
+  const otp = generateOTP();
+  const otpEntry = new Otp({
+    email,
+    otp,
+  });
+  await otpEntry.save();
+  const mailOptions = {
+    from: process.env.EMAIL_ID,
+    to: email,
+    subject: "OTP Verification",
+    text: `Your OTP is ${otp}`,
+  };
+  await transporter.sendMail(mailOptions);
+
+  res.status(200).json({ message: "OTP sent successfully to the email" });
+};
+
 const registerUser = async (req, res, next) => {
-  const { username, email, password, dob } = req.body;
+  const { username, email, password, dob,otp } = req.body;
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
   });
@@ -22,6 +48,13 @@ const registerUser = async (req, res, next) => {
       return next(new CustomError("Username already exists", 400));
     }
   }
+  const otpEntry = await Otp.findOne({ email, otp });
+  if (!otpEntry) {
+    Otp.deleteMany({ email });
+    return next(new CustomError("Invalid OTP", 400));
+  }
+  Otp.deleteMany({ email });
+
   const hashPassword = await bcrypt.hash(password, 10);
   await User.create({ username, email, password: hashPassword, dob });
   res.json({ message: "User Created successfully" });
@@ -78,4 +111,4 @@ const refreshingToken = async (req, res, next) => {
     });
 };
 
-export { registerUser, loginUser, refreshingToken,userLogout };
+export { registerUser, loginUser, refreshingToken,userLogout,sendOtp };

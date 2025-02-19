@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema(
     dob: { type: Object, required: true },
     bio : { type: String, required: false , default:"" },
     role: { type: String, default: "user" },
+    otp:{type:String,required:false}
   },
   {
     timestamps: true,
