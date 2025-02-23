@@ -69,7 +69,7 @@ const getAllPostsForExplore = async (req, res, next) => {
     .sort({ date: -1 })
     .skip((page - 1) * limit)
     .limit(Number(limit));
-    res.json(posts)
+  res.json(posts);
 };
 
 const getAllPostsOfUser = async (req, res, next) => {
@@ -119,7 +119,7 @@ const postComment = async (req, res, next) => {
   };
   post.comments.push(newComment);
   await post.save();
-  
+
   const updatedPost = await Posts.findById(postID).populate(
     "comments.user",
     "username profile"

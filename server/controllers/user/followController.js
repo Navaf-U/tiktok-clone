@@ -29,18 +29,18 @@ const userFollow = async (req, res, next) => {
   const notification = await Notification.create({
     receiver: userIdToFollow,
     sender: req.user.id,
-    type: "follow"
-})
-if (users.has(userIdToFollow)) {
-  io.to(users.get(userIdToFollow)).emit("newNotification", {
-    ...notification.toObject(),
-    sender: {
-      _id: follower._id,
-      username: follower.username,
-      profile: follower.profile
-    }
+    type: "follow",
   });
-}
+  if (users.has(userIdToFollow)) {
+    io.to(users.get(userIdToFollow)).emit("newNotification", {
+      ...notification.toObject(),
+      sender: {
+        _id: follower._id,
+        username: follower.username,
+        profile: follower.profile,
+      },
+    });
+  }
 
   res.status(200).json({ message: "Followed successfully!" });
 };
@@ -154,18 +154,22 @@ const followingUserPosts = async (req, res, next) => {
 };
 
 const unfollowedUsers = async (req, res, next) => {
-    const userID = req.user.id;
-    const userObjectId = new mongoose.Types.ObjectId(userID);
-    const { page = 1, limit = 20 } = req.query;
-    const followedUserIds = await Follows.find({ follower: userID }).distinct("following");
-    const users = await User.aggregate([
-      {$match: {_id: { $ne: userObjectId, $nin: followedUserIds }},},
-      {$addFields: { randomSortKey: { $rand: {}}}},{$sort: { randomSortKey: 1 }},
-      {$skip: (page - 1) * Number(limit)},{$limit: Number(limit),},{$project: { username: 1, profile: 1 },},
-    ]);
-    res.status(200).json(users);
+  const userID = req.user.id;
+  const userObjectId = new mongoose.Types.ObjectId(userID);
+  const { page = 1, limit = 20 } = req.query;
+  const followedUserIds = await Follows.find({ follower: userID }).distinct(
+    "following"
+  );
+  const users = await User.aggregate([
+    { $match: { _id: { $ne: userObjectId, $nin: followedUserIds } } },
+    { $addFields: { randomSortKey: { $rand: {} } } },
+    { $sort: { randomSortKey: 1 } },
+    { $skip: (page - 1) * Number(limit) },
+    { $limit: Number(limit) },
+    { $project: { username: 1, profile: 1 } },
+  ]);
+  res.status(200).json(users);
 };
-
 
 export {
   userFollow,
@@ -173,5 +177,5 @@ export {
   getFollowersAndFollowing,
   isFollowing,
   followingUserPosts,
-  unfollowedUsers
+  unfollowedUsers,
 };

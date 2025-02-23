@@ -2,7 +2,7 @@ import User from "../../models/userSchema.js";
 import cloudinary from "../../config/CloudinaryConfig.js";
 import CustomError from "../../util/CustomError.js";
 
-const getOneUser = async (req, res,next) => {
+const getOneUser = async (req, res, next) => {
   const { username } = req.params;
   const user = await User.findOne({ username: username }, { password: 0 });
   if (!user) {
@@ -12,25 +12,25 @@ const getOneUser = async (req, res,next) => {
 };
 
 const userUpdate = async (req, res, next) => {
-    const { bio } = req.body;
-    const user = await User.findOne({ _id: req.user.id }, { password: 0 });
-    if (!user) {
-      return next(new CustomError("User not found", 404));
-    }
-    
-    if (req.file) {
-      if (user.profile) {
-        await cloudinary.uploader.destroy(user.profile).catch(console.error);
-      }
-      user.profile = req.uploadedFile.secure_url;
-    }
+  const { bio } = req.body;
+  const user = await User.findOne({ _id: req.user.id }, { password: 0 });
+  if (!user) {
+    return next(new CustomError("User not found", 404));
+  }
 
-    if (bio !== undefined) {
-      user.bio = bio;
+  if (req.file) {
+    if (user.profile) {
+      await cloudinary.uploader.destroy(user.profile).catch(console.error);
     }
+    user.profile = req.uploadedFile.secure_url;
+  }
 
-    await user.save();
-    res.json(user);
+  if (bio !== undefined) {
+    user.bio = bio;
+  }
+
+  await user.save();
+  res.json(user);
 };
 
 const userProfileDelete = async (req, res, next) => {
@@ -58,13 +58,21 @@ const userAccountDelete = async (req, res, next) => {
   res.json({ message: "Account deleted successfully" });
 };
 
-const searchUser = async (req,res,next) =>{
+const searchUser = async (req, res, next) => {
   const { query } = req.query;
   if (!query) {
     return next(new CustomError("Query parameter is required", 404));
   }
-  const users = await User.find({username:{$regex:query,$options:'i'}}).limit(10)
+  const users = await User.find({
+    username: { $regex: query, $options: "i" },
+  }).limit(10);
   return res.json(users);
-}
+};
 
-export { getOneUser, userUpdate , searchUser , userProfileDelete ,userAccountDelete };
+export {
+  getOneUser,
+  userUpdate,
+  searchUser,
+  userProfileDelete,
+  userAccountDelete,
+};
