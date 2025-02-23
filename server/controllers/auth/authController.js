@@ -36,7 +36,7 @@ const sendOtp = async (req, res, next) => {
 };
 
 const registerUser = async (req, res, next) => {
-  const { username, email, password, dob,otp } = req.body;
+  const { username, email, password, dob, otp } = req.body;
   const existingUser = await User.findOne({
     $or: [{ email }, { username }],
   });
@@ -84,31 +84,29 @@ const loginUser = async (req, res, next) => {
   };
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true, 
-    secure: true, 
-    sameSite: "none"
-  })
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   res.json({ message: "Login successful", token, user: currUser });
 };
-
 
 const userLogout = async (req, res, next) => {
   res.clearCookie("refreshToken");
   res.json({ message: "Logout successful" });
 };
 
-
 const refreshingToken = async (req, res, next) => {
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
     return next(new CustomError("No refresh token provided", 401));
-  }  
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN);
-    const accessToken = createToken(decoded.id, decoded.role, "1h");
-    res.status(200).json({
-      message: "Token refreshed",
-      token: accessToken,
-    });
+  }
+  const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN);
+  const accessToken = createToken(decoded.id, decoded.role, "1h");
+  res.status(200).json({
+    message: "Token refreshed",
+    token: accessToken,
+  });
 };
 
-export { registerUser, loginUser, refreshingToken,userLogout,sendOtp };
+export { registerUser, loginUser, refreshingToken, userLogout, sendOtp };

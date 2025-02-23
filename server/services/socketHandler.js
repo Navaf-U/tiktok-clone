@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import Notification from "../models/notificationSchema.js";
 import Message from "../models/messageSchema.js";
-import User from '../models/userSchema.js';
+import User from "../models/userSchema.js";
 
 export const users = new Map();
 
@@ -34,14 +34,14 @@ const socketHandler = (io) => {
 
     const createAndEmitNotification = async (receiverId, type, data = {}) => {
       try {
-        const sender = await User.findById(socket.user.id, 'username profile');
+        const sender = await User.findById(socket.user.id, "username profile");
         const existingNotification = await Notification.findOne({
           receiver: receiverId,
           sender: socket.user.id,
           type,
-          createdAt: { 
-            $gte: new Date(Date.now() - 1000)
-          }
+          createdAt: {
+            $gte: new Date(Date.now() - 1000),
+          },
         });
 
         if (existingNotification) {
@@ -52,7 +52,7 @@ const socketHandler = (io) => {
           receiver: receiverId,
           sender: socket.user.id,
           type,
-          ...data
+          ...data,
         });
 
         if (users.has(receiverId)) {
@@ -61,8 +61,8 @@ const socketHandler = (io) => {
             sender: {
               _id: sender._id,
               username: sender.username,
-              profile: sender.profile
-            }
+              profile: sender.profile,
+            },
           });
         }
       } catch (error) {
@@ -70,18 +70,16 @@ const socketHandler = (io) => {
       }
     };
 
-      socket.on('sendMessage', async (data) => {
+    socket.on("sendMessage", async (data) => {
       try {
         const { receiverId, content } = data;
         let conversation = await Message.findOne({
-          $or: [
-            { users: { $all: [socket.user.id, receiverId] } }
-          ]
+          $or: [{ users: { $all: [socket.user.id, receiverId] } }],
         });
         if (!conversation) {
           conversation = await Message.create({
             users: [socket.user.id, receiverId],
-            messages: []
+            messages: [],
           });
         }
         const message = await Message.create({
@@ -102,19 +100,19 @@ const socketHandler = (io) => {
       }
     });
 
-    socket.on('follow', async (data) => {
+    socket.on("follow", async (data) => {
       await createAndEmitNotification(data.receiverId, "follow");
     });
 
     socket.on("like", async (data) => {
       await createAndEmitNotification(data.receiverId, "like", {
-        media: data.postId || "null"
+        media: data.postId || "null",
       });
     });
 
     socket.on("comment", async (data) => {
       await createAndEmitNotification(data.receiverId, "comment", {
-        media: data.postId || "null"
+        media: data.postId || "null",
       });
     });
   });

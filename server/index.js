@@ -7,7 +7,7 @@ import manageError from "./middlewares/manageError.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import http from "http";
-import {Server} from "socket.io";
+import { Server } from "socket.io";
 import setupSocket from "./services/socketHandler.js";
 import helmet from "helmet";
 const app = express();
@@ -17,11 +17,11 @@ export const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
-  }
+  },
 });
 
-setupSocket(io); 
-app.use(cookieParser());  
+setupSocket(io);
+app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
 app.use(express.json());

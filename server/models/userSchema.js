@@ -8,12 +8,13 @@ const userSchema = mongoose.Schema(
     isBlocked: { type: Boolean, default: false },
     profile: {
       type: String,
-      required: false, default:""
+      required: false,
+      default: "",
     },
     dob: { type: Object, required: true },
-    bio : { type: String, required: false , default:"" },
+    bio: { type: String, required: false, default: "" },
     role: { type: String, default: "user" },
-    otp:{type:String,required:false}
+    otp: { type: String, required: false },
   },
   {
     timestamps: true,
