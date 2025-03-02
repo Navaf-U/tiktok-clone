@@ -24,10 +24,10 @@ setupSocket(io);
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
-app.use(express.json());
+app.use(express.json())
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-app.use(helmet());
-ConnectDataBase();
+app.use(helmet())
+ConnectDataBase()
 
 app.get("/", (req, res) => {
   res.send("YOO RUNNING WORLD");
