@@ -10,8 +10,12 @@ import http from "http";
 import { Server } from "socket.io";
 import setupSocket from "./services/socketHandler.js";
 import helmet from "helmet";
+
+
 const app = express();
 dotenv.config();
+
+
 const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
@@ -28,6 +32,7 @@ app.use(express.json())
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(helmet())
 ConnectDataBase()
+
 
 app.get("/", (req, res) => {
   res.send("YOO RUNNING WORLD");
