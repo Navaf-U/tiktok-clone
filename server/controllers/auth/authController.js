@@ -48,13 +48,6 @@ const registerUser = async (req, res, next) => {
       return next(new CustomError("Username already exists", 400));
     }
   }
-  const otpEntry = await Otp.findOne({ email, otp });
-  if (!otpEntry) {
-    Otp.deleteMany({ email });
-    return next(new CustomError("Invalid OTP", 400));
-  }
-  Otp.deleteMany({ email });
-
   const hashPassword = await bcrypt.hash(password, 10);
   await User.create({ username, email, password: hashPassword, dob });
   res.json({ message: "User Created successfully" });
