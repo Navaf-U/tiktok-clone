@@ -5,7 +5,6 @@ import { verifyToken } from '../middlewares/verifyToken.js';
 const routes = express.Router();
 
 routes
-.post("send-otp",tryCatch(sendOtp))
 .post('/register', tryCatch(registerUser))
 .post('/login', tryCatch(loginUser))
 .post("/refreshToken",tryCatch(refreshingToken))
