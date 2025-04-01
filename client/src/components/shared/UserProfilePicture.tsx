@@ -3,8 +3,8 @@ import { FaUserCircle } from "react-icons/fa";
 interface UserProfilePictureProps {
   profile?: string;
   altText?: string;
-  className?: string; 
-  size?: number; 
+  className?: string;
+  size?: number;
 }
 
 function UserProfilePicture({
