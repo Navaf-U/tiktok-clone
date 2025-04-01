@@ -207,7 +207,13 @@ function NavBar(): JSX.Element {
       </div>
 
       {searchResults.length > 0 && (
-        <div className={ currUser ? `absolute top-[55px] md:left-[31%] md:right-[45%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10` : `absolute top-[55px] md:left-[37.5%] md:right-[65%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10`}>
+        <div
+          className={
+            currUser
+              ? `absolute top-[55px] md:left-[31%] md:right-[45%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10`
+              : `absolute top-[55px] md:left-[37.5%] md:right-[65%] right-[35%] w-[50%] md:w-[33%] rounded-lg bg-[#222222] max-h-[300px] overflow-y-auto z-10`
+          }
+        >
           {searchResults.map((user) => (
             <div
               key={user._id}
