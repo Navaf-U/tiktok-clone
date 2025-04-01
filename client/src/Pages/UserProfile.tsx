@@ -73,7 +73,6 @@ function UserProfile(): JSX.Element {
   const [profileShow, setProfileShow] = useState<boolean>(false);
   const [likeCountOfUser, setlikeCountOfUser] = useState<number>(0);
 
-
   const [stage, setStage] = useState<"following" | "followers" | "suggested">(
     "following"
   );
@@ -95,8 +94,6 @@ function UserProfile(): JSX.Element {
 
   const isCurrUser = currUser?.username === username;
 
-
- 
   useEffect(() => {
     const FetchUser = async (): Promise<void> => {
       try {
@@ -137,25 +134,25 @@ function UserProfile(): JSX.Element {
     FetchUser();
   }, [username, currUser]);
 
-    const getUserLikes = async (userID: string) => {
-      try {
-        if (userID) {
-          const { data } = await axios.get(
-            `${import.meta.env.VITE_API_URL}/user/posts/like/${userID}`
-          );
-          setlikeCountOfUser(data.length);
-        }
-      } catch (err) {
-        console.error(axiosErrorManager(err));
-      }
-    };
-
-    useEffect(() => {
-      const userID = isCurrUser ? currUser?._id : otherUser?._id;
+  const getUserLikes = async (userID: string) => {
+    try {
       if (userID) {
-        getUserLikes(userID);
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/user/posts/like/${userID}`
+        );
+        setlikeCountOfUser(data.length);
       }
-    }, [currUser, isCurrUser, otherUser]);
+    } catch (err) {
+      console.error(axiosErrorManager(err));
+    }
+  };
+
+  useEffect(() => {
+    const userID = isCurrUser ? currUser?._id : otherUser?._id;
+    if (userID) {
+      getUserLikes(userID);
+    }
+  }, [currUser, isCurrUser, otherUser]);
 
   useEffect(() => {
     const getFollowes = async (): Promise<void> => {
@@ -189,7 +186,7 @@ function UserProfile(): JSX.Element {
       });
       setIsFollowing(true);
       if (socket) {
-        socket.emit('follow', { receiverId: userId });
+        socket.emit("follow", { receiverId: userId });
       }
     } catch (error) {
       console.error(axiosErrorManager(error));
@@ -276,7 +273,9 @@ function UserProfile(): JSX.Element {
                 >
                   {followersCount} Followers
                 </p>
-                <p className="hover:underline cursor-pointer">{likeCountOfUser} Likes</p>
+                <p className="hover:underline cursor-pointer">
+                  {likeCountOfUser} Likes
+                </p>
               </div>
               <div className="mt-2 ms-16 md:mt-2 md:ms-5 font-normal text-[17px]">
                 {isCurrUser && currUser?.bio ? (
@@ -332,7 +331,12 @@ function UserProfile(): JSX.Element {
                 >
                   {isFollowing ? "Unfollow" : "Follow"}
                 </Button>
-                <button onClick={() => navigate(`/user/messages?u=${otherUser.username}`)} className="ms-2 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer">
+                <button
+                  onClick={() =>
+                    navigate(`/user/messages?u=${otherUser.username}`)
+                  }
+                  className="ms-2 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer"
+                >
                   Message
                 </button>
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
@@ -351,7 +355,9 @@ function UserProfile(): JSX.Element {
                 >
                   {followersCount} Followers
                 </p>
-                <p className="hover:underline cursor-pointer">{likeCountOfUser} Likes</p>
+                <p className="hover:underline cursor-pointer">
+                  {likeCountOfUser} Likes
+                </p>
               </div>
               <div className="mt-2 ms-16  font-normal text-[17px]">
                 {otherUser && otherUser?.bio ? (

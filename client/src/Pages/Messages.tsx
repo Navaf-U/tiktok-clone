@@ -67,7 +67,9 @@ function Messages(): JSX.Element {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const { data } = await axiosInstance.get<Conversation[]>("/user/messages");
+        const { data } = await axiosInstance.get<Conversation[]>(
+          "/user/messages"
+        );
         setConversations(data);
       } catch (error) {
         console.error(axiosErrorManager(error));
@@ -76,7 +78,6 @@ function Messages(): JSX.Element {
 
     fetchConversations();
   }, []);
-  
 
   useEffect(() => {
     socket?.on("newMessage", (data: Message) => {
@@ -119,7 +120,7 @@ function Messages(): JSX.Element {
 
   useEffect(() => {
     const fetchUser = async () => {
-      if (!username ) return setUser(null);
+      if (!username) return setUser(null);
       try {
         const { data } = await axios.get(
           `${import.meta.env.VITE_API_URL}/user/profile/${username}`
@@ -134,13 +135,13 @@ function Messages(): JSX.Element {
 
   useEffect(() => {
     const fetchMessages = async () => {
-      if(username === currUser?.username) return
+      if (username === currUser?.username) return;
       if (!user?._id) return setMessages([]);
       try {
         const { data } = await axiosInstance.get(`/user/messages/${user._id}`);
         setMessages(data);
         if (data.length > 0) {
-          scrollToBottom(); 
+          scrollToBottom();
         }
       } catch (error) {
         console.error(axiosErrorManager(error));
@@ -151,7 +152,7 @@ function Messages(): JSX.Element {
 
   const sendMessage = async () => {
     if (!message.trim() || !user?._id) return;
-    if(username === currUser?.username) return
+    if (username === currUser?.username) return;
     try {
       const { data } = await axiosInstance.post(`/user/messages/`, {
         receiverId: user?._id,
