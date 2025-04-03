@@ -48,7 +48,6 @@ const getConversations = async (req, res) => {
       },
     },
   ]);
-
   res.json(conversations);
 };
 
@@ -74,7 +73,6 @@ const getMessages = async (req, res) => {
     { senderId: otherUserId, receiverId: userId, read: false },
     { read: true }
   );
-
   res.json(messages);
 };
 
@@ -96,7 +94,6 @@ const sendMessage = async (req, res) => {
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", populatedMessage);
   }
-
   res.json(populatedMessage);
 };
 
