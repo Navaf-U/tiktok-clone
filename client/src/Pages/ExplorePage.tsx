@@ -84,6 +84,7 @@ function ExplorePage(): JSX.Element {
     };
   }, [hasMore, isFetching]);
 
+
   return (
     <div>
       <NavBar />
@@ -112,5 +113,6 @@ function ExplorePage(): JSX.Element {
     </div>
   );
 }
+
 
 export default ExplorePage;
