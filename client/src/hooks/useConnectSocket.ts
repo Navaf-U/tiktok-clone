@@ -1,6 +1,7 @@
 import { UserContext } from "@/context/UserProvider"
 import { useContext, useEffect } from "react"
 import {io} from 'socket.io-client'
+
 export const socket = io(import.meta.env.VITE_API_URL as string)
 function useConnectSocket() {
   const userContext = useContext(UserContext)
