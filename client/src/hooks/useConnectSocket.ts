@@ -15,12 +15,15 @@ function useConnectSocket() {
       console.log(err)
     })
 
+
     
     socket.on("disconnect", () => {})
     return () => {
       socket.disconnect()
     }
   },[currUser])
+
 }
+
 
 export default useConnectSocket
