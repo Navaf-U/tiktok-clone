@@ -30,6 +30,7 @@ function ExplorePage(): JSX.Element {
     if (isFetching) return;
 
     setIsFetching(true);
+
     try {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/user/posts/explore`,{params: {page: pageNum,limit:10}});
       if (data.length > 0) {
@@ -83,6 +84,7 @@ function ExplorePage(): JSX.Element {
     };
   }, [hasMore, isFetching]);
 
+
   return (
     <div>
       <NavBar />
@@ -111,5 +113,6 @@ function ExplorePage(): JSX.Element {
     </div>
   );
 }
+
 
 export default ExplorePage;

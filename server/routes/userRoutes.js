@@ -51,7 +51,6 @@ Router
 .post("/follow",verifyToken,tryCatch(userFollow))
 .post("/unfollow",verifyToken,tryCatch(userUnfollow))
 
-
 //messages
 .get("/messages",verifyToken,tryCatch(getConversations))
 .get("/messages/:otherUserId",verifyToken,tryCatch(getMessages))
@@ -59,7 +58,6 @@ Router
 
 //user account delete
 .delete("/delete/account",verifyToken,tryCatch(userAccountDelete))
-
 
 //notification routes
 .get('/notifications', verifyToken, tryCatch(getNotifications))
