@@ -5,9 +5,11 @@ A full-stack TikTok-style short video sharing app built with real-time capabilit
 Tech Stack
 Frontend: TypeScript, React , Tailwind CSS
 
-Backend: Node.js, Express
+Backend: Node.js, Express 
 
 Database: MongoDB, Mongoose
+
+Validation : Joi schema, Formik & Yup
 
 Real-Time: Socket.IO (for live comments, likes, etc.)
 
