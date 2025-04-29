@@ -121,8 +121,7 @@ function UserProfile(): JSX.Element {
         if (!userID) return;
 
         const res = await axios.get(
-          `${
-            import.meta.env.VITE_API_URL
+          `${import.meta.env.VITE_API_URL
           }/user/followers/${otherUserID}/${userID}`
         );
         setIsFollowing(res.data.isFollowing);
@@ -332,12 +331,22 @@ function UserProfile(): JSX.Element {
                   {isFollowing ? "Unfollow" : "Follow"}
                 </Button>
                 <button
+                  disabled={!currUser}
                   onClick={() =>
                     navigate(`/user/messages?u=${otherUser.username}`)
                   }
-                  className="ms-2 mt-[12px] bg-[#303030] rounded-md w-[115px] h-[40px] text-white hover:bg-[#3e3e3e] cursor-pointer"
+                  className={`ms-2 mt-[12px] rounded-md w-[115px] h-[40px] text-white relative group transition
+                     ${currUser
+                      ? 'bg-[#303030] hover:bg-[#3e3e3e] cursor-pointer'
+                      : 'bg-[#555555] cursor-not-allowed opacity-60'}`}
                 >
                   Message
+
+                  {!currUser && (
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 whitespace-nowrap">
+                      You must login
+                    </span>
+                  )}
                 </button>
                 <RiShareForwardLine className="ms-3 mt-3 w-[40px] p-2 h-[40px] bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
                 <HiDotsHorizontal className="ms-2 mt-3 me-1 w-[40px] p-2 h-[40px]  bg-[#303030] rounded-md text-white hover:bg-[#3e3e3e] cursor-pointer" />
