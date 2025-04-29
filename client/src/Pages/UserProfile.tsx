@@ -324,6 +324,7 @@ function UserProfile(): JSX.Element {
               </h1>
               <div className="flex ms-5">
                 <Button
+                disabled={!currUser}
                   variant={"pinks"}
                   onClick={isFollowing ? unfollowUser : followUser}
                   className="ms-4 mt-3 w-[115px] h-[40px]"

@@ -74,7 +74,7 @@ function SingleVideoPage(): JSX.Element {
         const { data } = await axiosInstance(`/user/posts/video/${id}`);
         setSinglePost(data);
       } catch (error) {
-      console.error(axiosErrorManager(error));
+        console.error(axiosErrorManager(error));
       }
     };
     getUserSinglePost();
@@ -107,7 +107,7 @@ function SingleVideoPage(): JSX.Element {
           );
           setUser(data);
         } catch (error) {
-         console.error(axiosErrorManager(error));
+          console.error(axiosErrorManager(error));
         }
       }
     };
@@ -149,7 +149,7 @@ function SingleVideoPage(): JSX.Element {
         });
       }
 
-      
+
     } catch (error) {
       console.error(axiosErrorManager(error));
     }
@@ -162,17 +162,17 @@ function SingleVideoPage(): JSX.Element {
         setShowModal?.(true);
         return;
       }
-  
+
       const isFavorite = singlePost?.favorites?.includes(currUser._id);
-  
+
       const { data } = isFavorite
         ? await axiosInstance.delete(`/user/favorites/${singlePost._id}`)
         : await axiosInstance.post(`/user/favorites/${singlePost._id}`);
-  
+
       setSinglePost((prev) =>
         prev ? { ...prev, favorites: data.favorites } : null
       );
-  
+
       if (setPosts) {
         setPosts((prev) =>
           prev?.map((post) =>
@@ -186,7 +186,7 @@ function SingleVideoPage(): JSX.Element {
       console.error(axiosErrorManager(error));
     }
   };
-  
+
   useEffect(() => {
     const getCommentsOfPost = async () => {
       try {
@@ -205,8 +205,7 @@ function SingleVideoPage(): JSX.Element {
       setModalType?.("login");
       setShowModal?.(true);
       return;
-    }
-    try {
+    } try {
       const { data } = await axiosInstance.post(`/user/posts/comments/${id}`, {
         text: comment,
         user: currUser?._id,
@@ -233,9 +232,9 @@ function SingleVideoPage(): JSX.Element {
       setSinglePost((prev) =>
         prev
           ? {
-              ...prev,
-              comments: prev.comments.filter((c) => c._id !== commentID),
-            }
+            ...prev,
+            comments: prev.comments.filter((c) => c._id !== commentID),
+          }
           : null
       );
     } catch (error) {
@@ -357,11 +356,10 @@ function SingleVideoPage(): JSX.Element {
                   <IoHeart
                     onClick={toggleLike}
                     size={32}
-                    className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
-                      currUser?._id && singlePost.likes?.includes(currUser?._id)
+                    className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${currUser?._id && singlePost.likes?.includes(currUser?._id)
                         ? "text-red-500"
                         : ""
-                    }`}
+                      }`}
                   />
                 )}
                 <p className="text-xs">{singlePost?.likes?.length}</p>
@@ -377,11 +375,10 @@ function SingleVideoPage(): JSX.Element {
                 <IoMdBookmark
                   onClick={toggleFavorites}
                   size={32}
-                  className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${
-                    currUser?._id && singlePost.favorites?.includes(currUser?._id)
+                  className={`bg-[#2e2e2e] hover:bg-[#1c1c1c] rounded-full p-2 ${currUser?._id && singlePost.favorites?.includes(currUser?._id)
                       ? "text-red-500"
                       : ""
-                  }`}
+                    }`}
                 />
                 <p className="text-xs">{singlePost?.favorites?.length}</p>
               </div>
@@ -412,17 +409,15 @@ function SingleVideoPage(): JSX.Element {
           <div className="flex justify-between">
             <h3
               onClick={() => setStage("comments")}
-              className={`text-sm font-semibold text-center w-[50%] cursor-pointer ${
-                stage === "comments" && "border-b-white border-b-2"
-              }`}
+              className={`text-sm font-semibold text-center w-[50%] cursor-pointer ${stage === "comments" && "border-b-white border-b-2"
+                }`}
             >
               Comments {singlePost?.comments.length}
             </h3>
             <h3
               onClick={() => setStage("creatorVideos")}
-              className={`text-sm font-semibold text-center w-[50%] cursor-pointer ${
-                stage === "creatorVideos" && "border-b-white border-b-2"
-              }`}
+              className={`text-sm font-semibold text-center w-[50%] cursor-pointer ${stage === "creatorVideos" && "border-b-white border-b-2"
+                }`}
             >
               Creator videos
             </h3>
@@ -458,27 +453,27 @@ function SingleVideoPage(): JSX.Element {
                   </div>
                   {(currUser?._id === comment.user._id ||
                     currUser?.username === singlePost?.username) && (
-                    <div
-                      className="relative"
-                      onMouseEnter={() => showDropdown(index)}
-                      onMouseLeave={() => hideDropdown(index)}
-                    >
-                      <HiOutlineDotsHorizontal
-                        size={30}
-                        className="text-white rounded-full p-1 cursor-pointer"
-                      />
-                      {dropdownIndex === index && (
-                        <div className="absolute top-6 right-0 bg-[#2e2e2e] text-white rounded-md shadow-md">
-                          <button
-                            className="px-12 py-3.5 flex items-center justify-start gap-2 hover:text-[#ff3b5b] w-full text-left"
-                            onClick={() => removeComment(comment._id)}
-                          >
-                            <FaRegTrashCan className="" /> Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                      <div
+                        className="relative"
+                        onMouseEnter={() => showDropdown(index)}
+                        onMouseLeave={() => hideDropdown(index)}
+                      >
+                        <HiOutlineDotsHorizontal
+                          size={30}
+                          className="text-white rounded-full p-1 cursor-pointer"
+                        />
+                        {dropdownIndex === index && (
+                          <div className="absolute top-6 right-0 bg-[#2e2e2e] text-white rounded-md shadow-md">
+                            <button
+                              className="px-12 py-3.5 flex items-center justify-start gap-2 hover:text-[#ff3b5b] w-full text-left"
+                              onClick={() => removeComment(comment._id)}
+                            >
+                              <FaRegTrashCan className="" /> Delete
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                 </div>
               ))}
         </div>
@@ -494,21 +489,19 @@ function SingleVideoPage(): JSX.Element {
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
-          <button type="submit" disabled={comment.length < 1}>
+          <button type="submit" disabled={comment.length < 1 || !currUser }>
             <IoPaperPlaneOutline
               size={28}
-              className={`md:hidden ${
-                comment.length > 0
+              className={`md:hidden ${comment.length > 0
                   ? "text-[#FF007C]"
                   : "text-gray-400"
-              }`}
+                }`}
             />
             <p
-              className={`hidden md:flex  ${
-                comment.length > 0
+              className={`hidden md:flex  ${comment.length > 0
                   ? "bg-[#FF007C] text-white rounded-md mb-2 p-2 w-[80px] flex justify-center items-center"
                   : "text-gray-400 bg-[#2e2e2e] rounded-md mb-2 p-2 w-[80px] flex justify-center items-center"
-              }`}
+                }`}
             >
               Post
             </p>
